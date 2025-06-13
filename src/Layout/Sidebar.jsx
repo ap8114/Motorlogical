@@ -3,6 +3,7 @@ import './Layout.css';
 import { Link } from 'react-router-dom';
 
 
+
 const Sidebar = () => {
 
     useEffect(() => {
@@ -95,14 +96,14 @@ const Sidebar = () => {
                             </Link>
                         </li>
                         <li className="mj-nav-item">
-                            <a href="#" className="mj-nav-link">
+                            <Link to="/productionstatus" className="mj-nav-link">
                                 <i className="fas fa-cogs mj-nav-icon" /> Production Status
-                            </a>
+                            </Link>
                         </li>
                         <li className="mj-nav-item">
-                            <a href="#" className="mj-nav-link">
+                            <Link to="/salesrecords" className="mj-nav-link">
                                 <i className="fas fa-chart-line mj-nav-icon" /> Sales Record
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
@@ -112,19 +113,19 @@ const Sidebar = () => {
                     <h6 className="mj-section-title">Settings</h6>
                     <ul className="mj-nav-list">
                         <li className="mj-nav-item">
-                            <a href="#" className="mj-nav-link">
+                            <Link to="/accountsetting" className="mj-nav-link">
                                 <i className="fas fa-user mj-nav-icon" /> Account
-                            </a>
+                            </Link>
                         </li>
                         <li className="mj-nav-item">
-                            <a href="#" className="mj-nav-link">
+                            <Link to="/userpreferences" className="mj-nav-link">
                                 <i className="fas fa-sliders-h mj-nav-icon" /> Preferences
-                            </a>
+                            </Link>
                         </li>
                         <li className="mj-nav-item">
-                            <a href="#" className="mj-nav-link">
+                            <Link to="/helpsupport" className="mj-nav-link">
                                 <i className="fas fa-question-circle mj-nav-icon" /> Help & Support
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
