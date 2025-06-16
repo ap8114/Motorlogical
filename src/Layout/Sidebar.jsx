@@ -34,7 +34,7 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
   );
 
   return (
-    <div className="sidebar d-flex flex-column vh-100 position-fixed top-0 start-0">
+    <div className="sidebar d-flex flex-column vh-100 position-fixed top-0 start-0 ">
       <div className="sidebar-header p-4 text-center">
         <img
           src="https://i.postimg.cc/T37mZZ0p/89b720af-5154-4d70-bb52-6882c2d51803.png"

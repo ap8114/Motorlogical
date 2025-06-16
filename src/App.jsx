@@ -4,19 +4,21 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import MainLayout from './Layout/MainLayout';
 import OrdersManagement from './Components/Orders/OrdersManagement';
 import InventoryManagement from './Components/InventoryManagement/InventoryManagement';
-import ProductionStatus from './Components/Productionstatus/Productionstatus';
 import SalesRecords from './Components/Salesrecord/SalesRecords';
 import AccountSettings from './Components/Setting/AccountSettings';
 import UserPreferences from './Components/Setting/UserPreferences';
 import HelpSupport from './Components/Setting/HelpSupport';
+import Login from './Components/Auth/Login';
+import Signup from './Components/Auth/Signup';
+import ProductionStatus from './Components/Productionstatus/ProductionStatus';
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Public routes without sidebar */}
-        {/* <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} /> */}
+        <Route path="/" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
 
         {/* Protected routes with MainLayout */}
         <Route element={<MainLayout />}>

@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Header = ({ onToggleSidebar }) => {
   return (
-    <header className="py-2 px-3 header">
+    <header className="py-4 px-3 header">
       <div className="d-flex align-items-center justify-content-between">
         {/* Toggle button - visible on mobile and tablet */}
         <button
@@ -16,25 +17,29 @@ const Header = ({ onToggleSidebar }) => {
 
         {/* Welcome message - hidden on mobile, visible on tablet and up */}
         <div className="d-none d-md-block">
-          <span className="fw-semibold">Welcome back, </span>
-          <span className="fw-bold">Michael</span>
+          <span className="fw-semibold ms-4 fw-bold fs-5">Welcome back, </span>
+          <span className="fw-bold fs-5 ">Michael</span>
         </div>
 
         {/* Synced button */}
         <div>
-          <button className="synced-btn">
-            <span className="synced-icon"></span>
-            <span className="d-none d-sm-inline">Synced</span>
-          </button>
+         
         </div>
 
         {/* Right section */}
         <div className="d-flex align-items-center gap-3">
-          {/* Notification bell */}
+          {/* synced status  */}
+           <button className="synced-btn">
+            <span className="synced-icon"></span>
+            <span className="d-none d-sm-inline">Synced</span>
+          </button>
+
+          {/* notification */}
           <button className="btn position-relative">
             <i className="far fa-bell text-light"></i>
             <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"></span>
           </button>
+          
 
           {/* User profile */}
           <div className="d-flex align-items-center">
@@ -53,12 +58,12 @@ const Header = ({ onToggleSidebar }) => {
           </button>
 
           {/* Logout - icon only on mobile */}
-          <button className="btn btn-outline-secondary">
-            <i className="fas fa-sign-out-alt d-md-none"></i>
-            <span className="d-none d-md-inline">
-              <i className="fas fa-sign-out-alt me-1"></i> Logout
-            </span>
+         
+          <Link to="/signup">
+          <button className="btn btn-outline-warning">
+            <i className="fas fa-sign-out-alt me-1"></i> Logout
           </button>
+          </Link>
         </div>
       </div>
     </header>
