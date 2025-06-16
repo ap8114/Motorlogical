@@ -1,0 +1,58 @@
+.sidebar {
+  background-color: #032D45; /* Dark navy background */
+  color: #ffffff;
+  width: 250px;
+  border-right: none;
+  z-index: 1000!important;
+}
+
+.sidebar-header {
+  background-color: #032D45;
+}
+
+.sidebar-logo {
+  max-height: 60px;
+  
+
+  margin-top: 65px;
+}
+
+.sidebar-link {
+  color: #ffffff!important;
+  border-radius: 0;
+  transition: background-color 0.2s;
+}
+
+.sidebar-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.active-link {
+  background-color: #FFC107!important; /* Yellow highlight */
+  color: #000000 !important;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none !important;
+  }
+
+  .content {
+    margin-left: 0 !important;
+  }
+}
+/* Add this in your global CSS */
+.sidebar-container {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .offcanvas-start {
+    width: 100% !important;    /* Full width on mobile */
+    max-width: 100% !important;
+  }
+}
+
+
