@@ -3,3 +3,13 @@ body,
   padding: 0 !important;
   margin: 0 !important;
 }
+
+
+
+  .offcanvas-backdrop.show {
+    opacity: 0 !important; /* no dark overlay */
+  }
+
+
+
+

@@ -56,3 +56,29 @@
 }
 
 
+/* Full width override for mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .offcanvas-body {
+    padding: 0 !important;
+  }
+
+  .sidebar-header {
+    padding: 1rem;
+  }
+}
+@media (max-width: 768px) {
+  .offcanvas {
+    overflow-y: auto;
+  }
+}
+
+/* Ensure the close button is visible and layered */
+.btn-close {
+  z-index: 1056 !important;
+}

@@ -48,36 +48,42 @@ const MainLayout = () => {
           className={`${isMobile ? "col-12" : "col-md-9 col-lg-10 offset-md-3 offset-lg-2"
             } bg-light`}
         >
-          <div className="p-3">
+          <div className="p-4 ">
             <Outlet />
           </div>
         </div>
       </div>
 
-   
-      {isMobile && isMobileSidebarOpen && (
-  <div
-    className=""
-    tabIndex="-1"
-    id="mobileSidebar"
-    aria-labelledby="mobileSidebarLabel"
-  >
-    <div className="">
-      <h5 className="" id="mobileSidebarLabel">
-        <img src="/logo.png" alt="Motorlogical Logo" height="30" />
-      </h5>
-      <button
-        type="button"
-        className="btn-close text-reset"
-        aria-label="Close"
-        onClick={() => setIsMobileSidebarOpen(false)} // ✅ THIS IS MISSING
-      ></button>
-    </div>
-    <div className="">
-      <Sidebar />
-    </div>
+      {/* Offcanvas Sidebar for Mobile */}
+      {isMobile && (
+<div
+  className="offcanvas offcanvas-start w-100"
+  tabIndex="-1"
+  id="mobileSidebar"
+  aria-labelledby="mobileSidebarLabel"
+>
+  {/* Close Button Positioned at Top-Right */}
+  <button
+    type="button"
+    className="btn-close position-absolute top-0 end-0 m-3 z-3"
+    data-bs-dismiss="offcanvas"
+    aria-label="Close"
+  ></button>
+
+  <div className="offcanvas-body p-0">
+    <Sidebar
+      isMobile={true}
+      onLinkClick={() => {
+        const offcanvasEl = document.getElementById("mobileSidebar");
+        const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+        if (bsOffcanvas) bsOffcanvas.hide();
+      }}
+    />
   </div>
-)}
+</div>
+
+
+      )}
     </div>
   );
 };

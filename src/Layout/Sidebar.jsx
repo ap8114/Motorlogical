@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import './Sidebar.css'; // Make sure to import the CSS file
+import './Sidebar.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const Sidebar = ({ isMobile, onLinkClick }) => {
   const location = useLocation();
@@ -8,11 +9,19 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
 
   const handleMenuClick = (path) => {
     setActivePath(path);
-    if (isMobile && onLinkClick) onLinkClick();
+
+    // Close sidebar on mobile using Bootstrap Offcanvas
+    if (isMobile) {
+      const offcanvasElement = document.getElementById('mobileSidebar');
+      const offcanvasInstance = window.bootstrap?.Offcanvas.getInstance(offcanvasElement);
+      if (offcanvasInstance) offcanvasInstance.hide();
+    }
+
+    if (onLinkClick) onLinkClick(); // optional callback
   };
 
   const navItem = (to, icon, label) => (
-    <li className="nav-item">
+    <li className="nav-item" key={to}>
       <Link
         to={to}
         onClick={() => handleMenuClick(to)}
