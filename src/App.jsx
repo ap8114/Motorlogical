@@ -20,7 +20,7 @@ function App() {
 
         {/* Protected routes with MainLayout */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/ordermanagement" element={<OrdersManagement />} />
             <Route path="/inventorymanagement" element={<InventoryManagement />} />
             <Route path="/productionstatus" element={<ProductionStatus />} />

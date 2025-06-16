@@ -42,14 +42,14 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
           {navItem("/ordermanagement", "fas fa-shopping-cart", "Orders")}
           {navItem("/inventorymanagement", "fas fa-boxes", "Inventory")}
           {navItem("/productionstatus", "fas fa-cog", "Production Status")}
-          {navItem("/salesrecord", "fas fa-chart-line", "Sales Record")}
+          {navItem("/salesrecords", "fas fa-chart-line", "Sales Record")}
         </ul>
 
         <div className="text-uppercase text-secondary small mb-2">Settings</div>
         <ul className="nav flex-column">
-          {navItem("/account", "fas fa-user", "Account")}
-          {navItem("/preferences", "fas fa-sliders-h", "Preferences")}
-          {navItem("/support", "fas fa-question-circle", "Help & Support")}
+          {navItem("/accountsetting", "fas fa-user", "Account")}
+          {navItem("/userpreferences", "fas fa-sliders-h", "Preferences")}
+          {navItem("/helpsupport", "fas fa-question-circle", "Help & Support")}
         </ul>
       </div>
     </div>
