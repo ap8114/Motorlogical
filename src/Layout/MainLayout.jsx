@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Header from "../Layout/Header";
 import Sidebar from "../Layout/Sidebar";
 import './Sidebar.css';
+import { Button } from "react-bootstrap";
 
 const MainLayout = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -87,12 +88,12 @@ const MainLayout = () => {
         data-bs-backdrop="false"
       >
         <div className="offcanvas-header justify-content-end p-2">
-          <button
+          <Button
             type="button"
-            className="btn-close"
+            className="btn-close "
             onClick={handleCloseSidebar}
             aria-label="Close"
-          ></button>
+          ></Button>
         </div>
         <div className="offcanvas-body p-0">
           <Sidebar
