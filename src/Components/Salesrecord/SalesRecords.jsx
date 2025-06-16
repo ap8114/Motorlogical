@@ -339,7 +339,7 @@ const SalesRecords = () => {
     <div className="min-vh-100 bg-light">
       {/* Header */}
       <header className="bg-white shadow-sm py-3">
-        <div className="container">
+        <div className="p-3">
           <div className="d-flex justify-content-between align-items-center">
             <h1 className="h3 mb-0 text-dark">Sales Records</h1>
             <div className="d-flex align-items-center gap-3">
@@ -356,7 +356,7 @@ const SalesRecords = () => {
 
       {/* Main Content */}
       <main className="py-4">
-        <div className="container">
+        <div className="">
           {/* Search and Filters */}
           <div className="card mb-4">
             <div className="card-body">

@@ -35,7 +35,7 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
         />
       </div>
 
-      <div className="flex-grow-1 overflow-auto px-3">
+      <div className="flex-grow-1 px-3">
         <div className="text-uppercase text-secondary small mb-2">Main Menu</div>
         <ul className="nav flex-column mb-4">
           {navItem("/dashboard", "fas fa-th-large", "Dashboard")}

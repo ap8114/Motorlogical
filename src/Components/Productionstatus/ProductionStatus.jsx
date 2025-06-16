@@ -393,7 +393,7 @@ const ProductionStatus = () => {
 
       {/* Main Content */}
       <main className="py-4">
-        <Container fluid>
+        <div fluid>
           {/* Filters */}
           <Card className="mb-4">
             <Card.Body>
@@ -753,7 +753,7 @@ const ProductionStatus = () => {
               </Row>
             </Card.Body>
           </Card>
-        </Container>
+        </div>
       </main>
 
       {/* Toast Notification */}

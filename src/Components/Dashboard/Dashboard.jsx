@@ -297,10 +297,7 @@ const Dashboard = () => {
                     <div className="dashboard-card h-100">
                         <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4">
                             <h3 className="h5 mb-0">Vehicle Categories</h3>
-                            <button className="btn btn-link p-0 text-decoration-none">
-                                <span className="small">View All</span>
-                                <i className="ri-arrow-right-s-line ms-1"></i>
-                            </button>
+                        
                         </div>
                         <div id="categoryChart" className="chart-container" style={{ minHeight: '300px' }}></div>
                     </div>
@@ -313,10 +310,7 @@ const Dashboard = () => {
                     <div className="dashboard-card h-100">
                         <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4">
                             <h3 className="h5 mb-0">Recent Orders</h3>
-                            <button className="btn btn-link p-0 text-decoration-none">
-                                <span className="small">View All</span>
-                                <i className="ri-arrow-right-s-line ms-1"></i>
-                            </button>
+                         
                         </div>
                         <div className="table-responsive">
                             <table className="table table-hover mb-0">
@@ -417,10 +411,7 @@ const Dashboard = () => {
                     <div className="dashboard-card h-100">
                         <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4">
                             <h3 className="h5 mb-0">Inventory Status</h3>
-                            <button className="btn btn-link p-0 text-decoration-none">
-                                <span className="small">View All</span>
-                                <i className="ri-arrow-right-s-line ms-1"></i>
-                            </button>
+                          
                         </div>
                         <div className="mb-4">
                             <div className="d-flex justify-content-between mb-1">

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { 
-  FiSun, FiMoon, FiShoppingBag, FiTag, FiMail, 
-  FiSave, FiLoader, FiCheck, FiFlag, FiChevronDown 
+import {
+  FiSun, FiMoon, FiShoppingBag, FiTag, FiMail,
+  FiSave, FiLoader, FiCheck, FiFlag, FiChevronDown
 } from 'react-icons/fi';
 
 const UserPreferences = () => {
@@ -35,7 +35,7 @@ const UserPreferences = () => {
   // Load saved preferences on component mount
   useEffect(() => {
     const savedNotifications = JSON.parse(
-      localStorage.getItem('notifications') || 
+      localStorage.getItem('notifications') ||
       '{"main":true,"orderUpdates":true,"salesAlerts":false,"emailNotifications":true}'
     );
     setNotifications(savedNotifications);
@@ -93,11 +93,11 @@ const UserPreferences = () => {
   // Save all preferences
   const savePreferences = () => {
     setSaveStatus({ loading: true, success: false });
-    
+
     // Simulate API call
     setTimeout(() => {
       setSaveStatus({ loading: false, success: true });
-      
+
       // Reset success state after 2 seconds
       setTimeout(() => {
         setSaveStatus({ loading: false, success: false });
@@ -114,7 +114,7 @@ const UserPreferences = () => {
   ];
 
   return (
-    <div className="container py-4" style={{ maxWidth: '800px' }}>
+    <div className=" py-4" style={{ maxWidth: '100%' }}>
       <header className="mb-4">
         <h1 className="h2 fw-bold">Preferences</h1>
         <p className="text-muted mb-0">Customize your experience by adjusting these settings</p>
@@ -128,7 +128,7 @@ const UserPreferences = () => {
               <h2 className="h5 fw-medium mb-1">Appearance</h2>
               <p className="text-muted small mb-0">Choose your preferred theme</p>
             </div>
-            <Form.Check 
+            <Form.Check
               type="switch"
               id="theme-switch"
               checked={darkMode}
@@ -146,7 +146,7 @@ const UserPreferences = () => {
               <h2 className="h5 fw-medium mb-1">Notifications</h2>
               <p className="text-muted small mb-0">Manage your notification preferences</p>
             </div>
-            <Form.Check 
+            <Form.Check
               type="switch"
               id="notification-switch"
               checked={notifications.main}
@@ -167,7 +167,7 @@ const UserPreferences = () => {
                   <p className="text-muted small mb-0">Get notified about status changes to your orders</p>
                 </div>
               </div>
-              <Form.Check 
+              <Form.Check
                 type="switch"
                 id="order-updates-switch"
                 checked={notifications.orderUpdates}
@@ -189,7 +189,7 @@ const UserPreferences = () => {
                   <p className="text-muted small mb-0">Receive notifications about special offers and discounts</p>
                 </div>
               </div>
-              <Form.Check 
+              <Form.Check
                 type="switch"
                 id="sales-alerts-switch"
                 checked={notifications.salesAlerts}
@@ -211,7 +211,7 @@ const UserPreferences = () => {
                   <p className="text-muted small mb-0">Receive important updates via email</p>
                 </div>
               </div>
-              <Form.Check 
+              <Form.Check
                 type="switch"
                 id="email-notifications-switch"
                 checked={notifications.emailNotifications}
@@ -230,7 +230,7 @@ const UserPreferences = () => {
             <h2 className="h5 fw-medium mb-1">Language</h2>
             <p className="text-muted small mb-0">Choose your preferred language</p>
           </div>
-          
+
           <Dropdown show={showLanguageDropdown} onToggle={setShowLanguageDropdown}>
             <Dropdown.Toggle variant="light" className="w-100 d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center">
@@ -239,11 +239,11 @@ const UserPreferences = () => {
               </div>
               <FiChevronDown />
             </Dropdown.Toggle>
-            
+
             <Dropdown.Menu className="w-100">
               {languages.map((lang) => (
-                <Dropdown.Item 
-                  key={lang.value} 
+                <Dropdown.Item
+                  key={lang.value}
                   onClick={() => changeLanguage(lang.value)}
                   active={language === lang.value}
                 >
@@ -260,7 +260,7 @@ const UserPreferences = () => {
 
       {/* Save Button */}
       <div className="d-flex justify-content-end">
-        <Button 
+        <Button
           variant={saveStatus.success ? 'success' : 'primary'}
           onClick={savePreferences}
           disabled={saveStatus.loading}

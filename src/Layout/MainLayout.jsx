@@ -23,6 +23,8 @@ const MainLayout = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
   return (
     <div className="container-fluid">
       {/* Header */}
@@ -43,9 +45,8 @@ const MainLayout = () => {
 
         {/* Main Content */}
         <div
-          className={`${
-            isMobile ? "col-12" : "col-md-9 col-lg-10 offset-md-3 offset-lg-2"
-          } bg-light`}
+          className={`${isMobile ? "col-12" : "col-md-9 col-lg-10 offset-md-3 offset-lg-2"
+            } bg-light`}
         >
           <div className="p-3">
             <Outlet />
@@ -53,32 +54,30 @@ const MainLayout = () => {
         </div>
       </div>
 
-      {/* Offcanvas Sidebar for Mobile */}
-      {isMobile && (
-       <div
-  className="offcanvas offcanvas-start"
-  tabIndex="-1"
-  id="mobileSidebar"
-  aria-labelledby="mobileSidebarLabel"
->
-  <div className="offcanvas-header">
-    <h5 className="offcanvas-title" id="mobileSidebarLabel">
-      <img src="/logo.png" alt="Motorlogical Logo" height="30" />
-    </h5>
-    <button
-      type="button"
-      className="btn-close text-reset"
-      data-bs-dismiss="offcanvas"
-      aria-label="Close"
-    ></button>
+   
+      {isMobile && isMobileSidebarOpen && (
+  <div
+    className=""
+    tabIndex="-1"
+    id="mobileSidebar"
+    aria-labelledby="mobileSidebarLabel"
+  >
+    <div className="">
+      <h5 className="" id="mobileSidebarLabel">
+        <img src="/logo.png" alt="Motorlogical Logo" height="30" />
+      </h5>
+      <button
+        type="button"
+        className="btn-close text-reset"
+        aria-label="Close"
+        onClick={() => setIsMobileSidebarOpen(false)} // ✅ THIS IS MISSING
+      ></button>
+    </div>
+    <div className="">
+      <Sidebar />
+    </div>
   </div>
-  <div className="offcanvas-body">
-    {/* Your sidebar nav links here */}
-    <Sidebar/>
-  </div>
-</div>
-
-      )}
+)}
     </div>
   );
 };

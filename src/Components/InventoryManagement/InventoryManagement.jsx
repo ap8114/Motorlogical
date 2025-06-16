@@ -318,7 +318,7 @@ const InventoryManagement = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container py-4">
+      <main className=" py-4">
         {/* Dealership Info & Filter Section */}
         <div className="card mb-4">
           <div className="card-body">

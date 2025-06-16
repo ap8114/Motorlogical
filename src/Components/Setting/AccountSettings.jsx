@@ -130,7 +130,7 @@ const AccountSettings = () => {
 
       {/* Main Content */}
       <main className="py-4">
-        <div className="container">
+        <div className="">
           {/* Success Alert */}
           {showSuccessAlert && (
             <Alert 
@@ -144,7 +144,7 @@ const AccountSettings = () => {
             </Alert>
           )}
 
-          <div className="bg-white shadow rounded p-4 p-md-5 mx-auto" style={{ maxWidth: '800px' }}>
+          <div className="bg-white shadow rounded p-4 p-md-5 mx-auto" style={{ maxWidth: '100%' }}>
             <div className="mb-4">
               <h2 className="h3 fw-bold">Account Settings</h2>
               <p className="text-muted mb-0">Manage your account information and password</p>
