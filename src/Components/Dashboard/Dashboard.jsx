@@ -187,9 +187,9 @@ const Dashboard = () => {
 
     return (
         <div className="container-fluid p-3 p-md-4">
-            <div className="mb-4">
-                <h1 className="h2 mb-1">Dashboard Overview</h1>
-                <p className="text-muted">Thursday, June 12, 2025</p>
+            <div className="mb-4 py-3 shadow-sm bg-white">
+                <h2 className="h3 mb-1 ms-2">Dashboard Overview</h2>
+                <p className="text-muted ms-2">Thursday, June 12, 2025</p>
             </div>
 
             {/* Quick Stats - Stack on mobile, 2x2 grid on sm, 4 columns on md+ */}

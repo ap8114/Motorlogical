@@ -1,77 +1,77 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Button, Modal, Alert } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { FiEye, FiEyeOff, FiCheck, FiX, FiUser } from 'react-icons/fi';
+import React, { useState, useEffect } from "react";
+import { Form, Button, Modal, Alert } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { FiEye, FiEyeOff, FiCheck, FiX, FiUser } from "react-icons/fi";
 
 const AccountSettings = () => {
   // State for profile form
   const [profileData, setProfileData] = useState({
-    name: 'James Wilson',
-    email: 'james.wilson@autodealer.com',
-    dealership: 'Premium Auto Group',
-    location: 'San Francisco, CA',
-    role: 'Sales Manager'
+    name: "James Wilson",
+    email: "james.wilson@autodealer.com",
+    dealership: "Premium Auto Group",
+    location: "San Francisco, CA",
+    role: "Sales Manager",
   });
 
   // State for password form
   const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
 
   // State for UI
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState("");
   const [passwordVisible, setPasswordVisible] = useState({
     current: false,
     new: false,
-    confirm: false
+    confirm: false,
   });
 
   // Handle profile form changes
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
-    setProfileData(prev => ({
+    setProfileData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   // Handle password form changes
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
-    setPasswordData(prev => ({
+    setPasswordData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   // Toggle password visibility
   const togglePasswordVisibility = (field) => {
-    setPasswordVisible(prev => ({
+    setPasswordVisible((prev) => ({
       ...prev,
-      [field]: !prev[field]
+      [field]: !prev[field],
     }));
   };
 
   // Handle profile form submission
   const handleProfileSubmit = (e) => {
     e.preventDefault();
-    
+
     // Validation
     if (!profileData.name || !profileData.dealership || !profileData.location) {
-      setAlertMessage('Please fill in all required fields');
+      setAlertMessage("Please fill in all required fields");
       setShowSuccessAlert(true);
       return;
     }
-    
+
     // Simulate API call
     setTimeout(() => {
-      setAlertMessage('Profile updated successfully!');
+      setAlertMessage("Profile updated successfully!");
       setShowSuccessAlert(true);
-      
+
       // Hide alert after 3 seconds
       setTimeout(() => {
         setShowSuccessAlert(false);
@@ -82,41 +82,44 @@ const AccountSettings = () => {
   // Handle password form submission
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
-    
+
     const { currentPassword, newPassword, confirmPassword } = passwordData;
-    
+
     // Validation
     if (!currentPassword || !newPassword || !confirmPassword) {
-      setAlertMessage('Please fill in all password fields');
+      setAlertMessage("Please fill in all password fields");
       setShowSuccessAlert(true);
       return;
     }
-    
+
     if (newPassword !== confirmPassword) {
-      setAlertMessage('New password and confirmation do not match');
+      setAlertMessage("New password and confirmation do not match");
       setShowSuccessAlert(true);
       return;
     }
-    
+
     // Password strength validation
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(newPassword)) {
-      setAlertMessage('Password must be at least 8 characters long and include uppercase, lowercase, number, and special character');
+      setAlertMessage(
+        "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character"
+      );
       setShowSuccessAlert(true);
       return;
     }
-    
+
     // Simulate password update
     setTimeout(() => {
       setShowPasswordModal(false);
-      setAlertMessage('Password updated successfully!');
+      setAlertMessage("Password updated successfully!");
       setShowSuccessAlert(true);
       setPasswordData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
       });
-      
+
       // Hide alert after 3 seconds
       setTimeout(() => {
         setShowSuccessAlert(false);
@@ -126,29 +129,30 @@ const AccountSettings = () => {
 
   return (
     <div className="min-vh-100 bg-light">
-    
-
       {/* Main Content */}
       <main className="py-4">
         <div className="">
           {/* Success Alert */}
           {showSuccessAlert && (
-            <Alert 
-              variant="success" 
-              className="position-fixed bottom-0 end-0 m-3 d-flex align-items-center" 
-              onClose={() => setShowSuccessAlert(false)} 
+            <Alert
+              variant="success"
+              className="position-fixed bottom-0 end-0 m-3 d-flex align-items-center"
+              onClose={() => setShowSuccessAlert(false)}
               dismissible
             >
               <FiCheck className="me-2" />
               {alertMessage}
             </Alert>
           )}
-
-          <div className="bg-white shadow rounded p-4 p-md-5 mx-auto" style={{ maxWidth: '100%' }}>
-            <div className="mb-4">
-              <h2 className="h3 fw-bold">Account Settings</h2>
-              <p className="text-muted mb-0">Manage your account information and password</p>
-            </div>
+          <h1 className="h3">Account Settings</h1>
+          <p className="text-muted mb-3">
+            Manage your account information and password
+          </p>
+          <div
+            className="bg-white shadow rounded p-4 p-md-5 mx-auto"
+            style={{ maxWidth: "100%" }}
+          >
+            <div className="mb-4"></div>
 
             <Form onSubmit={handleProfileSubmit}>
               <div className="row g-3">
@@ -175,7 +179,9 @@ const AccountSettings = () => {
                       readOnly
                       className="bg-light"
                     />
-                    <Form.Text className="text-muted">Email address cannot be changed</Form.Text>
+                    <Form.Text className="text-muted">
+                      Email address cannot be changed
+                    </Form.Text>
                   </Form.Group>
                 </div>
 
@@ -214,14 +220,16 @@ const AccountSettings = () => {
                       readOnly
                       className="bg-light"
                     />
-                    <Form.Text className="text-muted">Role can only be changed by an administrator</Form.Text>
+                    <Form.Text className="text-muted">
+                      Role can only be changed by an administrator
+                    </Form.Text>
                   </Form.Group>
                 </div>
               </div>
 
               <div className="pt-4 mt-4 border-top d-flex justify-content-end gap-3">
-                <Button 
-                  variant="outline-secondary" 
+                <Button
+                  variant="outline-secondary"
                   onClick={() => setShowPasswordModal(true)}
                 >
                   Change Password
@@ -236,7 +244,11 @@ const AccountSettings = () => {
       </main>
 
       {/* Password Modal */}
-      <Modal show={showPasswordModal} onHide={() => setShowPasswordModal(false)} centered>
+      <Modal
+        show={showPasswordModal}
+        onHide={() => setShowPasswordModal(false)}
+        centered
+      >
         <Modal.Header closeButton>
           <Modal.Title>Change Password</Modal.Title>
         </Modal.Header>
@@ -251,10 +263,10 @@ const AccountSettings = () => {
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
                 />
-                <Button 
-                  variant="link" 
+                <Button
+                  variant="link"
                   className="position-absolute top-0 end-0 h-100 d-flex align-items-center"
-                  onClick={() => togglePasswordVisibility('current')}
+                  onClick={() => togglePasswordVisibility("current")}
                 >
                   {passwordVisible.current ? <FiEyeOff /> : <FiEye />}
                 </Button>
@@ -270,16 +282,17 @@ const AccountSettings = () => {
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
                 />
-                <Button 
-                  variant="link" 
+                <Button
+                  variant="link"
                   className="position-absolute top-0 end-0 h-100 d-flex align-items-center"
-                  onClick={() => togglePasswordVisibility('new')}
+                  onClick={() => togglePasswordVisibility("new")}
                 >
                   {passwordVisible.new ? <FiEyeOff /> : <FiEye />}
                 </Button>
               </div>
               <Form.Text className="text-muted">
-                Password must be at least 8 characters long and include uppercase, lowercase, number, and special character
+                Password must be at least 8 characters long and include
+                uppercase, lowercase, number, and special character
               </Form.Text>
             </Form.Group>
 
@@ -292,10 +305,10 @@ const AccountSettings = () => {
                   value={passwordData.confirmPassword}
                   onChange={handlePasswordChange}
                 />
-                <Button 
-                  variant="link" 
+                <Button
+                  variant="link"
                   className="position-absolute top-0 end-0 h-100 d-flex align-items-center"
-                  onClick={() => togglePasswordVisibility('confirm')}
+                  onClick={() => togglePasswordVisibility("confirm")}
                 >
                   {passwordVisible.confirm ? <FiEyeOff /> : <FiEye />}
                 </Button>
@@ -303,8 +316,8 @@ const AccountSettings = () => {
             </Form.Group>
 
             <div className="pt-3 mt-3 border-top d-flex justify-content-end gap-3">
-              <Button 
-                variant="outline-secondary" 
+              <Button
+                variant="outline-secondary"
                 onClick={() => setShowPasswordModal(false)}
               >
                 Cancel

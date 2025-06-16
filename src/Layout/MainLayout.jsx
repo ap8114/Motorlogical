@@ -2,28 +2,47 @@ import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../Layout/Header";
 import Sidebar from "../Layout/Sidebar";
+import './Sidebar.css'
 
 const MainLayout = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // New state for mobile sidebar
 
   const handleToggleSidebar = () => {
-    setSidebarVisible((prev) => !prev);
+    if (isMobile) {
+      setSidebarOpen(prev => !prev); // Toggle mobile sidebar state
+      const offcanvasEl = document.getElementById("mobileSidebar");
+      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+      
+      if (bsOffcanvas) {
+        if (!sidebarOpen) {
+          bsOffcanvas.show();
+        } else {
+          bsOffcanvas.hide();
+        }
+      } else {
+        new bootstrap.Offcanvas(offcanvasEl).show();
+      }
+    } else {
+      setSidebarVisible(prev => !prev); // Toggle desktop sidebar
+    }
   };
 
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth <= 768;
+      const mobile = window.innerWidth < 992;
       setIsMobile(mobile);
-      if (!mobile) setSidebarVisible(true); // Always show on desktop
+      if (!mobile) {
+        setSidebarVisible(true); // Always show on desktop
+        setSidebarOpen(false); // Ensure mobile sidebar is closed
+      }
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
     <div className="container-fluid">
@@ -37,53 +56,43 @@ const MainLayout = () => {
       {/* Content Row */}
       <div className="row" style={{ paddingTop: "65px" }}>
         {/* Sidebar for Desktop */}
-        {!isMobile && (
-          <div className="col-md-3 col-lg-2 p-0">
+        {!isMobile && sidebarVisible && (
+          <div className="col-lg-2 p-0 d-none d-lg-block">
             <Sidebar isMobile={false} />
           </div>
         )}
 
         {/* Main Content */}
         <div
-          className={`${isMobile ? "col-12" : "col-md-9 col-lg-10 offset-md-3 offset-lg-2"
-            } bg-light`}
+          className={`${isMobile ? "col-12" : sidebarVisible ? "col-lg-10 offset-lg-2" : "col-12"} bg-light`}
         >
-          <div className="p-4 ">
+          <div className="p-4">
             <Outlet />
           </div>
         </div>
       </div>
 
-      {/* Offcanvas Sidebar for Mobile */}
-      {isMobile && (
-<div
-  className="offcanvas offcanvas-start w-100"
-  tabIndex="-1"
-  id="mobileSidebar"
-  aria-labelledby="mobileSidebarLabel"
->
-  {/* Close Button Positioned at Top-Right */}
-  <button
-    type="button"
-    className="btn-close position-absolute top-0 end-0 m-3 z-3"
-    data-bs-dismiss="offcanvas"
-    aria-label="Close"
-  ></button>
-
-  <div className="offcanvas-body p-0">
-    <Sidebar
-      isMobile={true}
-      onLinkClick={() => {
-        const offcanvasEl = document.getElementById("mobileSidebar");
-        const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
-        if (bsOffcanvas) bsOffcanvas.hide();
-      }}
-    />
-  </div>
-</div>
-
-
-      )}
+      {/* Offcanvas Sidebar for Mobile/Tablet */}
+      <div
+        className="offcanvas offcanvas-start"
+        tabIndex="-1"
+        id="mobileSidebar"
+        aria-labelledby="mobileSidebarLabel"
+        data-bs-scroll="true"
+        data-bs-backdrop="false"
+      >
+        <div className="offcanvas-body p-0">
+          <Sidebar
+            isMobile={true}
+            onLinkClick={() => {
+              const offcanvasEl = document.getElementById("mobileSidebar");
+              const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+              if (bsOffcanvas) bsOffcanvas.hide();
+              setSidebarOpen(false);
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

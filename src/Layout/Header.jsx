@@ -2,48 +2,62 @@ import React from "react";
 
 const Header = ({ onToggleSidebar }) => {
   return (
-    <header className="py-2 px-3">
+    <header className="py-2 px-3 header">
       <div className="d-flex align-items-center justify-content-between">
-        {/* Toggle on mobile */}
-     <button
-  className="btn d-md-none"
-  type="button"
-  data-bs-toggle="offcanvas"
-  data-bs-target="#mobileSidebar"
->
-  <i className="fas fa-bars"></i>
-</button>
+        {/* Toggle button - visible on mobile and tablet */}
+        <button
+          className="btn d-lg-none"
+          type="button"
+          onClick={onToggleSidebar}
+          aria-label="Toggle sidebar"
+        >
+          <i className="fas fa-bars text-white"></i>
+        </button>
 
-
-        {/* Welcome message */}
-        <div>
+        {/* Welcome message - hidden on mobile, visible on tablet and up */}
+        <div className="d-none d-md-block">
           <span className="fw-semibold">Welcome back, </span>
           <span className="fw-bold">Michael</span>
         </div>
 
+        {/* Synced button */}
+        <div>
+          <button className="synced-btn">
+            <span className="synced-icon"></span>
+            <span className="d-none d-sm-inline">Synced</span>
+          </button>
+        </div>
+
         {/* Right section */}
         <div className="d-flex align-items-center gap-3">
+          {/* Notification bell */}
           <button className="btn position-relative">
-            <i className="far fa-bell"></i>
+            <i className="far fa-bell text-light"></i>
             <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"></span>
           </button>
 
+          {/* User profile */}
           <div className="d-flex align-items-center">
             <div className="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center" style={{ width: "35px", height: "35px" }}>
               M
             </div>
             <div className="ms-2 d-none d-md-block">
               <div className="fw-bold">Michael Johnson</div>
-              <div className="text-muted small">Admin</div>
+              <div className="text-light small">Admin</div>
             </div>
           </div>
 
+          {/* Chevron down - hidden on mobile */}
           <button className="btn d-none d-md-inline-block">
-            <i className="fas fa-chevron-down"></i>
+            <i className="fas fa-chevron-down text-light"></i>
           </button>
 
-          <button className="btn btn-outline-danger">
-            <i className="fas fa-sign-out-alt me-1"></i> Logout
+          {/* Logout - icon only on mobile */}
+          <button className="btn btn-outline-secondary">
+            <i className="fas fa-sign-out-alt d-md-none"></i>
+            <span className="d-none d-md-inline">
+              <i className="fas fa-sign-out-alt me-1"></i> Logout
+            </span>
           </button>
         </div>
       </div>
