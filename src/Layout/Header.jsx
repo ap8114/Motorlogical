@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Header = ({ onToggleSidebar }) => {
   return (
@@ -42,9 +43,11 @@ const Header = ({ onToggleSidebar }) => {
             <i className="fas fa-chevron-down"></i>
           </button>
 
+          <Link to="/signup">
           <button className="btn btn-outline-danger">
             <i className="fas fa-sign-out-alt me-1"></i> Logout
           </button>
+          </Link>
         </div>
       </div>
     </header>
