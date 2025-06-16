@@ -22,7 +22,7 @@ const Sidebar = () => {
                                 <i className="fas fa-chart-bar text-dark" />
                             </div>
                             Motorlogical
-                        </Link>
+                        </Link> 
                     </div>
 
                     {/* Main Menu */}
