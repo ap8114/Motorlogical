@@ -292,7 +292,7 @@ const InventoryManagement = () => {
         <div className="container">
           <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
             <div className="d-flex align-items-center mb-3 mb-md-0">
-              <h1 className="h4 mb-0">Inventory Management</h1>
+              <h1 className="h3 mb-0">Inventory Management</h1>
             </div>
             <div className="d-flex align-items-center gap-3">
               <div className="position-relative">

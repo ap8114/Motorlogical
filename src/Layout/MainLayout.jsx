@@ -2,28 +2,52 @@ import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../Layout/Header";
 import Sidebar from "../Layout/Sidebar";
+import './Sidebar.css';
 
 const MainLayout = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleToggleSidebar = () => {
-    setSidebarVisible((prev) => !prev);
+    if (isMobile) {
+      setSidebarOpen(prev => !prev);
+      const offcanvasEl = document.getElementById("mobileSidebar");
+      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+      
+      if (bsOffcanvas) {
+        bsOffcanvas.toggle();
+      } else {
+        new bootstrap.Offcanvas(offcanvasEl).show();
+      }
+    } else {
+      setSidebarVisible(prev => !prev);
+    }
+  };
+
+  const handleCloseSidebar = () => {
+    if (isMobile) {
+      setSidebarOpen(false);
+      const offcanvasEl = document.getElementById("mobileSidebar");
+      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+      if (bsOffcanvas) bsOffcanvas.hide();
+    }
   };
 
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth <= 768;
+      const mobile = window.innerWidth < 992;
       setIsMobile(mobile);
-      if (!mobile) setSidebarVisible(true); // Always show on desktop
+      if (!mobile) {
+        setSidebarVisible(true);
+        setSidebarOpen(false);
+      }
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
     <div className="container-fluid">
@@ -37,53 +61,62 @@ const MainLayout = () => {
       {/* Content Row */}
       <div className="row" style={{ paddingTop: "65px" }}>
         {/* Sidebar for Desktop */}
-        {!isMobile && (
-          <div className="col-md-3 col-lg-2 p-0">
-            <Sidebar isMobile={false} />
+        {!isMobile && sidebarVisible && (
+          <div className="col-lg-2 p-0 d-none d-lg-block">
+            <Sidebar isMobile={false} onClose={handleCloseSidebar} />
           </div>
         )}
 
         {/* Main Content */}
         <div
-          className={`${isMobile ? "col-12" : "col-md-9 col-lg-10 "
-            } bg-light`}
+          className={`${isMobile ? "col-12" : sidebarVisible ? "col-md-9 col-lg-10 " : "col-12"} bg-light`}
         >
-          <div className="p-4 ">
+          <div className="p-4">
             <Outlet />
           </div>
         </div>
       </div>
 
-      {/* Offcanvas Sidebar for Mobile */}
-      {isMobile && (
-<div
-  className="offcanvas offcanvas-start w-100"
-  tabIndex="-1"
-  id="mobileSidebar"
-  aria-labelledby="mobileSidebarLabel"
+      {/* Offcanvas Sidebar for Mobile/Tablet */}
+      <div
+        className="offcanvas offcanvas-start"
+        tabIndex="-1"
+        id="mobileSidebar"
+        aria-labelledby="mobileSidebarLabel"
+        data-bs-scroll="true"
+        data-bs-backdrop="false"
+      >
+
+        <div className="offcanvas-header justify-content-end p-2">
+       <button
+  type="button"
+  className="btn bg-transparent border-0 position-absolute"
+  onClick={handleCloseSidebar}
+  aria-label="Close"
+  style={{
+    top: '10px',
+    right: '15px',
+    color: 'white',
+    fontSize: '1.5rem',
+    zIndex: 1051,
+  }}
 >
-  {/* Close Button Positioned at Top-Right */}
-  <button
-    type="button"
-    className="btn-close position-absolute top-0 end-0 m-3 z-3"
-    data-bs-dismiss="offcanvas"
-    aria-label="Close"
-  ></button>
-
-  <div className="offcanvas-body p-0">
-    <Sidebar
-      isMobile={true}
-      onLinkClick={() => {
-        const offcanvasEl = document.getElementById("mobileSidebar");
-        const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
-        if (bsOffcanvas) bsOffcanvas.hide();
-      }}
-    />
-  </div>
-</div>
+  <i className="fas fa-times"></i>
+</button>
 
 
-      )}
+        </div>
+        
+
+        <div className="offcanvas-body p-0">
+          <Sidebar
+            isMobile={true}
+            onLinkClick={() => {
+              handleCloseSidebar();
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

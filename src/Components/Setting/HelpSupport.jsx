@@ -115,8 +115,8 @@ const HelpSupport = () => {
       <main className="flex-grow-1 py-5">
         <Container>
           <div className="text-center mb-5">
-            <h1 className="display-5 fw-bold mb-3">Help & Support</h1>
-            <p className="lead text-muted mx-auto" style={{ maxWidth: '600px' }}>
+            <h3 className="  mb-3">Help & Support</h3>
+            <p className="lead text-muted mx-auto" style={{ maxWidth: '600px', fontSize:"17px" }}>
               We're here to help you with any questions or issues you might have. Check our FAQs for quick answers or reach out to our support team directly.
             </p>
           </div>

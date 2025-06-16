@@ -351,7 +351,7 @@ const ProductionStatus = () => {
         <Container fluid>
           <Row className="align-items-center">
             <Col xs={12} md={4} className="mb-3 mb-md-0">
-              <h1 className="h4 mb-0 font-weight-bold text-gray-900">Production Status</h1>
+              <h1 className="h3 mb-0 font-weight-bold text-gray-900">Production Status</h1>
             </Col>
             <Col xs={12} md={8} className="d-flex flex-wrap justify-content-end gap-2">
               <Dropdown className="mr-2">

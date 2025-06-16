@@ -257,6 +257,11 @@ const OrdersManagement = () => {
 
   return (
     <div className="container-fluid py-3 py-md-4">
+
+      <div className='bg-white shadow-sm py-3 mb-2 '>
+        <h3 className=' py-1 ms-3'>Order Management</h3>
+        <p className='text-muted ms-3'>All recent and pending orders in one place</p>
+      </div>
       {/* Action Bar - Responsive */}
       <div className="row mb-3 mb-md-4">
         <div className="col-12 col-md-6 mb-3 mb-md-0">
