@@ -1,16 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Dropdown, Toast, Spinner } from 'react-bootstrap';
-import { 
-  FaEye, 
-  FaEdit, 
-  FaPlus, 
-  FaDownload, 
-  FaSearch, 
-  FaChevronDown, 
-  FaExclamationTriangle, 
-  FaInbox, 
+import { FiEye } from 'react-icons/fi';
+
+import {
+  Table,
+  Button,
+  Modal,
+  Form,
+  Dropdown,
+  Toast,
+  Spinner,
+  ButtonGroup,
+  Pagination
+} from 'react-bootstrap';
+import {
+  FaEye,
+  FaEdit,
+  FaPlus,
+  FaDownload,
+  FaSearch,
+  FaChevronDown,
+  FaExclamationTriangle,
+  FaInbox,
   FaSync,
-  FaTimes
+  FaTimes,
+  FaChevronLeft,
+  FaChevronRight
 } from 'react-icons/fa';
 
 const OrdersManagement = () => {
@@ -38,6 +52,9 @@ const OrdersManagement = () => {
   const [currentOrder, setCurrentOrder] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [toastData, setToastData] = useState({ type: '', title: '', message: '' });
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
   // Form states
   const [selectedProduct, setSelectedProduct] = useState('');
@@ -54,6 +71,16 @@ const OrdersManagement = () => {
     completed: 'success',
     cancelled: 'danger'
   };
+
+  // Handle window resize for responsiveness
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     // Simulate loading data
@@ -79,13 +106,20 @@ const OrdersManagement = () => {
     }
   }, [searchTerm, orders]);
 
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page on new search
   };
 
   const handleExport = () => {
     showNotification('success', 'Export Started', 'Your orders are being exported to Excel. The download will begin shortly.');
-    
+
     setTimeout(() => {
       console.log('Exporting orders to Excel:', orders);
       showNotification('success', 'Export Complete', 'Your orders have been successfully exported to Excel.');
@@ -95,7 +129,7 @@ const OrdersManagement = () => {
   const showNotification = (type, title, message) => {
     setToastData({ type, title, message });
     setShowToast(true);
-    
+
     setTimeout(() => {
       setShowToast(false);
     }, 5000);
@@ -134,7 +168,7 @@ const OrdersManagement = () => {
       };
 
       console.log('Order submitted:', newOrder);
-      
+
       // In a real app, you would call an API here
       setOrders([...orders, newOrder]);
       setShowNewOrderModal(false);
@@ -155,12 +189,12 @@ const OrdersManagement = () => {
 
   const handleSaveOrder = () => {
     if (currentOrder) {
-      const updatedOrders = orders.map(order => 
-        order.id === currentOrder.id 
+      const updatedOrders = orders.map(order =>
+        order.id === currentOrder.id
           ? { ...order, status: selectedStatus, quantity: parseInt(currentOrder.quantity, 10) }
           : order
       );
-      
+
       setOrders(updatedOrders);
       setShowViewOrderModal(false);
       showNotification('success', 'Order Updated', 'Your order has been updated successfully.');
@@ -188,19 +222,52 @@ const OrdersManagement = () => {
     { id: 'product-5', name: 'Transmission Fluid' }
   ];
 
+  // Pagination component
+  const renderPagination = () => {
+    if (totalPages <= 1) return null;
+
+    return (
+      <Pagination className="mt-3 justify-content-center">
+        <Pagination.Prev
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          <FaChevronLeft size={12} />
+        </Pagination.Prev>
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+          <Pagination.Item
+            key={page}
+            active={page === currentPage}
+            onClick={() => setCurrentPage(page)}
+          >
+            {page}
+          </Pagination.Item>
+        ))}
+
+        <Pagination.Next
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          <FaChevronRight size={12} />
+        </Pagination.Next>
+      </Pagination>
+    );
+  };
+
   return (
-    <div className="container-fluid py-4">
-      {/* Action Bar */}
-      <div className="row mb-4">
-        <div className="col-md-6 mb-3 mb-md-0">
-          <Button variant="primary" onClick={handleNewOrder}>
+    <div className="container-fluid py-3 py-md-4">
+      {/* Action Bar - Responsive */}
+      <div className="row mb-3 mb-md-4">
+        <div className="col-12 col-md-6 mb-3 mb-md-0">
+          <Button variant="primary" className="w-100 w-md-auto" onClick={handleNewOrder}>
             <FaPlus className="me-2" />
             New Order
           </Button>
         </div>
-        <div className="col-md-6">
-          <div className="d-flex flex-column flex-md-row">
-            <div className="flex-grow-1 mb-3 mb-md-0 me-md-3">
+        <div className="col-12 col-md-6">
+          <div className="d-flex flex-column flex-md-row align-items-stretch">
+            <div className="flex-grow-1 mb-2 mb-md-0 me-md-2">
               <div className="input-group">
                 <span className="input-group-text">
                   <FaSearch />
@@ -214,9 +281,14 @@ const OrdersManagement = () => {
                 />
               </div>
             </div>
-            <Button variant="outline-secondary" onClick={handleExport}>
+            <Button
+              variant="outline-secondary"
+              className="w-100 w-md-auto mt-2 mt-md-0"
+              onClick={handleExport}
+            >
               <FaDownload className="me-2" />
-              Export to Excel
+              <span className="d-none d-md-inline">Export to Excel</span>
+              <span className="d-md-none">Export</span>
             </Button>
           </div>
         </div>
@@ -226,6 +298,7 @@ const OrdersManagement = () => {
       {loading && (
         <div className="d-flex justify-content-center align-items-center py-5">
           <Spinner animation="border" variant="primary" />
+          <span className="ms-3">Loading orders...</span>
         </div>
       )}
 
@@ -259,73 +332,46 @@ const OrdersManagement = () => {
         </div>
       )}
 
-      {/* Orders Table */}
-      {!loading && !error && filteredOrders.length > 0 && (
+      {/* Orders Table - Desktop */}
+      {!loading && !error && filteredOrders.length > 0 && !isMobile && (
         <div className="card">
           <div className="table-responsive">
             <Table hover className="mb-0">
               <thead>
                 <tr>
-                  <th>
-                    <div className="d-flex align-items-center">
-                      Order ID
-                      <FaChevronDown size={14} className="ms-1 opacity-0" />
-                    </div>
-                  </th>
-                  <th>
-                    <div className="d-flex align-items-center">
-                      Product
-                      <FaChevronDown size={14} className="ms-1 opacity-0" />
-                    </div>
-                  </th>
-                  <th className="text-end">
-                    <div className="d-flex align-items-center justify-content-end">
-                      Quantity
-                      <FaChevronDown size={14} className="ms-1 opacity-0" />
-                    </div>
-                  </th>
-                  <th>
-                    <div className="d-flex align-items-center">
-                      Status
-                      <FaChevronDown size={14} className="ms-1 opacity-0" />
-                    </div>
-                  </th>
-                  <th>
-                    <div className="d-flex align-items-center">
-                      Date
-                      <FaChevronDown size={14} className="ms-1 opacity-0" />
-                    </div>
-                  </th>
+                  <th>Order ID</th>
+                  <th>Product</th>
+                  <th className="text-end">Quantity</th>
+                  <th>Status</th>
+                  <th>Date</th>
                   <th className="text-end">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredOrders.map((order) => (
+                {currentItems.map((order) => (
                   <tr key={order.id}>
-                    <td>
-                      <div className="fw-semibold text-primary">{order.id}</div>
-                    </td>
+                    <td className="fw-semibold text-primary">{order.id}</td>
                     <td>{order.product}</td>
                     <td className="text-end">{order.quantity}</td>
                     <td>{getStatusBadge(order.status)}</td>
                     <td>{order.date}</td>
                     <td className="text-end">
-                      <Button 
-                        variant="link" 
-                        className="text-primary p-0 me-3" 
-                        onClick={() => handleViewOrder(order.id, false)}
-                        aria-label="View order"
-                      >
-                        <FaEye />
-                      </Button>
-                      <Button 
-                        variant="link" 
-                        className="text-secondary p-0" 
-                        onClick={() => handleViewOrder(order.id, true)}
-                        aria-label="Edit order"
-                      >
-                        <FaEdit />
-                      </Button>
+                      <ButtonGroup size="sm" className="gap-2">
+
+                        <Button
+                          variant="link" className="text-primary p-0 mr-2"
+                          onClick={() => handleViewOrder(order.id, false)}
+                        >
+                          <FiEye /> {/* View Icon */}
+                        </Button>
+
+                        <Button
+                          variant=""
+                          onClick={() => handleViewOrder(order.id, true)}
+                        >
+                          <FaEdit /> {/* Edit Icon */}
+                        </Button>
+                      </ButtonGroup>
                     </td>
                   </tr>
                 ))}
@@ -334,41 +380,79 @@ const OrdersManagement = () => {
           </div>
 
           {/* Pagination */}
-          <div className="card-footer d-flex flex-column flex-md-row justify-content-between align-items-center">
-            <div className="mb-3 mb-md-0">
+          <div className="card-footer d-flex flex-column flex-md-row justify-content-between align-items-center py-3">
+            <div className="mb-3 mb-md-0 text-center text-md-start">
               <p className="small mb-0">
-                Showing <span className="fw-semibold">1</span> to <span className="fw-semibold">10</span> of <span className="fw-semibold">{filteredOrders.length}</span> results
+                Showing <span className="fw-semibold">{indexOfFirstItem + 1}</span> to{' '}
+                <span className="fw-semibold">
+                  {indexOfLastItem > filteredOrders.length ? filteredOrders.length : indexOfLastItem}
+                </span> of{' '}
+                <span className="fw-semibold">{filteredOrders.length}</span> results
               </p>
             </div>
-            <nav>
-              <ul className="pagination pagination-sm mb-0">
-                <li className="page-item">
-                  <button className="page-link">
-                    <span aria-hidden="true">&laquo;</span>
-                  </button>
-                </li>
-                <li className="page-item active">
-                  <button className="page-link">1</button>
-                </li>
-                <li className="page-item">
-                  <button className="page-link">2</button>
-                </li>
-                <li className="page-item">
-                  <button className="page-link">3</button>
-                </li>
-                <li className="page-item">
-                  <span className="page-link">...</span>
-                </li>
-                <li className="page-item">
-                  <button className="page-link">5</button>
-                </li>
-                <li className="page-item">
-                  <button className="page-link">
-                    <span aria-hidden="true">&raquo;</span>
-                  </button>
-                </li>
-              </ul>
-            </nav>
+            {renderPagination()}
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Orders List */}
+      {!loading && !error && filteredOrders.length > 0 && isMobile && (
+        <div className="card">
+          <div className="list-group list-group-flush">
+            {currentItems.map((order) => (
+              <div key={order.id} className="list-group-item p-3">
+                <div className="d-flex justify-content-between align-items-start mb-2">
+                  <div>
+                    <div className="fw-bold text-primary">{order.id}</div>
+                    <div className="text-muted small">{order.date}</div>
+                  </div>
+                  {getStatusBadge(order.status)}
+                </div>
+
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <div>
+                    <div className="fw-medium">{order.product}</div>
+                    <div className="text-muted small">Quantity: {order.quantity}</div>
+                  </div>
+
+                  <div>
+                    <ButtonGroup size="sm">
+                     <Button
+                          variant="link" className="text-primary p-0 mr-2"
+                          onClick={() => handleViewOrder(order.id, false)}
+                        >
+                          <FiEye /> {/* View Icon */}
+                        </Button>
+                      <Button
+                        variant="btn-secondary"
+                        className="p-1 px-2"
+                        onClick={() => handleViewOrder(order.id, true)}
+                      >
+                        <FaEdit />
+                      </Button>
+                    </ButtonGroup>
+                  </div>
+                </div>
+
+                <div className="d-flex justify-content-between small">
+                  <div className="text-muted">Dealership: {order.dealership}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="card-footer d-flex flex-column align-items-center py-3">
+            <div className="mb-3 text-center">
+              <p className="small mb-0">
+                Showing <span className="fw-semibold">{indexOfFirstItem + 1}</span> to{' '}
+                <span className="fw-semibold">
+                  {indexOfLastItem > filteredOrders.length ? filteredOrders.length : indexOfLastItem}
+                </span> of{' '}
+                <span className="fw-semibold">{filteredOrders.length}</span> results
+              </p>
+            </div>
+            {renderPagination()}
           </div>
         </div>
       )}
@@ -388,7 +472,7 @@ const OrdersManagement = () => {
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="w-100">
                   {products.map((product) => (
-                    <Dropdown.Item 
+                    <Dropdown.Item
                       key={product.id}
                       onClick={() => {
                         setSelectedProduct(product.id);
@@ -409,8 +493,8 @@ const OrdersManagement = () => {
             <Form.Group className="mb-3">
               <Form.Label>Quantity</Form.Label>
               <div className="input-group">
-                <Form.Control 
-                  type="number" 
+                <Form.Control
+                  type="number"
                   value={quantity}
                   onChange={(e) => {
                     setQuantity(e.target.value);
@@ -474,18 +558,18 @@ const OrdersManagement = () => {
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Product</Form.Label>
-              <Form.Control 
-                type="text" 
-                value={currentOrder?.product || ''} 
-                readOnly 
+              <Form.Control
+                type="text"
+                value={currentOrder?.product || ''}
+                readOnly
               />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Quantity</Form.Label>
               <div className="input-group">
-                <Form.Control 
-                  type="number" 
+                <Form.Control
+                  type="number"
                   value={currentOrder?.quantity || ''}
                   onChange={(e) => setCurrentOrder({ ...currentOrder, quantity: e.target.value })}
                   readOnly={!editMode}
@@ -529,13 +613,25 @@ const OrdersManagement = () => {
       </Modal>
 
       {/* Notification Toast */}
-      <div className="position-fixed bottom-0 end-0 p-3" style={{ zIndex: 11 }}>
-        <Toast show={showToast} onClose={() => setShowToast(false)} delay={5000} autohide>
-          <Toast.Header className="bg-white">
+      <div className={`position-fixed ${isMobile ? 'bottom-0 start-0 end-0 p-3' : 'bottom-0 end-0 p-3'}`} style={{ zIndex: 11 }}>
+        <Toast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          delay={5000}
+          autohide
+          className={isMobile ? 'w-100' : ''}
+        >
+          <Toast.Header className={`bg-${toastData.type === 'success' ? 'success' : 'danger'} text-white`}>
             <strong className="me-auto">{toastData.title}</strong>
-            <button type="button" className="btn-close" onClick={() => setShowToast(false)}></button>
+            <button
+              type="button"
+              className="btn-close btn-close-white"
+              onClick={() => setShowToast(false)}
+            ></button>
           </Toast.Header>
-          <Toast.Body>{toastData.message}</Toast.Body>
+          <Toast.Body className={toastData.type === 'success' ? 'text-success' : 'text-danger'}>
+            {toastData.message}
+          </Toast.Body>
         </Toast>
       </div>
     </div>

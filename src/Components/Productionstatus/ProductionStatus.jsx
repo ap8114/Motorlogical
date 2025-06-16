@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Table, Button, Dropdown, Form, Spinner, Toast, 
-  Container, Row, Col, Card, Badge, OverlayTrigger, Tooltip 
+import {
+  Table, Button, Dropdown, Form, Spinner, Toast,
+  Container, Row, Col, Card, Badge, OverlayTrigger, Tooltip
 } from 'react-bootstrap';
-import { 
-  FiSearch, FiFile, FiFilter, FiCalendar, FiRefreshCw, 
+import {
+  FiSearch, FiFile, FiFilter, FiCalendar, FiRefreshCw,
   FiEye, FiMoreHorizontal, FiChevronLeft, FiChevronRight,
   FiCheck, FiX, FiCopy
 } from 'react-icons/fi';
@@ -16,29 +16,29 @@ const ProductionStatus = () => {
   // Sample production data
   const productionData = [
     { id: "JOB-2025-0142", product: "Luxury Sedan Model X", stage: "Completed", stageDetail: "Final Quality Check", eta: "2025-06-10", notes: "All quality checks passed. Ready for delivery to customer. Vehicle has been detailed and is in the delivery bay." },
-{ id: "JOB-2025-0156", product: "SUV Premium Plus", stage: "In Progress", stageDetail: "Painting", eta: "2025-06-15", notes: "Custom metallic paint application in progress. Estimated completion of painting stage by June 14." },
-{ id: "JOB-2025-0163", product: "Compact Hybrid EV", stage: "In Progress", stageDetail: "Assembly", eta: "2025-06-18", notes: "Battery pack installation complete. Moving to interior assembly next week." },
-{ id: "JOB-2025-0178", product: "Luxury Coupe Sport", stage: "Scheduled", stageDetail: "Materials Preparation", eta: "2025-06-22", notes: "Waiting for special order carbon fiber components to arrive from supplier." },
-{ id: "JOB-2025-0184", product: "Executive Sedan", stage: "Not Started", stageDetail: "Pending", eta: "2025-06-30", notes: "Production scheduled to begin on June 20. All materials on order." },
-{ id: "JOB-2025-0191", product: "Family Minivan Deluxe", stage: "Completed", stageDetail: "Delivery", eta: "2025-06-08", notes: "Vehicle delivered to customer on June 8. Customer reported high satisfaction with the vehicle." },
-{ id: "JOB-2025-0197", product: "Electric SUV Premium", stage: "In Progress", stageDetail: "Electronics", eta: "2025-06-17", notes: "Installing advanced driver assistance systems. Software calibration in progress." },
-{ id: "JOB-2025-0205", product: "Compact Sedan Base", stage: "Scheduled", stageDetail: "Production Planning", eta: "2025-06-25", notes: "Production slot confirmed. Materials being gathered for assembly line." },
-{ id: "JOB-2025-0212", product: "Luxury SUV Platinum", stage: "In Progress", stageDetail: "Interior", eta: "2025-06-16", notes: "Custom leather upholstery installation in progress. Woodgrain trim being applied." },
-{ id: "JOB-2025-0219", product: "Sports Convertible", stage: "Not Started", stageDetail: "Design Confirmation", eta: "2025-07-05", notes: "Awaiting final customer approval on custom design elements before production." },
-{ id: "JOB-2025-0226", product: "Hybrid Crossover", stage: "Completed", stageDetail: "Quality Assurance", eta: "2025-06-11", notes: "All systems tested and verified. Vehicle passed final inspection with no issues." },
-{ id: "JOB-2025-0233", product: "Electric Compact", stage: "In Progress", stageDetail: "Drivetrain", eta: "2025-06-19", notes: "Electric motor installation complete. Battery integration in progress." },
-{ id: "JOB-2025-0240", product: "Luxury Sedan Executive", stage: "Scheduled", stageDetail: "Component Preparation", eta: "2025-06-27", notes: "Special order parts have arrived. Production scheduled to begin next week." },
-{ id: "JOB-2025-0247", product: "SUV Off-Road Edition", stage: "Not Started", stageDetail: "Awaiting Materials", eta: "2025-07-08", notes: "Delay in specialized suspension components. Supplier has promised delivery by June 25." },
-{ id: "JOB-2025-0254", product: "City Electric Mini", stage: "In Progress", stageDetail: "Testing", eta: "2025-06-14", notes: "Range testing in progress. Initial results show better than expected performance." },
-{ id: "JOB-2025-0261", product: "Premium Hatchback", stage: "Completed", stageDetail: "Ready for Delivery", eta: "2025-06-12", notes: "Vehicle completed ahead of schedule. Customer notified for early pickup." },
-{ id: "JOB-2025-0268", product: "Full-Size Pickup Truck", stage: "In Progress", stageDetail: "Body Assembly", eta: "2025-06-20", notes: "Cab and bed assembly in progress. Custom towing package being installed." },
-{ id: "JOB-2025-0275", product: "Luxury Coupe Limited", stage: "Scheduled", stageDetail: "Production Queue", eta: "2025-06-29", notes: "Production slot confirmed. Special tooling being prepared for limited edition features." },
-{ id: "JOB-2025-0282", product: "Electric Performance Sedan", stage: "Not Started", stageDetail: "Engineering Review", eta: "2025-07-10", notes: "Final engineering review of custom performance package before production begins." },
-{ id: "JOB-2025-0289", product: "Midsize Family Sedan", stage: "In Progress", stageDetail: "Exterior Finishing", eta: "2025-06-16", notes: "Paint curing complete. Moving to final exterior trim installation." },
-{ id: "JOB-2025-0296", product: "Compact SUV Economy", stage: "Completed", stageDetail: "Dealership Transfer", eta: "2025-06-09", notes: "Vehicle completed and transferred to dealership inventory on June 9." },
-{ id: "JOB-2025-0303", product: "Hybrid Luxury Sedan", stage: "In Progress", stageDetail: "Powertrain", eta: "2025-06-21", notes: "Hybrid system integration in progress. Engine and electric motor synchronization being fine-tuned." },
-{ id: "JOB-2025-0310", product: "Sport Utility Compact", stage: "Scheduled", stageDetail: "Materials Allocation", eta: "2025-07-02", notes: "All components allocated. Production scheduled to begin on June 22." },
-{ id: "JOB-2025-0317", product: "Executive Electric SUV", stage: "Not Started", stageDetail: "Production Planning", eta: "2025-07-15", notes: "Finalizing production plan for new model variant with extended range battery." }
+    { id: "JOB-2025-0156", product: "SUV Premium Plus", stage: "In Progress", stageDetail: "Painting", eta: "2025-06-15", notes: "Custom metallic paint application in progress. Estimated completion of painting stage by June 14." },
+    { id: "JOB-2025-0163", product: "Compact Hybrid EV", stage: "In Progress", stageDetail: "Assembly", eta: "2025-06-18", notes: "Battery pack installation complete. Moving to interior assembly next week." },
+    { id: "JOB-2025-0178", product: "Luxury Coupe Sport", stage: "Scheduled", stageDetail: "Materials Preparation", eta: "2025-06-22", notes: "Waiting for special order carbon fiber components to arrive from supplier." },
+    { id: "JOB-2025-0184", product: "Executive Sedan", stage: "Not Started", stageDetail: "Pending", eta: "2025-06-30", notes: "Production scheduled to begin on June 20. All materials on order." },
+    { id: "JOB-2025-0191", product: "Family Minivan Deluxe", stage: "Completed", stageDetail: "Delivery", eta: "2025-06-08", notes: "Vehicle delivered to customer on June 8. Customer reported high satisfaction with the vehicle." },
+    { id: "JOB-2025-0197", product: "Electric SUV Premium", stage: "In Progress", stageDetail: "Electronics", eta: "2025-06-17", notes: "Installing advanced driver assistance systems. Software calibration in progress." },
+    { id: "JOB-2025-0205", product: "Compact Sedan Base", stage: "Scheduled", stageDetail: "Production Planning", eta: "2025-06-25", notes: "Production slot confirmed. Materials being gathered for assembly line." },
+    { id: "JOB-2025-0212", product: "Luxury SUV Platinum", stage: "In Progress", stageDetail: "Interior", eta: "2025-06-16", notes: "Custom leather upholstery installation in progress. Woodgrain trim being applied." },
+    { id: "JOB-2025-0219", product: "Sports Convertible", stage: "Not Started", stageDetail: "Design Confirmation", eta: "2025-07-05", notes: "Awaiting final customer approval on custom design elements before production." },
+    { id: "JOB-2025-0226", product: "Hybrid Crossover", stage: "Completed", stageDetail: "Quality Assurance", eta: "2025-06-11", notes: "All systems tested and verified. Vehicle passed final inspection with no issues." },
+    { id: "JOB-2025-0233", product: "Electric Compact", stage: "In Progress", stageDetail: "Drivetrain", eta: "2025-06-19", notes: "Electric motor installation complete. Battery integration in progress." },
+    { id: "JOB-2025-0240", product: "Luxury Sedan Executive", stage: "Scheduled", stageDetail: "Component Preparation", eta: "2025-06-27", notes: "Special order parts have arrived. Production scheduled to begin next week." },
+    { id: "JOB-2025-0247", product: "SUV Off-Road Edition", stage: "Not Started", stageDetail: "Awaiting Materials", eta: "2025-07-08", notes: "Delay in specialized suspension components. Supplier has promised delivery by June 25." },
+    { id: "JOB-2025-0254", product: "City Electric Mini", stage: "In Progress", stageDetail: "Testing", eta: "2025-06-14", notes: "Range testing in progress. Initial results show better than expected performance." },
+    { id: "JOB-2025-0261", product: "Premium Hatchback", stage: "Completed", stageDetail: "Ready for Delivery", eta: "2025-06-12", notes: "Vehicle completed ahead of schedule. Customer notified for early pickup." },
+    { id: "JOB-2025-0268", product: "Full-Size Pickup Truck", stage: "In Progress", stageDetail: "Body Assembly", eta: "2025-06-20", notes: "Cab and bed assembly in progress. Custom towing package being installed." },
+    { id: "JOB-2025-0275", product: "Luxury Coupe Limited", stage: "Scheduled", stageDetail: "Production Queue", eta: "2025-06-29", notes: "Production slot confirmed. Special tooling being prepared for limited edition features." },
+    { id: "JOB-2025-0282", product: "Electric Performance Sedan", stage: "Not Started", stageDetail: "Engineering Review", eta: "2025-07-10", notes: "Final engineering review of custom performance package before production begins." },
+    { id: "JOB-2025-0289", product: "Midsize Family Sedan", stage: "In Progress", stageDetail: "Exterior Finishing", eta: "2025-06-16", notes: "Paint curing complete. Moving to final exterior trim installation." },
+    { id: "JOB-2025-0296", product: "Compact SUV Economy", stage: "Completed", stageDetail: "Dealership Transfer", eta: "2025-06-09", notes: "Vehicle completed and transferred to dealership inventory on June 9." },
+    { id: "JOB-2025-0303", product: "Hybrid Luxury Sedan", stage: "In Progress", stageDetail: "Powertrain", eta: "2025-06-21", notes: "Hybrid system integration in progress. Engine and electric motor synchronization being fine-tuned." },
+    { id: "JOB-2025-0310", product: "Sport Utility Compact", stage: "Scheduled", stageDetail: "Materials Allocation", eta: "2025-07-02", notes: "All components allocated. Production scheduled to begin on June 22." },
+    { id: "JOB-2025-0317", product: "Executive Electric SUV", stage: "Not Started", stageDetail: "Production Planning", eta: "2025-07-15", notes: "Finalizing production plan for new model variant with extended range battery." }
   ];
 
   // State management
@@ -202,17 +202,17 @@ const ProductionStatus = () => {
   useEffect(() => {
     const filterData = () => {
       setIsLoading(true);
-      
+
       const filtered = productionData.filter(item => {
         // Search filter
-        const matchesSearch = searchTerm === '' || 
+        const matchesSearch = searchTerm === '' ||
           Object.values(item).some(
             val => typeof val === 'string' && val.toLowerCase().includes(searchTerm.toLowerCase())
           );
-        
+
         // Stage filter
         const matchesStage = stageFilters.includes(item.stage);
-        
+
         // Date filter
         let matchesDate = true;
         const itemDate = new Date(item.eta);
@@ -223,7 +223,7 @@ const ProductionStatus = () => {
         } else if (dateRange.to) {
           matchesDate = itemDate <= new Date(dateRange.to);
         }
-        
+
         return matchesSearch && matchesStage && matchesDate;
       });
 
@@ -335,7 +335,7 @@ const ProductionStatus = () => {
 
   // Get badge variant based on stage
   const getBadgeVariant = (stage) => {
-    switch(stage) {
+    switch (stage) {
       case 'Completed': return 'success';
       case 'In Progress': return 'warning';
       case 'Scheduled': return 'primary';
@@ -359,11 +359,11 @@ const ProductionStatus = () => {
                   {selectedDealership}
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item active={selectedDealership === 'Riverside Dealership'} 
+                  <Dropdown.Item active={selectedDealership === 'Riverside Dealership'}
                     onClick={() => setSelectedDealership('Riverside Dealership')}>
                     Riverside Dealership
                   </Dropdown.Item>
-                  <Dropdown.Item active={selectedDealership === 'Lakeside Dealership'} 
+                  <Dropdown.Item active={selectedDealership === 'Lakeside Dealership'}
                     onClick={() => setSelectedDealership('Lakeside Dealership')}>
                     Lakeside Dealership
                   </Dropdown.Item>
@@ -399,18 +399,18 @@ const ProductionStatus = () => {
             <Card.Body>
               <div className="d-flex flex-wrap justify-content-between align-items-center gap-3">
                 <h2 className="h5 mb-0 font-weight-bold">Active Production Jobs</h2>
-                
+
                 <div className="d-flex flex-wrap gap-2">
                   {/* Stage Filter */}
                   <div ref={stageFilterRef} className="position-relative">
-                    <Button 
-                      variant="outline-secondary" 
+                    <Button
+                      variant="outline-secondary"
                       onClick={() => setShowStageFilter(!showStageFilter)}
                     >
                       <FiFilter className="mr-2" />
                       Filter by Stage
                     </Button>
-                    
+
                     {showStageFilter && (
                       <Card className="position-absolute end-0 mt-2 shadow-sm" style={{ zIndex: 1000, minWidth: '250px' }}>
                         <Card.Body>
@@ -456,43 +456,43 @@ const ProductionStatus = () => {
 
                   {/* Date Filter */}
                   <div ref={dateFilterRef} className="position-relative">
-                    <Button 
-                      variant="outline-secondary" 
+                    <Button
+                      variant="outline-secondary"
                       onClick={() => setShowDateFilter(!showDateFilter)}
                     >
                       <FiCalendar className="mr-2" />
                       ETA Range
                     </Button>
-                    
+
                     {showDateFilter && (
                       <Card className="position-absolute end-0 mt-2 shadow-sm" style={{ zIndex: 1000, minWidth: '250px' }}>
                         <Card.Body>
                           <Form.Group className="mb-3">
                             <Form.Label>From</Form.Label>
-                            <Form.Control 
-                              type="date" 
+                            <Form.Control
+                              type="date"
                               value={dateRange.from || ''}
-                              onChange={(e) => setDateRange({...dateRange, from: e.target.value})}
+                              onChange={(e) => setDateRange({ ...dateRange, from: e.target.value })}
                             />
                           </Form.Group>
                           <Form.Group className="mb-3">
                             <Form.Label>To</Form.Label>
-                            <Form.Control 
-                              type="date" 
+                            <Form.Control
+                              type="date"
                               value={dateRange.to || ''}
-                              onChange={(e) => setDateRange({...dateRange, to: e.target.value})}
+                              onChange={(e) => setDateRange({ ...dateRange, to: e.target.value })}
                             />
                           </Form.Group>
                           <div className="d-flex justify-content-between">
-                            <Button 
-                              variant="link" 
-                              size="sm" 
+                            <Button
+                              variant="link"
+                              size="sm"
                               onClick={() => setDateRange({ from: null, to: null })}
                             >
                               Clear
                             </Button>
-                            <Button 
-                              variant="primary" 
+                            <Button
+                              variant="primary"
                               size="sm"
                               onClick={() => setShowDateFilter(false)}
                             >
@@ -505,8 +505,8 @@ const ProductionStatus = () => {
                   </div>
 
                   {/* Clear Filters */}
-                  <Button 
-                    variant="link" 
+                  <Button
+                    variant="link"
                     onClick={() => {
                       setSearchTerm('');
                       setStageFilters(['Completed', 'In Progress', 'Scheduled', 'Not Started']);
@@ -617,7 +617,7 @@ const ProductionStatus = () => {
                                 placement="top"
                                 overlay={<Tooltip>Click to copy</Tooltip>}
                               >
-                                <span 
+                                <span
                                   className="font-weight-bold text-primary cursor-pointer"
                                   onClick={() => copyJobId(item.id)}
                                 >
@@ -642,24 +642,24 @@ const ProductionStatus = () => {
                                 )}
                               </div>
                             </td>
-                         <td>
-  <div>
-    <div className="text-truncate" style={{ maxWidth: '300px', whiteSpace: expandedNotes[item.id] ? 'normal' : 'nowrap' }}>
-      {item.notes}
-    </div>
-    {item.notes.length > 60 && (
-      <Button 
-        variant="link" 
-        size="sm" 
-        className="p-0"
-        onClick={() => toggleNotes(item.id)}
-      >
-        {expandedNotes[item.id] ? 'Show less' : 'Show more'}
-      </Button>
-    )}
-  </div>
-</td>
-                            <td className="text-right">
+                            <td>
+                              <div>
+                                <div className="text-truncate" style={{ maxWidth: '300px', whiteSpace: expandedNotes[item.id] ? 'normal' : 'nowrap' }}>
+                                  {item.notes}
+                                </div>
+                                {item.notes.length > 60 && (
+                                  <Button
+                                    variant="link"
+                                    size="sm"
+                                    className="p-0"
+                                    onClick={() => toggleNotes(item.id)}
+                                  >
+                                    {expandedNotes[item.id] ? 'Show less' : 'Show more'}
+                                  </Button>
+                                )}
+                              </div>
+                            </td>
+                            <td className="text-right gap-3">
                               <Button variant="link" className="text-primary p-0 mr-2">
                                 <FiEye />
                               </Button>
@@ -681,9 +681,9 @@ const ProductionStatus = () => {
                     {Math.min(currentPage * itemsPerPage, filteredData.length)} of {filteredData.length} jobs
                   </div>
                   <div className="d-flex align-items-center">
-                    <Button 
-                      variant="outline-secondary" 
-                      size="sm" 
+                    <Button
+                      variant="outline-secondary"
+                      size="sm"
                       disabled={currentPage === 1}
                       onClick={() => setCurrentPage(currentPage - 1)}
                       className="mr-2"
@@ -691,9 +691,9 @@ const ProductionStatus = () => {
                       <FiChevronLeft />
                     </Button>
                     <span className="mx-2">Page {currentPage}</span>
-                    <Button 
-                      variant="outline-secondary" 
-                      size="sm" 
+                    <Button
+                      variant="outline-secondary"
+                      size="sm"
                       disabled={currentPage === totalPages || totalPages === 0}
                       onClick={() => setCurrentPage(currentPage + 1)}
                     >
@@ -712,9 +712,9 @@ const ProductionStatus = () => {
                 <h2 className="h5 mb-0 font-weight-bold">Production Statistics</h2>
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-secondary" id="timeframe-dropdown">
-                    {selectedTimeframe === '30' ? 'Last 30 Days' : 
-                     selectedTimeframe === '90' ? 'Last 90 Days' : 
-                     selectedTimeframe === '180' ? 'Last 180 Days' : 'Last 365 Days'}
+                    {selectedTimeframe === '30' ? 'Last 30 Days' :
+                      selectedTimeframe === '90' ? 'Last 90 Days' :
+                        selectedTimeframe === '180' ? 'Last 180 Days' : 'Last 365 Days'}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item active={selectedTimeframe === '30'} onClick={() => setSelectedTimeframe('30')}>
@@ -757,9 +757,9 @@ const ProductionStatus = () => {
       </main>
 
       {/* Toast Notification */}
-      <Toast 
-        show={showToast} 
-        onClose={() => setShowToast(false)} 
+      <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
         className="position-fixed bottom-0 end-0 m-3"
         delay={3000}
         autohide
