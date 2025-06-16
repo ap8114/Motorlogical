@@ -4,44 +4,81 @@ import Header from "../Layout/Header";
 import Sidebar from "../Layout/Sidebar";
 
 const MainLayout = () => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  const handleToggleSidebar = () => {
+    setSidebarVisible((prev) => !prev);
+  };
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      if (!mobile) setSidebarVisible(true); // Always show on desktop
     };
 
-    handleResize(); // Set initial value
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
-  };
-
   return (
-    <div className="d-flex">
-      {/* Sidebar - fixed height and width */}
-      <div>
-        <Sidebar />
-      </div>
-
-      {/* Main Content Area */}
-      <div
-        className="flex-grow-1 "
-        // style={{
-        //   marginLeft: "250px", // equal to sidebar width
-        //   background: "#f8fafc",
-        //   minHeight: "100vh",
-        // }}
-      >
-        <Header />
-        <div className="p-2">
-          <Outlet />
+    <div className="container-fluid">
+      {/* Header */}
+      <div className="row fixed-top bg-white shadow-sm">
+        <div className="col-12">
+          <Header onToggleSidebar={handleToggleSidebar} />
         </div>
       </div>
+
+      {/* Content Row */}
+      <div className="row" style={{ paddingTop: "65px" }}>
+        {/* Sidebar for Desktop */}
+        {!isMobile && (
+          <div className="col-md-3 col-lg-2 p-0">
+            <Sidebar isMobile={false} />
+          </div>
+        )}
+
+        {/* Main Content */}
+        <div
+          className={`${
+            isMobile ? "col-12" : "col-md-9 col-lg-10 offset-md-3 offset-lg-2"
+          } bg-light`}
+        >
+          <div className="p-3">
+            <Outlet />
+          </div>
+        </div>
+      </div>
+
+      {/* Offcanvas Sidebar for Mobile */}
+      {isMobile && (
+       <div
+  className="offcanvas offcanvas-start"
+  tabIndex="-1"
+  id="mobileSidebar"
+  aria-labelledby="mobileSidebarLabel"
+>
+  <div className="offcanvas-header">
+    <h5 className="offcanvas-title" id="mobileSidebarLabel">
+      <img src="/logo.png" alt="Motorlogical Logo" height="30" />
+    </h5>
+    <button
+      type="button"
+      className="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div className="offcanvas-body">
+    {/* Your sidebar nav links here */}
+    <Sidebar/>
+  </div>
+</div>
+
+      )}
     </div>
   );
 };

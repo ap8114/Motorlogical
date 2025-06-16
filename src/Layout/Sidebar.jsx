@@ -1,127 +1,59 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import './Sidebar.css'; // Make sure to import the CSS file
 
+const Sidebar = ({ isMobile, onLinkClick }) => {
+  const location = useLocation();
+  const [activePath, setActivePath] = useState(location.pathname);
 
-const Sidebar = () => {
-    const location = useLocation();
-    const [activePath, setActivePath] = useState(location.pathname);
+  const handleMenuClick = (path) => {
+    setActivePath(path);
+    if (isMobile && onLinkClick) onLinkClick();
+  };
 
-    const handleLinkClick = (path) => {
-        setActivePath(path);
-    };
+  const navItem = (to, icon, label) => (
+    <li className="nav-item">
+      <Link
+        to={to}
+        onClick={() => handleMenuClick(to)}
+        className={`nav-link d-flex align-items-center sidebar-link px-3 py-2 ${
+          activePath === to ? "active-link" : ""
+        }`}
+      >
+        <i className={`me-2 ${icon}`}></i> {label}
+      </Link>
+    </li>
+  );
 
-    return (
-        <div className="row g-0">
-            {/* Sidebar */}
-            <div className="col-md-auto">
-                <nav className="ml-sidebar-container" id="mlSidebar">
-                    {/* Brand Section */}
-                    <div className="ml-brand-section d-none d-md-block">
-                        <Link to="/" className="ml-brand-logo">
-                            <div className="ml-brand-icon">
-                                <i className="fas fa-chart-bar text-dark" />
-                            </div>
-                            Motorlogical
-                        </Link>
-                    </div>
+  return (
+    <div className="sidebar d-flex flex-column vh-100 position-fixed top-0 start-0">
+      <div className="sidebar-header p-4 text-center">
+        <img
+          src="https://i.postimg.cc/T37mZZ0p/89b720af-5154-4d70-bb52-6882c2d51803.png"
+          alt="Motorlogical Logo"
+          className="img-fluid sidebar-logo"
+        />
+      </div>
 
-                    {/* Main Menu */}
-                    <div className="ml-menu-section">
-                        <div className="ml-menu-title">Main Menu</div>
-                        <ul className="ml-nav-list">
-                            <li className="ml-nav-item">
-                                <Link
-                                    to="/"
-                                    className={`ml-nav-link ${activePath === '/dashboard' ? 'ml-active' : ''}`}
-                                    onClick={() => handleLinkClick('/dashboard')}
-                                >
-                                    <i className="fas fa-th-large ml-nav-icon" />
-                                    Dashboard
-                                </Link>
-                            </li>
-                            <li className="ml-nav-item">
-                                <Link
-                                    to="/ordermanagement"
-                                    className={`ml-nav-link ${activePath === '/orders' ? 'ml-active' : ''}`}
-                                    onClick={() => handleLinkClick('/orders')}
-                                >
-                                    <i className="fas fa-shopping-cart ml-nav-icon" />
-                                    Orders
-                                </Link>
-                            </li>
-                            <li className="ml-nav-item">
-                                <Link
-                                    to="/inventorymanagement"
-                                    className={`ml-nav-link ${activePath === '/inventorymanagement' ? 'ml-active' : ''}`}
-                                    onClick={() => handleLinkClick('/inventorymanagement')}
-                                >
-                                    <i className="fas fa-boxes ml-nav-icon" />
-                                    Inventory
-                                </Link>
-                            </li>
-                            <li className="ml-nav-item">
-                                <Link
-                                    to="/productionstatus"
-                                    className={`ml-nav-link ${activePath === '/productionstatus' ? 'ml-active' : ''}`}
-                                    onClick={() => handleLinkClick('/productionstatus')}
-                                >
-                                    <i className="fas fa-cog ml-nav-icon" />
-                                    Production Status
-                                </Link>
-                            </li>
-                            <li className="ml-nav-item">
-                                <Link
-                                    to="/salesrecord"
-                                    className={`ml-nav-link ${activePath === '/salesrecord' ? 'ml-active' : ''}`}
-                                    onClick={() => handleLinkClick('/salesrecord')}
-                                >
-                                    <i className="fas fa-chart-line ml-nav-icon" />
-                                    Sales Record
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
+      <div className="flex-grow-1 overflow-auto px-3">
+        <div className="text-uppercase text-secondary small mb-2">Main Menu</div>
+        <ul className="nav flex-column mb-4">
+          {navItem("/dashboard", "fas fa-th-large", "Dashboard")}
+          {navItem("/ordermanagement", "fas fa-shopping-cart", "Orders")}
+          {navItem("/inventorymanagement", "fas fa-boxes", "Inventory")}
+          {navItem("/productionstatus", "fas fa-cog", "Production Status")}
+          {navItem("/salesrecord", "fas fa-chart-line", "Sales Record")}
+        </ul>
 
-                    {/* Settings Menu */}
-                    <div className="ml-menu-section">
-                        <div className="ml-menu-title">Settings</div>
-                        <ul className="ml-nav-list">
-                            <li className="ml-nav-item">
-                                <Link
-                                    to="/account"
-                                    className={`ml-nav-link ${activePath === '/account' ? 'ml-active' : ''}`}
-                                    onClick={() => handleLinkClick('/account')}
-                                >
-                                    <i className="fas fa-user ml-nav-icon" />
-                                    Account
-                                </Link>
-                            </li>
-                            <li className="ml-nav-item">
-                                <Link
-                                    to="/preferences"
-                                    className={`ml-nav-link ${activePath === '/preferences' ? 'ml-active' : ''}`}
-                                    onClick={() => handleLinkClick('/preferences')}
-                                >
-                                    <i className="fas fa-sliders-h ml-nav-icon" />
-                                    Preferences
-                                </Link>
-                            </li>
-                            <li className="ml-nav-item">
-                                <Link
-                                    to="/support"
-                                    className={`ml-nav-link ${activePath === '/support' ? 'ml-active' : ''}`}
-                                    onClick={() => handleLinkClick('/support')}
-                                >
-                                    <i className="fas fa-question-circle ml-nav-icon" />
-                                    Help &amp; Support
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
-    );
+        <div className="text-uppercase text-secondary small mb-2">Settings</div>
+        <ul className="nav flex-column">
+          {navItem("/account", "fas fa-user", "Account")}
+          {navItem("/preferences", "fas fa-sliders-h", "Preferences")}
+          {navItem("/support", "fas fa-question-circle", "Help & Support")}
+        </ul>
+      </div>
+    </div>
+  );
 };
 
 export default Sidebar;
