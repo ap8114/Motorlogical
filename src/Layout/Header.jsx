@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./Sidebar.css"
 
 const Header = ({ onToggleSidebar }) => {
   return (
@@ -17,7 +18,7 @@ const Header = ({ onToggleSidebar }) => {
 
         {/* Welcome message - hidden on mobile, visible on tablet and up */}
         <div className="d-none d-md-block">
-          <span className="fw-semibold ms-4 fw-bold fs-5">Welcome back, </span>
+          <span className="fw-semibold fw-bold fs-5">Welcome back, </span>
           <span className="fw-bold fs-5 ">Michael</span>
         </div>
 

@@ -9,8 +9,8 @@ import {
   FiCheck, FiX, FiCopy
 } from 'react-icons/fi';
 import * as echarts from 'echarts';
-import { RiArrowUpSLine } from "react-icons/ri";
-
+import { RiArrowUpSLine, RiArrowDownSLine } from "react-icons/ri";
+import { Modal } from "react-bootstrap";
 
 const ProductionStatus = () => {
   // Sample production data
@@ -344,48 +344,65 @@ const ProductionStatus = () => {
     }
   };
 
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleView = (job) => {
+    setSelectedJob(job);
+    setShowModal(true);
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+    setSelectedJob(null);
+  };
+
+
+
   return (
     <div className="production-status">
       {/* Header */}
-      <header className="bg-white shadow-sm py-3">
+      <header className="bg-white shadow-sm mt-3 py-3">
         <Container fluid>
           <Row className="align-items-center">
             <Col xs={12} md={4} className="mb-3 mb-md-0">
-              <h1 className="h3 mb-0 font-weight-bold text-gray-900">Production Status</h1>
+              <h1 className="h5 h-md-3 mb-0 font-weight-bold text-gray-900">Production Status</h1>
             </Col>
-            <Col xs={12} md={8} className="d-flex flex-wrap justify-content-end gap-2">
-              <Dropdown className="mr-2">
-                <Dropdown.Toggle variant="light" id="dealership-dropdown">
-                  {selectedDealership}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item active={selectedDealership === 'Riverside Dealership'}
-                    onClick={() => setSelectedDealership('Riverside Dealership')}>
-                    Riverside Dealership
-                  </Dropdown.Item>
-                  <Dropdown.Item active={selectedDealership === 'Lakeside Dealership'}
-                    onClick={() => setSelectedDealership('Lakeside Dealership')}>
-                    Lakeside Dealership
-                  </Dropdown.Item>
-                  {/* Add other dealerships */}
-                </Dropdown.Menu>
-              </Dropdown>
+            <Col xs={12} md={8}>
+              <div className="d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-end gap-2">
+                <Dropdown className="me-md-2 mb-2 mb-md-0">
+                  <Dropdown.Toggle variant="light" id="dealership-dropdown" size="sm" className="w-100 w-md-auto">
+                    {selectedDealership}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item active={selectedDealership === 'Riverside Dealership'}
+                      onClick={() => setSelectedDealership('Riverside Dealership')}>
+                      Riverside Dealership
+                    </Dropdown.Item>
+                    <Dropdown.Item active={selectedDealership === 'Lakeside Dealership'}
+                      onClick={() => setSelectedDealership('Lakeside Dealership')}>
+                      Lakeside Dealership
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
 
-              <div className="position-relative">
-                <Form.Control
-                  type="text"
-                  placeholder="Search jobs..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-4"
-                />
-                <FiSearch className="position-absolute top-50 start-0 translate-middle-y ms-2 text-muted" />
+                <div className="position-relative flex-grow-1 mb-2 mb-md-0">
+                  <Form.Control
+                    type="text"
+                    placeholder="Search jobs..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="ps-5"
+                    size="sm"
+                  />
+                  <FiSearch className="position-absolute top-50 start-0 translate-middle-y ms-2 text-muted" />
+                </div>
+
+                <Button variant="primary" size="sm" onClick={() => showToastMessage('Exporting to Excel...')}>
+                  <FiFile className="mr-2" />
+                  <span className="d-none d-md-inline">Export</span>
+                </Button>
               </div>
-
-              <Button variant="primary" onClick={() => showToastMessage('Exporting to Excel...')}>
-                <FiFile className="mr-2" />
-                Export
-              </Button>
             </Col>
           </Row>
         </Container>
@@ -397,142 +414,154 @@ const ProductionStatus = () => {
           {/* Filters */}
           <Card className="mb-4">
             <Card.Body>
-              <div className="d-flex flex-wrap justify-content-between align-items-center gap-3">
-                <h2 className="h5 mb-0 font-weight-bold">Active Production Jobs</h2>
+              <Row className="align-items-center">
+                <Col xs={12} md={4} className="mb-3 mb-md-0">
+                  <h2 className="h6 h-md-5 mb-0 font-weight-bold">Active Production Jobs</h2>
+                </Col>
+                <Col xs={12} md={8}>
+                  <div className="d-flex flex-column flex-md-row justify-content-md-end gap-2">
+                    {/* Stage Filter */}
+                    <div ref={stageFilterRef} className="position-relative mb-2 mb-md-0">
+                      <Button
+                        variant="outline-secondary"
+                        size="sm"
+                        onClick={() => setShowStageFilter(!showStageFilter)}
+                        className="w-100 w-md-auto"
+                      >
+                        <FiFilter className="mr-2" />
+                        <span>Stage</span>
+                      </Button>
 
-                <div className="d-flex flex-wrap gap-2">
-                  {/* Stage Filter */}
-                  <div ref={stageFilterRef} className="position-relative">
+                      {showStageFilter && (
+                        <Card className="position-md-absolute end-md-0 mt-md-2 shadow-sm w-100 w-md-auto" style={{ zIndex: 1000 }}>
+                          <Card.Body>
+                            <Form.Group>
+                              <Form.Check
+                                type="checkbox"
+                                label="All Stages"
+                                checked={allStagesSelected}
+                                onChange={(e) => toggleAllStages(e.target.checked)}
+                              />
+                            </Form.Group>
+                            <hr />
+                            <Form.Group>
+                              <Form.Check
+                                type="checkbox"
+                                label={<Badge bg="success">Completed</Badge>}
+                                checked={stageFilters.includes('Completed')}
+                                onChange={(e) => handleStageFilterChange('Completed', e.target.checked)}
+                              />
+                              <Form.Check
+                                type="checkbox"
+                                label={<Badge bg="warning">In Progress</Badge>}
+                                checked={stageFilters.includes('In Progress')}
+                                onChange={(e) => handleStageFilterChange('In Progress', e.target.checked)}
+                              />
+                              <Form.Check
+                                type="checkbox"
+                                label={<Badge bg="primary">Scheduled</Badge>}
+                                checked={stageFilters.includes('Scheduled')}
+                                onChange={(e) => handleStageFilterChange('Scheduled', e.target.checked)}
+                              />
+                              <Form.Check
+                                type="checkbox"
+                                label={<Badge bg="secondary">Not Started</Badge>}
+                                checked={stageFilters.includes('Not Started')}
+                                onChange={(e) => handleStageFilterChange('Not Started', e.target.checked)}
+                              />
+                            </Form.Group>
+                          </Card.Body>
+                        </Card>
+                      )}
+                    </div>
+
+                    {/* Date Filter */}
+                    <div ref={dateFilterRef} className="position-relative mb-2 mb-md-0">
+                      <Button
+                        variant="outline-secondary"
+                        size="sm"
+                        onClick={() => setShowDateFilter(!showDateFilter)}
+                        className="w-100 w-md-auto"
+                      >
+                        <FiCalendar className="mr-2" />
+                        <span>ETA Range</span>
+                      </Button>
+
+                      {showDateFilter && (
+                        <Card className="position-md-absolute end-md-0 mt-md-2 shadow-sm w-100 w-md-auto" style={{ zIndex: 1000 }}>
+                          <Card.Body>
+                            <Form.Group className="mb-3">
+                              <Form.Label>From</Form.Label>
+                              <Form.Control
+                                type="date"
+                                value={dateRange.from || ''}
+                                onChange={(e) => setDateRange({ ...dateRange, from: e.target.value })}
+                                size="sm"
+                              />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                              <Form.Label>To</Form.Label>
+                              <Form.Control
+                                type="date"
+                                value={dateRange.to || ''}
+                                onChange={(e) => setDateRange({ ...dateRange, to: e.target.value })}
+                                size="sm"
+                              />
+                            </Form.Group>
+                            <div className="d-flex justify-content-between">
+                              <Button
+                                variant="link"
+                                size="sm"
+                                onClick={() => setDateRange({ from: null, to: null })}
+                              >
+                                Clear
+                              </Button>
+                              <Button
+                                variant="primary"
+                                size="sm"
+                                onClick={() => setShowDateFilter(false)}
+                              >
+                                Apply
+                              </Button>
+                            </div>
+                          </Card.Body>
+                        </Card>
+                      )}
+                    </div>
+
+                    {/* Clear Filters */}
                     <Button
-                      variant="outline-secondary"
-                      onClick={() => setShowStageFilter(!showStageFilter)}
-                    >
-                      <FiFilter className="mr-2" />
-                      Filter by Stage
-                    </Button>
-
-                    {showStageFilter && (
-                      <Card className="position-absolute end-0 mt-2 shadow-sm" style={{ zIndex: 1000, minWidth: '250px' }}>
-                        <Card.Body>
-                          <Form.Group>
-                            <Form.Check
-                              type="checkbox"
-                              label="All Stages"
-                              checked={allStagesSelected}
-                              onChange={(e) => toggleAllStages(e.target.checked)}
-                            />
-                          </Form.Group>
-                          <hr />
-                          <Form.Group>
-                            <Form.Check
-                              type="checkbox"
-                              label={<Badge bg="success">Completed</Badge>}
-                              checked={stageFilters.includes('Completed')}
-                              onChange={(e) => handleStageFilterChange('Completed', e.target.checked)}
-                            />
-                            <Form.Check
-                              type="checkbox"
-                              label={<Badge bg="warning">In Progress</Badge>}
-                              checked={stageFilters.includes('In Progress')}
-                              onChange={(e) => handleStageFilterChange('In Progress', e.target.checked)}
-                            />
-                            <Form.Check
-                              type="checkbox"
-                              label={<Badge bg="primary">Scheduled</Badge>}
-                              checked={stageFilters.includes('Scheduled')}
-                              onChange={(e) => handleStageFilterChange('Scheduled', e.target.checked)}
-                            />
-                            <Form.Check
-                              type="checkbox"
-                              label={<Badge bg="secondary">Not Started</Badge>}
-                              checked={stageFilters.includes('Not Started')}
-                              onChange={(e) => handleStageFilterChange('Not Started', e.target.checked)}
-                            />
-                          </Form.Group>
-                        </Card.Body>
-                      </Card>
-                    )}
-                  </div>
-
-                  {/* Date Filter */}
-                  <div ref={dateFilterRef} className="position-relative">
-                    <Button
-                      variant="outline-secondary"
-                      onClick={() => setShowDateFilter(!showDateFilter)}
-                    >
-                      <FiCalendar className="mr-2" />
-                      ETA Range
-                    </Button>
-
-                    {showDateFilter && (
-                      <Card className="position-absolute end-0 mt-2 shadow-sm" style={{ zIndex: 1000, minWidth: '250px' }}>
-                        <Card.Body>
-                          <Form.Group className="mb-3">
-                            <Form.Label>From</Form.Label>
-                            <Form.Control
-                              type="date"
-                              value={dateRange.from || ''}
-                              onChange={(e) => setDateRange({ ...dateRange, from: e.target.value })}
-                            />
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>To</Form.Label>
-                            <Form.Control
-                              type="date"
-                              value={dateRange.to || ''}
-                              onChange={(e) => setDateRange({ ...dateRange, to: e.target.value })}
-                            />
-                          </Form.Group>
-                          <div className="d-flex justify-content-between">
-                            <Button
-                              variant="link"
-                              size="sm"
-                              onClick={() => setDateRange({ from: null, to: null })}
-                            >
-                              Clear
-                            </Button>
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              onClick={() => setShowDateFilter(false)}
-                            >
-                              Apply
-                            </Button>
-                          </div>
-                        </Card.Body>
-                      </Card>
-                    )}
-                  </div>
-
-                  {/* Clear Filters */}
-                  <Button
-                    variant="link"
-                    onClick={() => {
-                      setSearchTerm('');
-                      setStageFilters(['Completed', 'In Progress', 'Scheduled', 'Not Started']);
-                      setDateRange({ from: null, to: null });
-                      setAllStagesSelected(true);
-                    }}
-                  >
-                    <FiRefreshCw className="mr-1" />
-                    Clear Filters
-                  </Button>
-
-                  {/* Auto Refresh */}
-                  <Form.Group className="d-flex align-items-center mb-0">
-                    <Form.Label className="mb-0 mr-2">Auto-refresh:</Form.Label>
-                    <Form.Check
-                      type="switch"
-                      id="auto-refresh-switch"
-                      checked={autoRefresh}
-                      onChange={(e) => {
-                        setAutoRefresh(e.target.checked);
-                        showToastMessage(`Auto-refresh ${e.target.checked ? 'enabled' : 'disabled'}`);
+                      variant="link"
+                      size="sm"
+                      onClick={() => {
+                        setSearchTerm('');
+                        setStageFilters(['Completed', 'In Progress', 'Scheduled', 'Not Started']);
+                        setDateRange({ from: null, to: null });
+                        setAllStagesSelected(true);
                       }}
-                    />
-                  </Form.Group>
-                </div>
-              </div>
+                      className="text-nowrap mb-2 mb-md-0"
+                    >
+                      <FiRefreshCw className="mr-1" />
+                      <span>Clear</span>
+                    </Button>
+
+                    {/* Auto Refresh */}
+                    <Form.Group className="d-flex align-items-center mb-0">
+                      <Form.Label className="mb-0 mr-2 d-none d-md-block">Auto-refresh:</Form.Label>
+                      <Form.Check
+                        type="switch"
+                        id="auto-refresh-switch"
+                        checked={autoRefresh}
+                        onChange={(e) => {
+                          setAutoRefresh(e.target.checked);
+                          showToastMessage(`Auto-refresh ${e.target.checked ? 'enabled' : 'disabled'}`);
+                        }}
+                        label={<span className="d-md-none">Auto-refresh</span>}
+                      />
+                    </Form.Group>
+                  </div>
+                </Col>
+              </Row>
             </Card.Body>
           </Card>
 
@@ -552,12 +581,14 @@ const ProductionStatus = () => {
             ) : (
               <>
                 <div className="table-responsive">
+
                   <Table hover className="mb-0">
                     <thead className="bg-light">
                       <tr>
-                        <th onClick={() => handleSort('id')} style={{ cursor: 'pointer' }}>
+                        <th onClick={() => handleSort('id')} style={{ cursor: 'pointer', minWidth: '120px' }}>
                           <div className="d-flex align-items-center">
-                            Job ID
+                            <span className="d-none d-md-inline">Job ID</span>
+                            <span className="d-inline d-md-none">ID</span>
                             {sortField === 'id' && (
                               <span className="ml-1">
                                 {sortDirection === 'asc' ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
@@ -565,7 +596,7 @@ const ProductionStatus = () => {
                             )}
                           </div>
                         </th>
-                        <th onClick={() => handleSort('product')} style={{ cursor: 'pointer' }}>
+                        <th onClick={() => handleSort('product')} style={{ cursor: 'pointer', minWidth: '150px' }}>
                           <div className="d-flex align-items-center">
                             Product
                             {sortField === 'product' && (
@@ -575,7 +606,7 @@ const ProductionStatus = () => {
                             )}
                           </div>
                         </th>
-                        <th onClick={() => handleSort('stage')} style={{ cursor: 'pointer' }}>
+                        <th onClick={() => handleSort('stage')} style={{ cursor: 'pointer', minWidth: '120px' }}>
                           <div className="d-flex align-items-center">
                             Stage
                             {sortField === 'stage' && (
@@ -585,9 +616,10 @@ const ProductionStatus = () => {
                             )}
                           </div>
                         </th>
-                        <th onClick={() => handleSort('eta')} style={{ cursor: 'pointer' }}>
+                        <th onClick={() => handleSort('eta')} style={{ cursor: 'pointer', minWidth: '100px' }}>
                           <div className="d-flex align-items-center">
-                            ETA
+                            <span className="d-none d-md-inline">ETA</span>
+                            <span className="d-inline d-md-none">Due</span>
                             {sortField === 'eta' && (
                               <span className="ml-1">
                                 {sortDirection === 'asc' ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
@@ -595,8 +627,8 @@ const ProductionStatus = () => {
                             )}
                           </div>
                         </th>
-                        <th>Notes</th>
-                        <th className="text-right">Actions</th>
+                        <th style={{ minWidth: '200px' }}>Notes</th>
+                        <th className="text-end" style={{ minWidth: '80px' }}>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -659,24 +691,47 @@ const ProductionStatus = () => {
                                 )}
                               </div>
                             </td>
-                            <td className="text-right gap-3">
-                              <Button variant="link" className="text-primary p-0 mr-2">
-                                <FiEye />
-                              </Button>
-                              <Button variant="link" className="text-secondary p-0">
-                                <FiMoreHorizontal />
-                              </Button>
+                            <td className="text-end">
+
+                              <div className="d-flex justify-content-center gap-2">
+                                <Button variant="link" className="text-primary" onClick={() => handleView(item)}>
+                                  <FiEye />
+                                </Button>
+                              </div>
+
                             </td>
                           </tr>
                         );
                       })}
                     </tbody>
                   </Table>
+
+                  {/* Modal */}
+                  <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Job Details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      {selectedJob ? (
+                        <>
+                          <p><strong>Job ID:</strong> {selectedJob.id}</p>
+                          <p><strong>Product:</strong> {selectedJob.product}</p>
+                          <p><strong>Stage:</strong> {selectedJob.stage}</p>
+                          <p><strong>Stage Detail:</strong> {selectedJob.stageDetail}</p>
+                          <p><strong>ETA:</strong> {new Date(selectedJob.eta).toLocaleDateString()}</p>
+                          <p><strong>Notes:</strong> {selectedJob.notes}</p>
+                        </>
+                      ) : (
+                        <p>No job selected.</p>
+                      )}
+                    </Modal.Body>
+                  </Modal>
+
                 </div>
 
                 {/* Pagination */}
-                <Card.Footer className="d-flex justify-content-between align-items-center">
-                  <div className="text-muted">
+                <Card.Footer className="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                  <div className="text-muted mb-2 mb-md-0">
                     Showing {((currentPage - 1) * itemsPerPage) + 1}-
                     {Math.min(currentPage * itemsPerPage, filteredData.length)} of {filteredData.length} jobs
                   </div>
@@ -686,7 +741,7 @@ const ProductionStatus = () => {
                       size="sm"
                       disabled={currentPage === 1}
                       onClick={() => setCurrentPage(currentPage - 1)}
-                      className="mr-2"
+                      className="me-2"
                     >
                       <FiChevronLeft />
                     </Button>
@@ -708,45 +763,49 @@ const ProductionStatus = () => {
           {/* Statistics */}
           <Card className="mb-4">
             <Card.Body>
-              <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2 className="h5 mb-0 font-weight-bold">Production Statistics</h2>
-                <Dropdown>
-                  <Dropdown.Toggle variant="outline-secondary" id="timeframe-dropdown">
-                    {selectedTimeframe === '30' ? 'Last 30 Days' :
-                      selectedTimeframe === '90' ? 'Last 90 Days' :
-                        selectedTimeframe === '180' ? 'Last 180 Days' : 'Last 365 Days'}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item active={selectedTimeframe === '30'} onClick={() => setSelectedTimeframe('30')}>
-                      Last 30 Days
-                    </Dropdown.Item>
-                    <Dropdown.Item active={selectedTimeframe === '90'} onClick={() => setSelectedTimeframe('90')}>
-                      Last 90 Days
-                    </Dropdown.Item>
-                    <Dropdown.Item active={selectedTimeframe === '180'} onClick={() => setSelectedTimeframe('180')}>
-                      Last 180 Days
-                    </Dropdown.Item>
-                    <Dropdown.Item active={selectedTimeframe === '365'} onClick={() => setSelectedTimeframe('365')}>
-                      Last 365 Days
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
+              <Row className="align-items-center mb-4">
+                <Col xs={12} md={6} className="mb-3 mb-md-0">
+                  <h2 className="h6 h-md-5 mb-0 font-weight-bold">Production Statistics</h2>
+                </Col>
+                <Col xs={12} md={6} className="text-md-end">
+                  <Dropdown>
+                    <Dropdown.Toggle variant="outline-secondary" id="timeframe-dropdown" size="sm">
+                      {selectedTimeframe === '30' ? 'Last 30 Days' :
+                        selectedTimeframe === '90' ? 'Last 90 Days' :
+                          selectedTimeframe === '180' ? 'Last 180 Days' : 'Last 365 Days'}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item active={selectedTimeframe === '30'} onClick={() => setSelectedTimeframe('30')}>
+                        Last 30 Days
+                      </Dropdown.Item>
+                      <Dropdown.Item active={selectedTimeframe === '90'} onClick={() => setSelectedTimeframe('90')}>
+                        Last 90 Days
+                      </Dropdown.Item>
+                      <Dropdown.Item active={selectedTimeframe === '180'} onClick={() => setSelectedTimeframe('180')}>
+                        Last 180 Days
+                      </Dropdown.Item>
+                      <Dropdown.Item active={selectedTimeframe === '365'} onClick={() => setSelectedTimeframe('365')}>
+                        Last 365 Days
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Col>
+              </Row>
 
               <Row>
-                <Col md={6} className="mb-3 mb-md-0">
+                <Col xs={12} lg={6} className="mb-3 mb-lg-0">
                   <Card>
                     <Card.Body>
                       <h3 className="h6 font-weight-medium text-muted mb-2">Production by Stage</h3>
-                      <div ref={stageChartRef} style={{ height: '300px' }} />
+                      <div ref={stageChartRef} style={{ height: '300px', width: '100%' }} />
                     </Card.Body>
                   </Card>
                 </Col>
-                <Col md={6}>
+                <Col xs={12} lg={6}>
                   <Card>
                     <Card.Body>
                       <h3 className="h6 font-weight-medium text-muted mb-2">Production Timeline</h3>
-                      <div ref={timelineChartRef} style={{ height: '300px' }} />
+                      <div ref={timelineChartRef} style={{ height: '300px', width: '100%' }} />
                     </Card.Body>
                   </Card>
                 </Col>

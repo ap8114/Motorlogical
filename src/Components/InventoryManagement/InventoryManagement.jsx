@@ -288,7 +288,7 @@ const InventoryManagement = () => {
   return (
     <div className="min-vh-100 bg-light">
       {/* Header */}
-      <header className="bg-white shadow-sm py-3">
+      <header className="bg-white shadow-sm py-3 mt-3">
         <div className="container">
           <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
             <div className="d-flex align-items-center mb-3 mb-md-0">

@@ -338,7 +338,7 @@ const SalesRecords = () => {
   return (
     <div className="min-vh-100 bg-light">
       {/* Header */}
-      <header className="bg-white shadow-sm py-3">
+      <header className="bg-white mt-3 shadow-sm">
         <div className="p-3">
           <div className="d-flex justify-content-between align-items-center">
             <h1 className="h3 mb-0 text-dark">Sales Records</h1>

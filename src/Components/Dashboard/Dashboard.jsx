@@ -237,7 +237,7 @@ const Dashboard = () => {
 
     return (
         <div className="container-fluid p-3 p-md-4">
-            <div className="mb-4 mt-3 p-2 py-3 shadow-sm bg-white">
+            <div className="mb-3 p-2 py-3 shadow-sm bg-white">
                 <h2 className="h3 mb-1 ms-2">Dashboard Overview</h2>
                 <p className="text-muted ms-2">Thursday, June 12, 2025</p>
             </div>
