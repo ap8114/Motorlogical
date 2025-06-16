@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../Layout/Header";
 import Sidebar from "../Layout/Sidebar";
 
 const MainLayout = () => {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize(); // Set initial value
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+
   return (
     <div className="d-flex">
       {/* Sidebar - fixed height and width */}
