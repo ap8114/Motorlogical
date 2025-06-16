@@ -45,7 +45,7 @@ const MainLayout = () => {
 
         {/* Main Content */}
         <div
-          className={`${isMobile ? "col-12" : "col-md-9 col-lg-10 offset-md-3 offset-lg-2"
+          className={`${isMobile ? "col-12" : "col-md-9 col-lg-10 "
             } bg-light`}
         >
           <div className="p-4 ">

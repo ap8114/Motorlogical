@@ -1,8 +1,58 @@
-import React, { useEffect } from 'react';
+
+import React, { useState, useEffect } from 'react';
+
 import './dashboard.css';
 import * as echarts from 'echarts';
 
 const Dashboard = () => {
+
+
+      const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const orders = [
+    {
+      id: '#ORD-7829',
+      customer: 'James Donovan',
+      initials: 'JD',
+      vehicle: 'Tesla Model Y',
+      amount: '$58,990',
+      status: 'Completed',
+      statusClass: 'success',
+    },
+    {
+      id: '#ORD-7828',
+      customer: 'Rebecca Liu',
+      initials: 'RL',
+      vehicle: 'Ford F-150 Lightning',
+      amount: '$62,500',
+      status: 'Processing',
+      statusClass: 'warning',
+    },
+    {
+      id: '#ORD-7827',
+      customer: 'Alexander Martinez',
+      initials: 'AM',
+      vehicle: 'Rivian R1S',
+      amount: '$78,000',
+      status: 'In Production',
+      statusClass: 'info',
+    },
+    {
+      id: '#ORD-7826',
+      customer: 'Sarah Parker',
+      initials: 'SP',
+      vehicle: 'Lucid Air',
+      amount: '$87,400',
+      status: 'Pending',
+      statusClass: 'secondary',
+    },
+  ];
+
+  const handleView = (order) => {
+    setSelectedOrder(order);
+  };
+
+
     useEffect(() => {
         // Initialize charts after component mounts
         const initCharts = () => {
@@ -297,7 +347,7 @@ const Dashboard = () => {
                     <div className="dashboard-card h-100">
                         <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4">
                             <h3 className="h5 mb-0">Vehicle Categories</h3>
-                        
+
                         </div>
                         <div id="categoryChart" className="chart-container" style={{ minHeight: '300px' }}></div>
                     </div>
@@ -310,7 +360,7 @@ const Dashboard = () => {
                     <div className="dashboard-card h-100">
                         <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4">
                             <h3 className="h5 mb-0">Recent Orders</h3>
-                         
+
                         </div>
                         <div className="table-responsive">
                             <table className="table table-hover mb-0">
@@ -325,84 +375,73 @@ const Dashboard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td className="fw-medium">#ORD-7829</td>
-                                        <td className="d-none d-sm-table-cell">
-                                            <div className="d-flex align-items-center">
-                                                <div className="user-avatar bg-primary bg-opacity-10 text-primary">JD</div>
-                                                <span>James Donovan</span>
-                                            </div>
-                                        </td>
-                                        <td>Tesla Model Y</td>
-                                        <td className="fw-medium d-none d-md-table-cell">$58,990</td>
-                                        <td>
-                                            <span className="badge-status bg-success bg-opacity-10 text-success">Completed</span>
-                                        </td>
-                                        <td>
-                                            <button className="btn btn-sm btn-link text-muted">
-                                                <i className="ri-more-2-fill"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="fw-medium">#ORD-7828</td>
-                                        <td className="d-none d-sm-table-cell">
-                                            <div className="d-flex align-items-center">
-                                                <div className="user-avatar bg-purple bg-opacity-10 text-purple">RL</div>
-                                                <span>Rebecca Liu</span>
-                                            </div>
-                                        </td>
-                                        <td>Ford F-150 Lightning</td>
-                                        <td className="fw-medium d-none d-md-table-cell">$62,500</td>
-                                        <td>
-                                            <span className="badge-status bg-warning bg-opacity-10 text-warning">Processing</span>
-                                        </td>
-                                        <td>
-                                            <button className="btn btn-sm btn-link text-muted">
-                                                <i className="ri-more-2-fill"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="fw-medium">#ORD-7827</td>
-                                        <td className="d-none d-sm-table-cell">
-                                            <div className="d-flex align-items-center">
-                                                <div className="user-avatar bg-success bg-opacity-10 text-success">AM</div>
-                                                <span>Alexander Martinez</span>
-                                            </div>
-                                        </td>
-                                        <td>Rivian R1S</td>
-                                        <td className="fw-medium d-none d-md-table-cell">$78,000</td>
-                                        <td>
-                                            <span className="badge-status bg-info bg-opacity-10 text-info">In Production</span>
-                                        </td>
-                                        <td>
-                                            <button className="btn btn-sm btn-link text-muted">
-                                                <i className="ri-more-2-fill"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="fw-medium">#ORD-7826</td>
-                                        <td className="d-none d-sm-table-cell">
-                                            <div className="d-flex align-items-center">
-                                                <div className="user-avatar bg-danger bg-opacity-10 text-danger">SP</div>
-                                                <span>Sarah Parker</span>
-                                            </div>
-                                        </td>
-                                        <td>Lucid Air</td>
-                                        <td className="fw-medium d-none d-md-table-cell">$87,400</td>
-                                        <td>
-                                            <span className="badge-status bg-secondary bg-opacity-10 text-secondary">Pending</span>
-                                        </td>
-                                        <td>
-                                            <button className="btn btn-sm btn-link text-muted">
-                                                <i className="ri-more-2-fill"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    {orders.map((order, index) => (
+                                        <tr key={index}>
+                                            <td className="fw-medium">{order.id}</td>
+                                            <td className="d-none d-sm-table-cell">
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <div className={`user-avatar bg-${order.statusClass} bg-opacity-10 text-${order.statusClass}`}>{order.initials}</div>
+                                                    <span>{order.customer}</span>
+                                                </div>
+                                            </td>
+                                            <td>{order.vehicle}</td>
+                                            <td className="fw-medium d-none d-md-table-cell">{order.amount}</td>
+                                            <td>
+                                                <span className={`badge-status bg-${order.statusClass} bg-opacity-10 text-${order.statusClass}`}>
+                                                    {order.status}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-sm btn-link text-muted"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#orderDetailModal"
+                                                    onClick={() => handleView(order)}
+                                                >
+                                                    <i className="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Modal */}
+                <div
+                    className="modal fade"
+                    id="orderDetailModal"
+                    tabIndex="-1"
+                    aria-labelledby="orderDetailModalLabel"
+                    aria-hidden="true"
+                >
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="orderDetailModalLabel">Order Details</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                {selectedOrder ? (
+                                    <>
+                                        <p><strong>Order ID:</strong> {selectedOrder.id}</p>
+                                        <p><strong>Customer:</strong> {selectedOrder.customer}</p>
+                                        <p><strong>Vehicle:</strong> {selectedOrder.vehicle}</p>
+                                        <p><strong>Amount:</strong> {selectedOrder.amount}</p>
+                                        <p><strong>Status:</strong> {selectedOrder.status}</p>
+                                    </>
+                                ) : (
+                                    <p>No order selected.</p>
+                                )}
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -411,7 +450,7 @@ const Dashboard = () => {
                     <div className="dashboard-card h-100">
                         <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4">
                             <h3 className="h5 mb-0">Inventory Status</h3>
-                          
+
                         </div>
                         <div className="mb-4">
                             <div className="d-flex justify-content-between mb-1">

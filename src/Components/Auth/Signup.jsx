@@ -122,7 +122,7 @@ const Signup = () => {
                 <div className="text-center">
                     <p className="small text-white">
                         Already have an account?{' '}
-                        <a href="/login" className="text-decoration-none fw-semibold" style={{ color: '#FFB803' }}>
+                        <a href="/" className="text-decoration-none fw-semibold" style={{ color: '#FFB803' }}>
                             Login
                         </a>
                     </p>
