@@ -4,6 +4,7 @@ const Header = () => {
   return (
     <div>
       <header className="mj-header-container">
+        
   <div className="container-fluid">
     <div className="row align-items-center">
       {/* Welcome Section */}

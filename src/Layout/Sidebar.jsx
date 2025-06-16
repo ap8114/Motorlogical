@@ -1,135 +1,125 @@
-import React, { useEffect } from 'react';
-import './Layout.css';
-import { Link } from 'react-router-dom';
-
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
+    const location = useLocation();
+    const [activePath, setActivePath] = useState(location.pathname);
 
-    useEffect(() => {
-        const links = document.querySelectorAll('.mj-nav-link');
-        const overlay = document.querySelector('.mj-sidebar-overlay');
-
-        const closeSidebar = () => {
-            document.getElementById('mjSidebar').classList.remove('mj-sidebar-open');
-            overlay.classList.remove('mj-overlay-show');
-        };
-
-        links.forEach(link => {
-            link.addEventListener('click', function () {
-                if (window.innerWidth <= 768) {
-                    document.querySelectorAll('.mj-nav-link').forEach(l => l.classList.remove('mj-nav-active'));
-                    this.classList.add('mj-nav-active');
-                    closeSidebar();
-                }
-            });
-        });
-
-        const handleResize = () => {
-            if (window.innerWidth > 768) {
-                closeSidebar();
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        // Cleanup on unmount
-        return () => {
-            links.forEach(link => link.removeEventListener('click', () => { }));
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    const toggleSidebar = () => {
-        const sidebar = document.getElementById('mjSidebar');
-        const overlay = document.querySelector('.mj-sidebar-overlay');
-        sidebar.classList.toggle('mj-sidebar-open');
-        overlay.classList.toggle('mj-overlay-show');
-    };
-
-    const closeSidebar = () => {
-        const sidebar = document.getElementById('mjSidebar');
-        const overlay = document.querySelector('.mj-sidebar-overlay');
-        sidebar.classList.remove('mj-sidebar-open');
-        overlay.classList.remove('mj-overlay-show');
+    const handleLinkClick = (path) => {
+        setActivePath(path);
     };
 
     return (
-        <>
-            {/* Mobile Toggle Button */}
-            <button className="mj-mobile-toggle" onClick={toggleSidebar}>
-                <i className="fas fa-bars" />
-            </button>
-
-            {/* Sidebar Overlay for Mobile */}
-            <div className="mj-sidebar-overlay" onClick={closeSidebar} />
-
+        <div className="row g-0">
             {/* Sidebar */}
-            <nav className="mj-sidebar-container" id="mjSidebar">
-                <div className="mj-logo-section">
-                    <div className="mj-logo-icon">
-                        <div className="mj-logo-bars">
-                            <div className="mj-logo-bar" />
-                            <div className="mj-logo-bar" />
-                            <div className="mj-logo-bar" />
-                        </div>
-                    </div>
-                    <p className="mj-logo-text">Motorlogical</p>
-                </div>
-
-                {/* Main Menu Section */}
-                <div className="mj-menu-section">
-                    <h6 className="mj-section-title">Main Menu</h6>
-                    <ul className="mj-nav-list">
-                        <li className="mj-nav-item">
-                            <a href="#" className="mj-nav-link mj-nav-active">
-                                <i className="fas fa-th-large mj-nav-icon" /> Dashboard
-                            </a>
-                        </li>
-                        <Link to="/ordermanagement" className="mj-nav-link">
-                            <i className="fas fa-shopping-cart mj-nav-icon" /> Orders
+            <div className="col-md-auto">
+                <nav className="ml-sidebar-container" id="mlSidebar">
+                    {/* Brand Section */}
+                    <div className="ml-brand-section d-none d-md-block">
+                        <Link to="/" className="ml-brand-logo">
+                            <div className="ml-brand-icon">
+                                <i className="fas fa-chart-bar text-dark" />
+                            </div>
+                            Motorlogical
                         </Link>
+                    </div>
 
-                        <li className="mj-nav-item">
-                            <Link to="/inventorymanagement" className="mj-nav-link">
-                                <i className="fas fa-boxes mj-nav-icon" /> Inventory
-                            </Link>
-                        </li>
-                        <li className="mj-nav-item">
-                            <a href="#" className="mj-nav-link">
-                                <i className="fas fa-cogs mj-nav-icon" /> Production Status
-                            </a>
-                        </li>
-                        <li className="mj-nav-item">
-                            <a href="#" className="mj-nav-link">
-                                <i className="fas fa-chart-line mj-nav-icon" /> Sales Record
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                    {/* Main Menu */}
+                    <div className="ml-menu-section">
+                        <div className="ml-menu-title">Main Menu</div>
+                        <ul className="ml-nav-list">
+                            <li className="ml-nav-item">
+                                <Link
+                                    to="/"
+                                    className={`ml-nav-link ${activePath === '/dashboard' ? 'ml-active' : ''}`}
+                                    onClick={() => handleLinkClick('/dashboard')}
+                                >
+                                    <i className="fas fa-th-large ml-nav-icon" />
+                                    Dashboard
+                                </Link>
+                            </li>
+                            <li className="ml-nav-item">
+                                <Link
+                                    to="/ordermanagement"
+                                    className={`ml-nav-link ${activePath === '/orders' ? 'ml-active' : ''}`}
+                                    onClick={() => handleLinkClick('/orders')}
+                                >
+                                    <i className="fas fa-shopping-cart ml-nav-icon" />
+                                    Orders
+                                </Link>
+                            </li>
+                            <li className="ml-nav-item">
+                                <Link
+                                    to="/inventorymanagement"
+                                    className={`ml-nav-link ${activePath === '/inventorymanagement' ? 'ml-active' : ''}`}
+                                    onClick={() => handleLinkClick('/inventorymanagement')}
+                                >
+                                    <i className="fas fa-boxes ml-nav-icon" />
+                                    Inventory
+                                </Link>
+                            </li>
+                            <li className="ml-nav-item">
+                                <Link
+                                    to="/productionstatus"
+                                    className={`ml-nav-link ${activePath === '/productionstatus' ? 'ml-active' : ''}`}
+                                    onClick={() => handleLinkClick('/productionstatus')}
+                                >
+                                    <i className="fas fa-cog ml-nav-icon" />
+                                    Production Status
+                                </Link>
+                            </li>
+                            <li className="ml-nav-item">
+                                <Link
+                                    to="/salesrecord"
+                                    className={`ml-nav-link ${activePath === '/salesrecord' ? 'ml-active' : ''}`}
+                                    onClick={() => handleLinkClick('/salesrecord')}
+                                >
+                                    <i className="fas fa-chart-line ml-nav-icon" />
+                                    Sales Record
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
 
-                {/* Settings Section */}
-                <div className="mj-menu-section">
-                    <h6 className="mj-section-title">Settings</h6>
-                    <ul className="mj-nav-list">
-                        <li className="mj-nav-item">
-                            <a href="#" className="mj-nav-link">
-                                <i className="fas fa-user mj-nav-icon" /> Account
-                            </a>
-                        </li>
-                        <li className="mj-nav-item">
-                            <a href="#" className="mj-nav-link">
-                                <i className="fas fa-sliders-h mj-nav-icon" /> Preferences
-                            </a>
-                        </li>
-                        <li className="mj-nav-item">
-                            <a href="#" className="mj-nav-link">
-                                <i className="fas fa-question-circle mj-nav-icon" /> Help & Support
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </>
+                    {/* Settings Menu */}
+                    <div className="ml-menu-section">
+                        <div className="ml-menu-title">Settings</div>
+                        <ul className="ml-nav-list">
+                            <li className="ml-nav-item">
+                                <Link
+                                    to="/account"
+                                    className={`ml-nav-link ${activePath === '/account' ? 'ml-active' : ''}`}
+                                    onClick={() => handleLinkClick('/account')}
+                                >
+                                    <i className="fas fa-user ml-nav-icon" />
+                                    Account
+                                </Link>
+                            </li>
+                            <li className="ml-nav-item">
+                                <Link
+                                    to="/preferences"
+                                    className={`ml-nav-link ${activePath === '/preferences' ? 'ml-active' : ''}`}
+                                    onClick={() => handleLinkClick('/preferences')}
+                                >
+                                    <i className="fas fa-sliders-h ml-nav-icon" />
+                                    Preferences
+                                </Link>
+                            </li>
+                            <li className="ml-nav-item">
+                                <Link
+                                    to="/support"
+                                    className={`ml-nav-link ${activePath === '/support' ? 'ml-active' : ''}`}
+                                    onClick={() => handleLinkClick('/support')}
+                                >
+                                    <i className="fas fa-question-circle ml-nav-icon" />
+                                    Help &amp; Support
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
     );
 };
 

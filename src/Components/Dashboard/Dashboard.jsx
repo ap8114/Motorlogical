@@ -185,7 +185,7 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <div className="container-fluid p-4">
+        <div className="p-4">
             <div className="mb-4">
                 <h1 className="h2 mb-1">Dashboard Overview</h1>
                 <p className="text-muted">Thursday, June 12, 2025</p>
