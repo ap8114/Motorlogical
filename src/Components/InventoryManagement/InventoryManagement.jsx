@@ -1,54 +1,56 @@
 // src/components/InventoryManagement.js
 import React, { useState, useEffect } from 'react';
 import { Modal, Toast, Button } from 'react-bootstrap';
+import { Pie } from 'react-chartjs-2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+// Register ChartJS components
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const InventoryManagement = () => {
-  // Sample inventory data
+  // Sample inventory data with shipping indication
   const inventoryData = [
-    { id: 1, name: "Premium Leather Steering Wheel Cover", category: "Accessories", quantity: 45, status: "In Stock", updated: "2025-06-10" },
-    { id: 2, name: "Advanced Navigation System", category: "Electronics", quantity: 12, status: "Low Stock", updated: "2025-06-11" },
-    { id: 3, name: "Brake Pads - Performance Series", category: "Parts", quantity: 78, status: "In Stock", updated: "2025-06-09" },
-    { id: 4, name: "Windshield Wiper Blades - All Weather", category: "Accessories", quantity: 0, status: "Out of Stock", updated: "2025-06-08" },
-    { id: 5, name: "Engine Oil Filter - Premium", category: "Parts", quantity: 120, status: "In Stock", updated: "2025-06-12" },
-    { id: 6, name: "Bluetooth Car Audio Adapter", category: "Electronics", quantity: 8, status: "Low Stock", updated: "2025-06-07" },
-    { id: 7, name: "Transmission Fluid - Synthetic", category: "Fluids", quantity: 35, status: "In Stock", updated: "2025-06-06" },
-    { id: 8, name: "LED Headlight Conversion Kit", category: "Electronics", quantity: 0, status: "Out of Stock", updated: "2025-06-05" },
-    { id: 9, name: "Diagnostic Scanner Tool", category: "Tools", quantity: 5, status: "Low Stock", updated: "2025-06-04" },
-    { id: 10, name: "Premium Floor Mats - All Weather", category: "Accessories", quantity: 42, status: "In Stock", updated: "2025-06-03" },
-    { id: 11, name: "Cabin Air Filter - HEPA", category: "Parts", quantity: 67, status: "In Stock", updated: "2025-06-02" },
-    { id: 12, name: "Tire Pressure Monitoring System", category: "Electronics", quantity: 15, status: "In Stock", updated: "2025-06-01" },
-    { id: 13, name: "Brake Fluid - DOT 4", category: "Fluids", quantity: 7, status: "Low Stock", updated: "2025-05-31" },
-    { id: 14, name: "Spark Plugs - Platinum", category: "Parts", quantity: 0, status: "Out of Stock", updated: "2025-05-30" },
-    { id: 15, name: "Car Battery - High Performance", category: "Parts", quantity: 23, status: "In Stock", updated: "2025-05-29" },
-    { id: 16, name: "Wheel Alignment Tool Kit", category: "Tools", quantity: 3, status: "Low Stock", updated: "2025-05-28" },
-    { id: 17, name: "Ceramic Coating Protection", category: "Accessories", quantity: 18, status: "In Stock", updated: "2025-05-27" },
-    { id: 18, name: "Rear View Camera System", category: "Electronics", quantity: 0, status: "Out of Stock", updated: "2025-05-26" },
-    { id: 19, name: "Power Steering Fluid", category: "Fluids", quantity: 52, status: "In Stock", updated: "2025-05-25" },
-    { id: 20, name: "Torque Wrench Set", category: "Tools", quantity: 9, status: "Low Stock", updated: "2025-05-24" },
-    { id: 21, name: "Radiator Coolant - Extended Life", category: "Fluids", quantity: 38, status: "In Stock", updated: "2025-05-23" },
-    { id: 22, name: "Car Seat Covers - Premium", category: "Accessories", quantity: 27, status: "In Stock", updated: "2025-05-22" },
-    { id: 23, name: "Fuel Injector Cleaner", category: "Fluids", quantity: 0, status: "Out of Stock", updated: "2025-05-21" },
-    { id: 24, name: "Air Compressor - Portable", category: "Tools", quantity: 6, status: "Low Stock", updated: "2025-05-20" },
-    { id: 25, name: "Alternator - High Output", category: "Parts", quantity: 14, status: "In Stock", updated: "2025-05-19" },
-    { id: 26, name: "Dashboard Camera - 4K", category: "Electronics", quantity: 11, status: "Low Stock", updated: "2025-05-18" },
-    { id: 27, name: "Hydraulic Jack - 3 Ton", category: "Tools", quantity: 19, status: "In Stock", updated: "2025-05-17" },
-    { id: 28, name: "Window Tint Film - Premium", category: "Accessories", quantity: 0, status: "Out of Stock", updated: "2025-05-16" },
-    { id: 29, name: "Serpentine Belt - Heavy Duty", category: "Parts", quantity: 31, status: "In Stock", updated: "2025-05-15" },
-    { id: 30, name: "Wheel Bearing Kit - Front", category: "Parts", quantity: 4, status: "Low Stock", updated: "2025-05-14" }
+    { id: 1, name: "Premium Leather Steering Wheel Cover", category: "Accessories", quantity: 45, status: "In Stock", updated: "2025-06-10", shipping: "Express" },
+    { id: 2, name: "Advanced Navigation System", category: "Electronics", quantity: 12, status: "Low Stock", updated: "2025-06-11", shipping: "Standard" },
+    { id: 3, name: "Brake Pads - Performance Series", category: "Parts", quantity: 78, status: "In Stock", updated: "2025-06-09", shipping: "Express" },
+    { id: 4, name: "Windshield Wiper Blades - All Weather", category: "Accessories", quantity: 0, status: "Out of Stock", updated: "2025-06-08", shipping: "Backorder" },
+    { id: 5, name: "Engine Oil Filter - Premium", category: "Parts", quantity: 120, status: "In Stock", updated: "2025-06-12", shipping: "Standard" },
+    { id: 6, name: "Bluetooth Car Audio Adapter", category: "Electronics", quantity: 8, status: "Low Stock", updated: "2025-06-07", shipping: "Express" },
+    { id: 7, name: "Transmission Fluid - Synthetic", category: "Fluids", quantity: 35, status: "In Stock", updated: "2025-06-06", shipping: "Standard" },
+    { id: 8, name: "LED Headlight Conversion Kit", category: "Electronics", quantity: 0, status: "Out of Stock", updated: "2025-06-05", shipping: "Backorder" },
+    { id: 9, name: "Diagnostic Scanner Tool", category: "Tools", quantity: 5, status: "Low Stock", updated: "2025-06-04", shipping: "Express" },
+    { id: 10, name: "Premium Floor Mats - All Weather", category: "Accessories", quantity: 42, status: "In Stock", updated: "2025-06-03", shipping: "Standard" },
+     { id: 1, name: "Premium Leather Steering Wheel Cover", category: "Accessories", quantity: 45, status: "In Stock", updated: "2025-06-10", shipping: "Express" },
+    { id: 2, name: "Advanced Navigation System", category: "Electronics", quantity: 12, status: "Low Stock", updated: "2025-06-11", shipping: "Standard" },
+    { id: 3, name: "Brake Pads - Performance Series", category: "Parts", quantity: 78, status: "In Stock", updated: "2025-06-09", shipping: "Express" },
+    { id: 4, name: "Windshield Wiper Blades - All Weather", category: "Accessories", quantity: 0, status: "Out of Stock", updated: "2025-06-08", shipping: "Backorder" },
+    { id: 5, name: "Engine Oil Filter - Premium", category: "Parts", quantity: 120, status: "In Stock", updated: "2025-06-12", shipping: "Standard" },
+    { id: 6, name: "Bluetooth Car Audio Adapter", category: "Electronics", quantity: 8, status: "Low Stock", updated: "2025-06-07", shipping: "Express" },
+    { id: 7, name: "Transmission Fluid - Synthetic", category: "Fluids", quantity: 35, status: "In Stock", updated: "2025-06-06", shipping: "Standard" },
+    { id: 8, name: "LED Headlight Conversion Kit", category: "Electronics", quantity: 0, status: "Out of Stock", updated: "2025-06-05", shipping: "Backorder" },
+    { id: 9, name: "Diagnostic Scanner Tool", category: "Tools", quantity: 5, status: "Low Stock", updated: "2025-06-04", shipping: "Express" },
+    { id: 10, name: "Premium Floor Mats - All Weather", category: "Accessories", quantity: 42, status: "In Stock", updated: "2025-06-03", shipping: "Standard" },
+      { id: 1, name: "Premium Leather Steering Wheel Cover", category: "Accessories", quantity: 45, status: "In Stock", updated: "2025-06-10", shipping: "Express" },
+    { id: 2, name: "Advanced Navigation System", category: "Electronics", quantity: 12, status: "Low Stock", updated: "2025-06-11", shipping: "Standard" },
+    { id: 3, name: "Brake Pads - Performance Series", category: "Parts", quantity: 78, status: "In Stock", updated: "2025-06-09", shipping: "Express" },
+    { id: 4, name: "Windshield Wiper Blades - All Weather", category: "Accessories", quantity: 0, status: "Out of Stock", updated: "2025-06-08", shipping: "Backorder" },
+    { id: 5, name: "Engine Oil Filter - Premium", category: "Parts", quantity: 120, status: "In Stock", updated: "2025-06-12", shipping: "Standard" },
+   // ... (rest of the inventory data remains the same)
   ];
 
   // State variables
   const [loading, setLoading] = useState(true);
   const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(25); // Increased from 10 to 25
   const [currentSortColumn, setCurrentSortColumn] = useState('name');
   const [currentSortDirection, setCurrentSortDirection] = useState('asc');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [shippingFilter, setShippingFilter] = useState('all');
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showToast, setShowToast] = useState(false);
@@ -67,7 +69,7 @@ const InventoryManagement = () => {
   // Apply filters whenever search or filters change
   useEffect(() => {
     applyFilters();
-  }, [searchTerm, categoryFilter, statusFilter]);
+  }, [searchTerm, categoryFilter, statusFilter, shippingFilter, currentSortColumn, currentSortDirection]);
 
   // Format date for display
   const formatDate = (dateString) => {
@@ -89,12 +91,19 @@ const InventoryManagement = () => {
       result = result.filter(item => item.status === statusFilter);
     }
     
-    // Search filter
+    // Shipping filter
+    if (shippingFilter !== 'all') {
+      result = result.filter(item => item.shipping === shippingFilter);
+    }
+    
+    // Search filter - now searches name, category, and status
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       result = result.filter(item => 
         item.name.toLowerCase().includes(term) || 
-        item.category.toLowerCase().includes(term)
+        item.category.toLowerCase().includes(term) ||
+        item.status.toLowerCase().includes(term) ||
+        item.shipping.toLowerCase().includes(term)
       );
     }
     
@@ -132,6 +141,10 @@ const InventoryManagement = () => {
           valueA = new Date(a.updated);
           valueB = new Date(b.updated);
           break;
+        case 'shipping':
+          valueA = a.shipping;
+          valueB = b.shipping;
+          break;
         default:
           valueA = a.name;
           valueB = b.name;
@@ -156,9 +169,6 @@ const InventoryManagement = () => {
       setCurrentSortColumn(column);
       setCurrentSortDirection('asc');
     }
-    
-    // Apply sorting to filteredData
-    setFilteredData(prevData => sortData(prevData));
   };
 
   // Get sort icon for column
@@ -167,6 +177,48 @@ const InventoryManagement = () => {
     return currentSortDirection === 'asc' ? 
       <i className="bi bi-arrow-up ms-1"></i> : 
       <i className="bi bi-arrow-down ms-1"></i>;
+  };
+
+  // Get shipping badge color
+  const getShippingBadgeColor = (shippingType) => {
+    switch (shippingType) {
+      case 'Express':
+        return 'bg-info text-white';
+      case 'Standard':
+        return 'bg-primary text-white';
+      case 'Backorder':
+        return 'bg-warning text-dark';
+      default:
+        return 'bg-secondary text-white';
+    }
+  };
+
+  // Prepare data for pie chart
+  const getShippingChartData = () => {
+    const shippingCounts = filteredData.reduce((acc, item) => {
+      acc[item.shipping] = (acc[item.shipping] || 0) + 1;
+      return acc;
+    }, {});
+
+    const labels = Object.keys(shippingCounts);
+    const data = Object.values(shippingCounts);
+    const backgroundColors = labels.map(label => {
+      switch (label) {
+        case 'Express': return '#0dcaf0';
+        case 'Standard': return '#0d6efd';
+        case 'Backorder': return '#ffc107';
+        default: return '#6c757d';
+      }
+    });
+
+    return {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: backgroundColors,
+        borderWidth: 1
+      }]
+    };
   };
 
   // Handle page change
@@ -190,6 +242,7 @@ const InventoryManagement = () => {
     if (!selectedItem) return;
     
     const newQuantity = parseInt(document.getElementById('edit-item-quantity').value);
+    const newShipping = document.getElementById('edit-item-shipping').value;
     
     if (isNaN(newQuantity)) {
       showToastMessage('Please enter a valid quantity', 'error');
@@ -199,7 +252,7 @@ const InventoryManagement = () => {
     // Update the item in the inventoryData
     const updatedData = inventoryData.map(item => {
       if (item.id === selectedItem.id) {
-        const updatedItem = { ...item, quantity: newQuantity };
+        const updatedItem = { ...item, quantity: newQuantity, shipping: newShipping };
         
         // Update status based on quantity
         if (newQuantity === 0) {
@@ -218,12 +271,16 @@ const InventoryManagement = () => {
       return item;
     });
     
-    // Update inventory data (in a real app, you would update your state)
-    // For this demo, we'll just update the filteredData to reflect changes
+    // Update filtered data to reflect changes
     setFilteredData(prevData => 
       prevData.map(item => 
         item.id === selectedItem.id ? 
-          {...item, quantity: newQuantity, status: newQuantity === 0 ? 'Out of Stock' : newQuantity <= 10 ? 'Low Stock' : 'In Stock', updated: new Date().toISOString().split('T')[0]} 
+          {...item, 
+            quantity: newQuantity, 
+            shipping: newShipping,
+            status: newQuantity === 0 ? 'Out of Stock' : newQuantity <= 10 ? 'Low Stock' : 'In Stock', 
+            updated: new Date().toISOString().split('T')[0]
+          } 
           : item
       )
     );
@@ -253,6 +310,7 @@ const InventoryManagement = () => {
     setSearchTerm('');
     setCategoryFilter('all');
     setStatusFilter('all');
+    setShippingFilter('all');
   };
 
   // Calculate pagination values
@@ -295,22 +353,22 @@ const InventoryManagement = () => {
               <h1 className="h3 mb-0">Inventory Management</h1>
             </div>
             <div className="d-flex align-items-center gap-3">
-              <div className="position-relative">
+              {/* <div className="position-relative">
                 <i className="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
                 <input
                   type="text"
                   className="form-control ps-5"
-                  placeholder="Search inventory..."
+                  placeholder="Search by name, category, status..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-              </div>
+              </div> */}
               <button
                 className="btn btn-primary d-flex align-items-center"
                 onClick={exportToExcel}
               >
                 <i className="bi bi-file-earmark-excel me-2"></i>
-                <span className="d-none d-md-inline">Export to Excel</span>
+                <span className="d-none d-md-inline">Export</span>
               </button>
             </div>
           </div>
@@ -318,49 +376,127 @@ const InventoryManagement = () => {
       </header>
 
       {/* Main Content */}
-      <main className=" py-4">
+      <main className="py-4">
         {/* Dealership Info & Filter Section */}
+       <div className="card mb-4">
+  <div className="card-body">
+    <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+      <div className="mb-3 mb-md-0">
+        <h2 className="h6 mb-1">Dealership:</h2>
+        <p className="mb-0 fw-bold">Riverside Automotive Group</p>
+      </div>
+
+      <div className="d-flex flex-wrap gap-2">
+        {/* Search Field */}
+        <div>
+          <div className="input-group input-group-sm">
+            <span className="input-group-text bg-light border-end-0">
+              <i className="fas fa-search text-muted"></i>
+            </span>
+            <input
+              type="text"
+              className="form-control border-start-0"
+              placeholder="Search items..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Category Filter */}
+        <div>
+          <select 
+            className="form-select form-select-sm"
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+          >
+            <option value="all">All Categories</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Parts">Parts</option>
+            <option value="Tools">Tools</option>
+            <option value="Fluids">Fluids</option>
+          </select>
+        </div>
+
+        {/* Status Filter */}
+        <div>
+          <select 
+            className="form-select form-select-sm"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All Statuses</option>
+            <option value="In Stock">In Stock</option>
+            <option value="Low Stock">Low Stock</option>
+            <option value="Out of Stock">Out of Stock</option>
+          </select>
+        </div>
+
+        {/* Shipping Filter */}
+        <div>
+          <select 
+            className="form-select form-select-sm"
+            value={shippingFilter}
+            onChange={(e) => setShippingFilter(e.target.value)}
+          >
+            <option value="all">All Shipping</option>
+            <option value="Express">Express</option>
+            <option value="Standard">Standard</option>
+            <option value="Backorder">Backorder</option>
+          </select>
+        </div>
+
+        {/* Clear Filters Button */}
+        <button 
+          className="btn btn-outline-secondary btn-sm d-flex align-items-center"
+          onClick={clearFilters}
+        >
+          <i className="bi bi-arrow-repeat me-1"></i>
+          Clear Filters
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+        {/* Shipping Chart */}
         <div className="card mb-4">
           <div className="card-body">
-            <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-              <div className="mb-3 mb-md-0">
-                <h2 className="h6 mb-1">Dealership:</h2>
-                <p className="mb-0 fw-bold">Riverside Automotive Group</p>
+            <h5 className="card-title">Shipping Distribution</h5>
+            <div className="row">
+              <div className="col-md-6">
+                <div className="chart-container" style={{ height: '300px' }}>
+                  <Pie 
+                    data={getShippingChartData()} 
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: {
+                          position: 'right'
+                        }
+                      }
+                    }}
+                  />
+                </div>
               </div>
-              <div className="d-flex flex-wrap gap-2">
-                <div>
-                  <select 
-                    className="form-select form-select-sm"
-                    value={categoryFilter}
-                    onChange={(e) => setCategoryFilter(e.target.value)}
-                  >
-                    <option value="all">All Categories</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Accessories">Accessories</option>
-                    <option value="Parts">Parts</option>
-                    <option value="Tools">Tools</option>
-                    <option value="Fluids">Fluids</option>
-                  </select>
+              <div className="col-md-6">
+                <div className="d-flex flex-column h-100 justify-content-center">
+                  <div className="mb-3">
+                    <span className="badge bg-info me-2">Express</span>
+                    <span>Fast delivery (1-2 business days)</span>
+                  </div>
+                  <div className="mb-3">
+                    <span className="badge bg-primary me-2">Standard</span>
+                    <span>Regular delivery (3-5 business days)</span>
+                  </div>
+                  <div>
+                    <span className="badge bg-warning text-dark me-2">Backorder</span>
+                    <span>Currently out of stock, will ship when available</span>
+                  </div>
                 </div>
-                <div>
-                  <select 
-                    className="form-select form-select-sm"
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                  >
-                    <option value="all">All Statuses</option>
-                    <option value="In Stock">In Stock</option>
-                    <option value="Low Stock">Low Stock</option>
-                    <option value="Out of Stock">Out of Stock</option>
-                  </select>
-                </div>
-                <button 
-                  className="btn btn-outline-secondary btn-sm d-flex align-items-center"
-                  onClick={clearFilters}
-                >
-                  <i className="bi bi-arrow-repeat me-1"></i>
-                  Clear Filters
-                </button>
               </div>
             </div>
           </div>
@@ -370,46 +506,52 @@ const InventoryManagement = () => {
         <div className="card">
           <div className="card-body p-0">
             <div className="table-responsive">
-              <table className="table table-hover align-middle mb-0">
+              <table className="table table-hover align-middle mb-0" style={{ fontSize: '0.875rem' }}>
                 <thead className="table-light">
                   <tr>
                     <th 
-                      className="cursor-pointer" 
+                      className=" cursor-pointer py-2" 
                       onClick={() => handleSort('name')}
                     >
                       Item Name {getSortIcon('name')}
                     </th>
                     <th 
-                      className="text-center cursor-pointer" 
+                      className="text-center cursor-pointer py-2" 
                       onClick={() => handleSort('category')}
                     >
                       Category {getSortIcon('category')}
                     </th>
                     <th 
-                      className="text-end cursor-pointer" 
+                      className="text-end cursor-pointer py-2" 
                       onClick={() => handleSort('quantity')}
                     >
                       Quantity {getSortIcon('quantity')}
                     </th>
                     <th 
-                      className="text-center cursor-pointer" 
+                      className="text-center cursor-pointer py-2" 
                       onClick={() => handleSort('status')}
                     >
                       Status {getSortIcon('status')}
                     </th>
                     <th 
-                      className="cursor-pointer" 
+                      className="text-center cursor-pointer py-2" 
+                      onClick={() => handleSort('shipping')}
+                    >
+                      Shipping {getSortIcon('shipping')}
+                    </th>
+                    <th 
+                      className="cursor-pointer py-2" 
                       onClick={() => handleSort('updated')}
                     >
                       Last Updated {getSortIcon('updated')}
                     </th>
-                    <th className="text-end">Actions</th>
+                    <th className="text-end py-2">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan="6" className="text-center py-5">
+                      <td colSpan="7" className="text-center py-4">
                         <div className="spinner-border text-primary" role="status">
                           <span className="visually-hidden">Loading...</span>
                         </div>
@@ -419,10 +561,10 @@ const InventoryManagement = () => {
                   ) : paginatedData.length > 0 ? (
                     paginatedData.map((item) => (
                       <tr key={item.id} className="cursor-pointer" onClick={() => openEditModal(item)}>
-                        <td>{item.name}</td>
-                        <td className="text-center">{item.category}</td>
-                        <td className="text-end">{item.quantity}</td>
-                        <td className="text-center">
+                        <td className=" py-3">{item.name}</td>
+                        <td className="text-center py-2">{item.category}</td>
+                        <td className="text-end py-2">{item.quantity}</td>
+                        <td className="text-center py-2">
                           <span className={`badge rounded-pill d-inline-flex align-items-center ${
                             item.status === 'In Stock' ? 'bg-success-light text-success' :
                             item.status === 'Low Stock' ? 'bg-warning-light text-warning' :
@@ -436,8 +578,13 @@ const InventoryManagement = () => {
                             {item.status}
                           </span>
                         </td>
-                        <td>{formatDate(item.updated)}</td>
-                        <td className="text-end">
+                        <td className="text-center py-2">
+                          <span className={`badge ${getShippingBadgeColor(item.shipping)}`}>
+                            {item.shipping}
+                          </span>
+                        </td>
+                        <td className="py-2">{formatDate(item.updated)}</td>
+                        <td className="text-end py-2">
                           <button 
                             className="btn btn-sm btn-outline-primary"
                             onClick={(e) => {
@@ -452,7 +599,7 @@ const InventoryManagement = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="6" className="text-center py-5">
+                      <td colSpan="7" className="text-center py-4">
                         <div className="mb-3">
                           <i className="bi bi-inbox text-muted" style={{ fontSize: '3rem' }}></i>
                         </div>
@@ -473,9 +620,9 @@ const InventoryManagement = () => {
 
             {/* Pagination */}
             {filteredData.length > 0 && !loading && (
-              <div className="card-footer bg-white d-flex flex-column flex-md-row justify-content-between align-items-center">
+              <div className="card-footer bg-white d-flex flex-column flex-md-row justify-content-between align-items-center py-2">
                 <div className="mb-2 mb-md-0">
-                  <p className="mb-0 text-muted">
+                  <p className="mb-0 text-muted small">
                     Showing <span className="fw-medium">{startIndex + 1}</span> to <span className="fw-medium">{endIndex}</span> of 
                     <span className="fw-medium"> {filteredData.length}</span> results
                   </p>
@@ -514,7 +661,7 @@ const InventoryManagement = () => {
       {/* Edit Modal */}
       <Modal show={showEditModal} onHide={closeEditModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Update Quantity</Modal.Title>
+          <Modal.Title>Update Inventory Item</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedItem && (
@@ -546,6 +693,18 @@ const InventoryManagement = () => {
                   defaultValue={selectedItem.quantity}
                   min="0"
                 />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Shipping</label>
+                <select 
+                  id="edit-item-shipping"
+                  className="form-select" 
+                  defaultValue={selectedItem.shipping}
+                >
+                  <option value="Express">Express</option>
+                  <option value="Standard">Standard</option>
+                  <option value="Backorder">Backorder</option>
+                </select>
               </div>
             </>
           )}

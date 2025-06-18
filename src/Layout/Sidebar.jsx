@@ -42,25 +42,25 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
         <div className="sidebar d-flex flex-column vh-100 position-fixed start-0">
 
             {/* Header Row with Close Button and Logo */}
-            <div className="d-flex justify-content-between align-items-center px-3 py-2">
+            <div className="d-flex justify-content-between align-items-center py-2">
                 <img
                     src="https://i.postimg.cc/T37mZZ0p/89b720af-5154-4d70-bb52-6882c2d51803.png"
                     alt="Motorlogical Logo"
                     className="img-fluid sidebar-logo"
-                    style={{ maxHeight: '40px' }}
+                    style={{ maxHeight: '60px' }}
                 />
-<button
-  type="button"
-  className="btn btn-outline-light ms-auto d-lg-none"  // 👈 Only visible on small screens
-  onClick={handleCloseSidebar}
-  aria-label="Close"
-  style={{
-    padding: '4px 10px',
-    borderRadius: '6px'
-  }}
->
-  <i className="fas fa-times"></i>
-</button>
+                <button
+                    type="button"
+                    className="btn btn-outline-light ms-auto d-lg-none"  // 👈 Only visible on small screens
+                    onClick={handleCloseSidebar}
+                    aria-label="Close"
+                    style={{
+                        padding: '4px 10px',
+                        borderRadius: '6px'
+                    }}
+                >
+                    <i className="fas fa-times"></i>
+                </button>
             </div>
 
             {/* Navigation Items */}
@@ -68,15 +68,15 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
                 <div className="text-uppercase text-secondary small mb-2">Main Menu</div>
                 <ul className="nav flex-column mb-4">
                     {navItem("/dashboard", "fas fa-th-large", "Dashboard")}
-                    {navItem("/ordermanagement", "fas fa-shopping-cart", "Orders")}
+                    {navItem("/ordermanagement", "fas fa-shopping-cart", "Finance Department")}
                     {navItem("/inventorymanagement", "fas fa-boxes", "Inventory")}
-                    {navItem("/productionstatus", "fas fa-cog", "Production Status")}
+                    {navItem("/productionstatus", "fas fa-cog", "Aging Stock")}
                     {navItem("/salesrecords", "fas fa-chart-line", "Sales Record")}
                 </ul>
 
                 <div className="text-uppercase text-secondary small mb-2">Settings</div>
                 <ul className="nav flex-column">
-                    {navItem("/accountsetting", "fas fa-user", "Account")}
+                    {navItem("/accountsetting", "fas fa-user", "User Management")}
                     {navItem("/userpreferences", "fas fa-sliders-h", "Preferences")}
                     {navItem("/helpsupport", "fas fa-question-circle", "Help & Support")}
                 </ul>

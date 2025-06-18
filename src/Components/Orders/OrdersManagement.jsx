@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiEye } from 'react-icons/fi';
+import { FiEye, FiLock } from 'react-icons/fi';
 
 import {
   Table,
@@ -28,18 +28,18 @@ import {
 } from 'react-icons/fa';
 
 const OrdersManagement = () => {
-  // Sample order data
+  // Sample order data with paymentStatus field
   const [orders, setOrders] = useState([
-    { id: 'ORD-2025-1042', product: 'Premium Brake Pads', quantity: 8, status: 'completed', date: '06/12/2025', dealership: 'Eastside Motors', location: 'Seattle, WA' },
-    { id: 'ORD-2025-1041', product: 'Performance Air Filter', quantity: 12, status: 'processing', date: '06/11/2025', dealership: 'Eastside Motors', location: 'Seattle, WA' },
-    { id: 'ORD-2025-1040', product: 'Synthetic Motor Oil (5L)', quantity: 20, status: 'pending', date: '06/10/2025', dealership: 'Eastside Motors', location: 'Seattle, WA' },
-    { id: 'ORD-2025-1039', product: 'Headlight Assembly', quantity: 2, status: 'completed', date: '06/09/2025', dealership: 'Eastside Motors', location: 'Seattle, WA' },
-    { id: 'ORD-2025-1038', product: 'Transmission Fluid', quantity: 15, status: 'cancelled', date: '06/08/2025', dealership: 'Eastside Motors', location: 'Seattle, WA' },
-    { id: 'ORD-2025-1037', product: 'Wiper Blades (Set)', quantity: 30, status: 'completed', date: '06/07/2025', dealership: 'Eastside Motors', location: 'Seattle, WA' },
-    { id: 'ORD-2025-1036', product: 'Cabin Air Filter', quantity: 10, status: 'processing', date: '06/06/2025', dealership: 'Eastside Motors', location: 'Seattle, WA' },
-    { id: 'ORD-2025-1035', product: 'Spark Plugs (Set of 4)', quantity: 25, status: 'completed', date: '06/05/2025', dealership: 'Eastside Motors', location: 'Seattle, WA' },
-    { id: 'ORD-2025-1034', product: 'Brake Fluid', quantity: 12, status: 'pending', date: '06/04/2025', dealership: 'Eastside Motors', location: 'Seattle, WA' },
-    { id: 'ORD-2025-1033', product: 'Power Steering Fluid', quantity: 8, status: 'completed', date: '06/03/2025', dealership: 'Eastside Motors', location: 'Seattle, WA' },
+    { id: 'ORD-2025-1042', product: 'Premium Brake Pads', quantity: 8, status: 'completed', date: '06/12/2025', dealership: 'Eastside Motors', location: 'Seattle, WA', paymentStatus: true },
+    { id: 'ORD-2025-1041', product: 'Performance Air Filter', quantity: 12, status: 'processing', date: '06/11/2025', dealership: 'Eastside Motors', location: 'Seattle, WA', paymentStatus: false },
+    { id: 'ORD-2025-1040', product: 'Synthetic Motor Oil (5L)', quantity: 20, status: 'pending', date: '06/10/2025', dealership: 'Eastside Motors', location: 'Seattle, WA', paymentStatus: false },
+    { id: 'ORD-2025-1039', product: 'Headlight Assembly', quantity: 2, status: 'completed', date: '06/09/2025', dealership: 'Eastside Motors', location: 'Seattle, WA', paymentStatus: true },
+    { id: 'ORD-2025-1038', product: 'Transmission Fluid', quantity: 15, status: 'cancelled', date: '06/08/2025', dealership: 'Eastside Motors', location: 'Seattle, WA', paymentStatus: false },
+    { id: 'ORD-2025-1037', product: 'Wiper Blades (Set)', quantity: 30, status: 'completed', date: '06/07/2025', dealership: 'Eastside Motors', location: 'Seattle, WA', paymentStatus: true },
+    { id: 'ORD-2025-1036', product: 'Cabin Air Filter', quantity: 10, status: 'processing', date: '06/06/2025', dealership: 'Eastside Motors', location: 'Seattle, WA', paymentStatus: false },
+    { id: 'ORD-2025-1035', product: 'Spark Plugs (Set of 4)', quantity: 25, status: 'completed', date: '06/05/2025', dealership: 'Eastside Motors', location: 'Seattle, WA', paymentStatus: true },
+    { id: 'ORD-2025-1034', product: 'Brake Fluid', quantity: 12, status: 'pending', date: '06/04/2025', dealership: 'Eastside Motors', location: 'Seattle, WA', paymentStatus: false },
+    { id: 'ORD-2025-1033', product: 'Power Steering Fluid', quantity: 8, status: 'completed', date: '06/03/2025', dealership: 'Eastside Motors', location: 'Seattle, WA', paymentStatus: true },
   ]);
 
   const [filteredOrders, setFilteredOrders] = useState([]);
@@ -55,6 +55,7 @@ const OrdersManagement = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const [isFinanceUser, setIsFinanceUser] = useState(false); // Finance department access
 
   // Form states
   const [selectedProduct, setSelectedProduct] = useState('');
@@ -70,6 +71,12 @@ const OrdersManagement = () => {
     processing: 'primary',
     completed: 'success',
     cancelled: 'danger'
+  };
+
+  // Payment status colors
+  const paymentStatusColors = {
+    true: 'success',
+    false: 'warning'
   };
 
   // Handle window resize for responsiveness
@@ -164,7 +171,8 @@ const OrdersManagement = () => {
         status: 'pending',
         date: new Date().toLocaleDateString(),
         dealership: 'Eastside Motors',
-        location: 'Seattle, WA'
+        location: 'Seattle, WA',
+        paymentStatus: false // Default to unpaid
       };
 
       console.log('Order submitted:', newOrder);
@@ -191,7 +199,12 @@ const OrdersManagement = () => {
     if (currentOrder) {
       const updatedOrders = orders.map(order =>
         order.id === currentOrder.id
-          ? { ...order, status: selectedStatus, quantity: parseInt(currentOrder.quantity, 10) }
+          ? { 
+              ...order, 
+              status: selectedStatus, 
+              quantity: parseInt(currentOrder.quantity, 10),
+              paymentStatus: currentOrder.paymentStatus 
+            }
           : order
       );
 
@@ -210,6 +223,14 @@ const OrdersManagement = () => {
     return (
       <span className={`badge bg-${statusColors[status]}`}>
         {status.charAt(0).toUpperCase() + status.slice(1)}
+      </span>
+    );
+  };
+
+  const getPaymentStatusBadge = (paymentStatus) => {
+    return (
+      <span className={`badge bg-${paymentStatus ? 'success' : 'warning'}`}>
+        {paymentStatus ? "Paid" : "Pending"}
       </span>
     );
   };
@@ -257,11 +278,24 @@ const OrdersManagement = () => {
 
   return (
     <div className="container-fluid py-3 py-md-4">
+      {/* Finance Mode Toggle */}
+      <div className="position-absolute top-0 end-0 mt-3 me-3">
+        <Button 
+          variant={isFinanceUser ? "success" : "outline-secondary"} 
+          size="sm"
+          onClick={() => setIsFinanceUser(!isFinanceUser)}
+          className="d-flex align-items-center"
+        >
+          <FiLock className="me-1" />
+          Finance Mode: {isFinanceUser ? 'ON' : 'OFF'}
+        </Button>
+      </div>
 
       <div className='bg-white shadow-sm py-3 mb-2 '>
         <h3 className=' py-1 ms-3'>Order Management</h3>
         <p className='text-muted ms-3'>All recent and pending orders in one place</p>
       </div>
+      
       {/* Action Bar - Responsive */}
       <div className="row mb-3 mb-md-4">
         <div className="col-12 col-md-6 mb-3 mb-md-0">
@@ -346,8 +380,9 @@ const OrdersManagement = () => {
                 <tr>
                   <th>Order ID</th>
                   <th>Product</th>
-                  <th className="text-end">Quantity</th>
+                  <th>Quantity</th>
                   <th>Status</th>
+                  <th>Payment</th>
                   <th>Date</th>
                   <th className="text-end">Actions</th>
                 </tr>
@@ -357,8 +392,9 @@ const OrdersManagement = () => {
                   <tr key={order.id}>
                     <td className="fw-semibold text-primary">{order.id}</td>
                     <td>{order.product}</td>
-                    <td className="text-end">{order.quantity}</td>
+                    <td className="">{order.quantity}</td>
                     <td>{getStatusBadge(order.status)}</td>
+                    <td>{getPaymentStatusBadge(order.paymentStatus)}</td>
                     <td>{order.date}</td>
                     <td className="text-end">
                       <ButtonGroup size="sm" className="gap-2">
@@ -411,7 +447,10 @@ const OrdersManagement = () => {
                     <div className="fw-bold text-primary">{order.id}</div>
                     <div className="text-muted small">{order.date}</div>
                   </div>
-                  {getStatusBadge(order.status)}
+                  <div className="d-flex flex-column align-items-end">
+                    {getStatusBadge(order.status)}
+                    <div className="mt-1">{getPaymentStatusBadge(order.paymentStatus)}</div>
+                  </div>
                 </div>
 
                 <div className="d-flex justify-content-between align-items-center mb-2">
@@ -583,9 +622,32 @@ const OrdersManagement = () => {
               </div>
             </Form.Group>
 
+            <Form.Group className="mb-3">
+              <Form.Label>Payment Status</Form.Label>
+              {editMode && isFinanceUser ? (
+                <Dropdown>
+                  <Dropdown.Toggle variant="outline-secondary" className="w-100 text-start">
+                    {currentOrder?.paymentStatus ? "Paid" : "Pending"}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className="w-100">
+                    <Dropdown.Item onClick={() => setCurrentOrder({ ...currentOrder, paymentStatus: true })}>
+                      Paid
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => setCurrentOrder({ ...currentOrder, paymentStatus: false })}>
+                      Pending
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              ) : (
+                <div className={`badge bg-${paymentStatusColors[currentOrder?.paymentStatus]} p-2 w-100 text-start`}>
+                  {currentOrder?.paymentStatus ? "Paid" : "Pending"}
+                </div>
+              )}
+            </Form.Group>
+
             {editMode && (
               <Form.Group className="mb-3">
-                <Form.Label>Status</Form.Label>
+                <Form.Label>Order Status</Form.Label>
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-secondary" className="w-100 text-start d-flex align-items-center justify-content-between">
                     {statusName}

@@ -33,9 +33,7 @@ const HelpSupport = () => {
   });
 
   // Toggle accordion
-  const toggleAccordion = (index) => {
-    setActiveAccordion(activeAccordion === index ? null : index);
-  };
+
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -107,6 +105,13 @@ const HelpSupport = () => {
     alert('Chatbot would open here. This is a placeholder for the actual chatbot integration.');
   };
 
+
+
+const toggleAccordion = (index) => {
+  setActiveAccordion(activeAccordion === index ? null : index);
+};
+
+
   return (
     <div className="d-flex flex-column min-vh-100 bg-light">
   
@@ -127,13 +132,11 @@ const HelpSupport = () => {
               <Card className="h-100">
                 <Card.Body className="p-4">
                   <h2 className="h3 fw-bold mb-4">Frequently Asked Questions</h2>
-                  
-                  <Accordion activeKey={activeAccordion} className="mb-4">
+
+                  <Accordion className="mb-4">
                     {faqs.map((faq, index) => (
                       <Accordion.Item eventKey={index.toString()} key={index}>
-                        <Accordion.Header onClick={() => toggleAccordion(index)}>
-                          {faq.question}
-                        </Accordion.Header>
+                        <Accordion.Header>{faq.question}</Accordion.Header>
                         <Accordion.Body className="text-muted">
                           {faq.answer}
                         </Accordion.Body>

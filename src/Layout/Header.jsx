@@ -43,7 +43,7 @@ const Header = ({ onToggleSidebar }) => {
           
 
           {/* User profile */}
-          <div className="d-flex align-items-center">
+          <div className="d-flex align-items-center me-3 ms-2">
             <div className="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center" style={{ width: "35px", height: "35px" }}>
               M
             </div>
@@ -54,9 +54,9 @@ const Header = ({ onToggleSidebar }) => {
           </div>
 
           {/* Chevron down - hidden on mobile */}
-          <button className="btn d-none d-md-inline-block">
+          {/* <button className="btn d-none d-md-inline-block">
             <i className="fas fa-chevron-down text-light"></i>
-          </button>
+          </button> */}
 
           {/* Logout - icon only on mobile */}
          
