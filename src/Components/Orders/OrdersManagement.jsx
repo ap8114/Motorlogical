@@ -292,7 +292,7 @@ const OrdersManagement = () => {
       </div>
 
       <div className='bg-white shadow-sm py-3 mb-2 '>
-        <h3 className=' py-1 ms-3'>Order Management</h3>
+        <h3 className=' py-1 ms-3'>Finance Department</h3>
         <p className='text-muted ms-3'>All recent and pending orders in one place</p>
       </div>
       
