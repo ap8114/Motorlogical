@@ -8,6 +8,8 @@ import DealershipManagement from './Components/Dashboard/DealershipManagement';
 import OrderManagement from './Components/Dashboard/Ordermanagement';
 import UserManagement from './Components/Dashboard/UserManagement';
 import InventoryManagement from './Components/Dashboard/InventoryManagement';
+import Setting from './Components/Dashboard/Setting';
+import Reporting from './Components/Dashboard/Reporting';
 
 function App() {
   return (
@@ -22,8 +24,10 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dealershipmanagement" element={<DealershipManagement />} />
           <Route path="/ordermanagement" element={<OrderManagement />} />
-           <Route path="/usermanagement" element={<UserManagement />} />
-            <Route path="/inventorymanagement" element={<InventoryManagement />} />
+          <Route path="/usermanagement" element={<UserManagement />} />
+          <Route path="/inventorymanagement" element={<InventoryManagement />} />
+          <Route path="/reporting" element={<Reporting />} />
+          <Route path="/setting" element={<Setting />} />
 
           {/* <Route path="/ordermanagement" element={<OrdersManagement />} />
           <Route path="/inventorymanagement" element={<InventoryManagement />} />

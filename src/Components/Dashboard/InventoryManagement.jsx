@@ -17,7 +17,7 @@ const InventoryManagement = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [viewMode, setViewMode] = useState('list');
   const [showItemDetailsModal, setShowItemDetailsModal] = useState(false);
-const [demo, selectedItem] = useState()
+  const [demo, selectedItem] = useState()
   // Sample inventory data
   const [inventory, setInventory] = useState([
     {
@@ -446,409 +446,343 @@ const [demo, selectedItem] = useState()
 
   return (
     <div>
-        {/* Main Content */}
-        <main className="p-6">
-          <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800 flex items-center"> Inventory Management
-              </h1>
-              <p className="text-gray-600 mt-1">Manage all vehicle inventory in one place</p>
-            </div>
-            <div className="flex mt-4 md:mt-0 space-x-3">
-              <a
-                href="https://readdy.ai/home/c8a6bcde-470a-4a15-8148-ac3671c15e32/a52cc47e-9a13-4d7b-ba7f-f2308dbea63f"
-                data-readdy="true"
-                className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition cursor-pointer !rounded-button whitespace-nowrap"
-              >
-                <i className="fas fa-shopping-cart mr-2"></i> Order Management
-              </a>
-              <button
-                onClick={handleCreateNewItem}
-                className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer !rounded-button whitespace-nowrap"
-              >
-                <i className="fas fa-plus mr-2"></i> Add New Item
-              </button>
-            </div>
+      {/* Main Content */}
+      <main className="p-6">
+        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800 flex items-center"> Inventory Management
+            </h1>
+            <p className="text-gray-600 mt-1">Manage all vehicle inventory in one place</p>
           </div>
-
-          {/* Tab Navigation */}
-          <div className="mb-6 border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8">
-              <button
-                onClick={() => setActiveTab('inventory')}
-                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === 'inventory'
-                    ? 'border-indigo-500 text-indigo-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
-              >
-                <i className="fas fa-warehouse mr-2"></i> Inventory List
-              </button>
-              <button
-                onClick={() => setActiveTab('reports')}
-                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === 'reports'
-                    ? 'border-indigo-500 text-indigo-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
-              >
-                <i className="fas fa-chart-bar mr-2"></i> Reports
-              </button>
-            </nav>
+          <div className="flex mt-4 md:mt-0 space-x-3">
+            <a
+              href="https://readdy.ai/home/c8a6bcde-470a-4a15-8148-ac3671c15e32/a52cc47e-9a13-4d7b-ba7f-f2308dbea63f"
+              data-readdy="true"
+              className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition cursor-pointer !rounded-button whitespace-nowrap"
+            >
+              <i className="fas fa-shopping-cart mr-2"></i> Order Management
+            </a>
+            <button
+              onClick={handleCreateNewItem}
+              className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer !rounded-button whitespace-nowrap"
+            >
+              <i className="fas fa-plus mr-2"></i> Add New Item
+            </button>
           </div>
+        </div>
 
-          {activeTab === 'inventory' && (
-            <>
-              {/* Statistics Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 rounded-full bg-indigo-100 text-indigo-600">
-                      <i className="fas fa-car text-xl"></i>
-                    </div>
-                    <div className="ml-4">
-                      <h2 className="text-sm font-medium text-gray-600">Total Models</h2>
-                      <p className="text-2xl font-bold text-gray-800">{totalItems}</p>
-                    </div>
+        {/* Tab Navigation */}
+        <div className="mb-6 border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8">
+            <button
+              onClick={() => setActiveTab('inventory')}
+              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === 'inventory'
+                ? 'border-indigo-500 text-indigo-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+            >
+              <i className="fas fa-warehouse mr-2"></i> Inventory List
+            </button>
+            <button
+              onClick={() => setActiveTab('reports')}
+              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === 'reports'
+                ? 'border-indigo-500 text-indigo-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+            >
+              <i className="fas fa-chart-bar mr-2"></i> Reports
+            </button>
+          </nav>
+        </div>
+
+        {activeTab === 'inventory' && (
+          <>
+            {/* Statistics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <div className="p-3 rounded-full bg-indigo-100 text-indigo-600">
+                    <i className="fas fa-car text-xl"></i>
                   </div>
-                  <div className="mt-4 flex items-center text-sm">
-                    <span className="text-green-500 flex items-center">
-                      <i className="fas fa-arrow-up mr-1"></i> 8%
-                    </span>
-                    <span className="text-gray-500 ml-2">from last month</span>
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 rounded-full bg-green-100 text-green-600">
-                      <i className="fas fa-cubes text-xl"></i>
-                    </div>
-                    <div className="ml-4">
-                      <h2 className="text-sm font-medium text-gray-600">Total Stock</h2>
-                      <p className="text-2xl font-bold text-gray-800">{totalStock}</p>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex items-center text-sm">
-                    <span className="text-green-500 flex items-center">
-                      <i className="fas fa-arrow-up mr-1"></i> 12%
-                    </span>
-                    <span className="text-gray-500 ml-2">from last month</span>
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                      <i className="fas fa-exclamation-triangle text-xl"></i>
-                    </div>
-                    <div className="ml-4">
-                      <h2 className="text-sm font-medium text-gray-600">Low Stock</h2>
-                      <p className="text-2xl font-bold text-gray-800">{lowStockItems}</p>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex items-center text-sm">
-                    <span className="text-red-500 flex items-center">
-                      <i className="fas fa-arrow-up mr-1"></i> 3%
-                    </span>
-                    <span className="text-gray-500 ml-2">from last month</span>
+                  <div className="ml-4">
+                    <h2 className="text-sm font-medium text-gray-600">Total Models</h2>
+                    <p className="text-2xl font-bold text-gray-800">{totalItems}</p>
                   </div>
                 </div>
-                <div className="bg-white rounded-lg shadow p-6">
-                  <div className="flex items-center">
-                    <div className="p-3 rounded-full bg-blue-100 text-blue-600">
-                      <i className="fas fa-dollar-sign text-xl"></i>
-                    </div>
-                    <div className="ml-4">
-                      <h2 className="text-sm font-medium text-gray-600">Total Value</h2>
-                      <p className="text-2xl font-bold text-gray-800">${totalValue.toLocaleString()}</p>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex items-center text-sm">
-                    <span className="text-green-500 flex items-center">
-                      <i className="fas fa-arrow-up mr-1"></i> 15%
-                    </span>
-                    <span className="text-gray-500 ml-2">from last month</span>
-                  </div>
+                <div className="mt-4 flex items-center text-sm">
+                  <span className="text-green-500 flex items-center">
+                    <i className="fas fa-arrow-up mr-1"></i> 8%
+                  </span>
+                  <span className="text-gray-500 ml-2">from last month</span>
                 </div>
               </div>
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <div className="p-3 rounded-full bg-green-100 text-green-600">
+                    <i className="fas fa-cubes text-xl"></i>
+                  </div>
+                  <div className="ml-4">
+                    <h2 className="text-sm font-medium text-gray-600">Total Stock</h2>
+                    <p className="text-2xl font-bold text-gray-800">{totalStock}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center text-sm">
+                  <span className="text-green-500 flex items-center">
+                    <i className="fas fa-arrow-up mr-1"></i> 12%
+                  </span>
+                  <span className="text-gray-500 ml-2">from last month</span>
+                </div>
+              </div>
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <div className="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                    <i className="fas fa-exclamation-triangle text-xl"></i>
+                  </div>
+                  <div className="ml-4">
+                    <h2 className="text-sm font-medium text-gray-600">Low Stock</h2>
+                    <p className="text-2xl font-bold text-gray-800">{lowStockItems}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center text-sm">
+                  <span className="text-red-500 flex items-center">
+                    <i className="fas fa-arrow-up mr-1"></i> 3%
+                  </span>
+                  <span className="text-gray-500 ml-2">from last month</span>
+                </div>
+              </div>
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <div className="p-3 rounded-full bg-blue-100 text-blue-600">
+                    <i className="fas fa-dollar-sign text-xl"></i>
+                  </div>
+                  <div className="ml-4">
+                    <h2 className="text-sm font-medium text-gray-600">Total Value</h2>
+                    <p className="text-2xl font-bold text-gray-800">${totalValue.toLocaleString()}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center text-sm">
+                  <span className="text-green-500 flex items-center">
+                    <i className="fas fa-arrow-up mr-1"></i> 15%
+                  </span>
+                  <span className="text-gray-500 ml-2">from last month</span>
+                </div>
+              </div>
+            </div>
 
-              {/* Filters and Charts */}
-              <div className="bg-white rounded-lg shadow mb-8">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
-                  <div className="lg:col-span-1 bg-white rounded-lg border border-gray-200 p-6">
-                    <h2 className="text-lg font-medium text-gray-800 mb-4">Filters</h2>
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                      <div className="relative">
-                        <select
-                          className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                          value={categoryFilter}
-                          onChange={(e) => setCategoryFilter(e.target.value)}
-                        >
-                          <option value="all">All Categories</option>
-                          {categories.map(category => (
-                            <option key={category.id} value={category.name.toLowerCase()}>{category.name}</option>
-                          ))}
-                        </select>
-                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                          <i className="fas fa-chevron-down text-xs"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                      <div className="relative">
-                        <select
-                          className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                          value={statusFilter}
-                          onChange={(e) => setStatusFilter(e.target.value)}
-                        >
-                          <option value="all">All Statuses</option>
-                          <option value="active">Active</option>
-                          <option value="inactive">Inactive</option>
-                        </select>
-                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                          <i className="fas fa-chevron-down text-xs"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mb-4">
-                      <button
-                        onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                        className="flex items-center text-indigo-600 hover:text-indigo-800 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap"
+            {/* Filters and Charts */}
+            <div className="bg-white rounded-lg shadow mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+                <div className="lg:col-span-1 bg-white rounded-lg border border-gray-200 p-6">
+                  <h2 className="text-lg font-medium text-gray-800 mb-4">Filters</h2>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <div className="relative">
+                      <select
+                        className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                        value={categoryFilter}
+                        onChange={(e) => setCategoryFilter(e.target.value)}
                       >
-                        <i className={`fas ${showAdvancedFilters ? 'fa-chevron-up' : 'fa-chevron-down'} mr-2`}></i>
-                        Advanced Filters
-                      </button>
-                    </div>
-                    {showAdvancedFilters && (
-                      <div className="space-y-4 mt-4 border-t pt-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Stock Level</label>
-                          <div className="grid grid-cols-2 gap-2">
-                            <div>
-                              <label className="block text-xs text-gray-500">Min</label>
-                              <input
-                                type="number"
-                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="0"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs text-gray-500">Max</label>
-                              <input
-                                type="number"
-                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="100"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
-                          <div className="grid grid-cols-2 gap-2">
-                            <div>
-                              <label className="block text-xs text-gray-500">Min ($)</label>
-                              <input
-                                type="number"
-                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="0"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs text-gray-500">Max ($)</label>
-                              <input
-                                type="number"
-                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                placeholder="100000"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex space-x-2 pt-2">
-                          <button className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap">
-                            Apply Filters
-                          </button>
-                          <button className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap">
-                            Reset
-                          </button>
-                        </div>
+                        <option value="all">All Categories</option>
+                        {categories.map(category => (
+                          <option key={category.id} value={category.name.toLowerCase()}>{category.name}</option>
+                        ))}
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <i className="fas fa-chevron-down text-xs"></i>
                       </div>
-                    )}
-                    <div className="mt-6 pt-6 border-t">
-                      <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                        <i className="fas fa-file-export mr-2"></i> Export Inventory
-                      </button>
                     </div>
                   </div>
-                  <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white rounded-lg border border-gray-200 p-6">
-                      <div id="inventory-stats-chart" style={{ height: '250px' }}></div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <div className="relative">
+                      <select
+                        className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                      >
+                        <option value="all">All Statuses</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <i className="fas fa-chevron-down text-xs"></i>
+                      </div>
                     </div>
-                    <div className="bg-white rounded-lg border border-gray-200 p-6">
-                      <div id="category-distribution-chart" style={{ height: '250px' }}></div>
+                  </div>
+                  <div className="mb-4">
+                    <button
+                      onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                      className="flex items-center text-indigo-600 hover:text-indigo-800 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap"
+                    >
+                      <i className={`fas ${showAdvancedFilters ? 'fa-chevron-up' : 'fa-chevron-down'} mr-2`}></i>
+                      Advanced Filters
+                    </button>
+                  </div>
+                  {showAdvancedFilters && (
+                    <div className="space-y-4 mt-4 border-t pt-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Stock Level</label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="block text-xs text-gray-500">Min</label>
+                            <input
+                              type="number"
+                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              placeholder="0"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-500">Max</label>
+                            <input
+                              type="number"
+                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              placeholder="100"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="block text-xs text-gray-500">Min ($)</label>
+                            <input
+                              type="number"
+                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              placeholder="0"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-500">Max ($)</label>
+                            <input
+                              type="number"
+                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              placeholder="100000"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex space-x-2 pt-2">
+                        <button className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap">
+                          Apply Filters
+                        </button>
+                        <button className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap">
+                          Reset
+                        </button>
+                      </div>
                     </div>
+                  )}
+                  <div className="mt-6 pt-6 border-t">
+                    <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                      <i className="fas fa-file-export mr-2"></i> Export Inventory
+                    </button>
+                  </div>
+                </div>
+                <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white rounded-lg border border-gray-200 p-6">
+                    <div id="inventory-stats-chart" style={{ height: '250px' }}></div>
+                  </div>
+                  <div className="bg-white rounded-lg border border-gray-200 p-6">
+                    <div id="category-distribution-chart" style={{ height: '250px' }}></div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Inventory Table */}
-              <div className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-                  <h3 className="text-lg font-medium text-gray-800">Inventory List</h3>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      className={`flex items-center px-3 py-1 ${viewMode === 'list' ? 'bg-indigo-100 text-indigo-700' : 'bg-white text-gray-700'} border border-gray-300 rounded text-sm hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap`}
-                      onClick={() => setViewMode('list')}
-                    >
-                      <i className="fas fa-list mr-1"></i> List
-                    </button>
-                    <button
-                      className={`flex items-center px-3 py-1 ${viewMode === 'grid' ? 'bg-indigo-100 text-indigo-700' : 'bg-white text-gray-700'} border border-gray-300 rounded text-sm hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap`}
-                      onClick={() => setViewMode('grid')}
-                    >
-                      <i className="fas fa-th-large mr-1"></i> Grid
-                    </button>
-                    <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                      <i className="fas fa-filter mr-1"></i> Filter
-                    </button>
-                    <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                      <i className="fas fa-sort mr-1"></i> Sort
-                    </button>
-                    <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                      <i className="fas fa-file-export mr-1"></i> Export
-                    </button>
-                  </div>
+            {/* Inventory Table */}
+            <div className="bg-white rounded-lg shadow overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                <h3 className="text-lg font-medium text-gray-800">Inventory List</h3>
+                <div className="flex items-center space-x-2">
+                  <button
+                    className={`flex items-center px-3 py-1 ${viewMode === 'list' ? 'bg-indigo-100 text-indigo-700' : 'bg-white text-gray-700'} border border-gray-300 rounded text-sm hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap`}
+                    onClick={() => setViewMode('list')}
+                  >
+                    <i className="fas fa-list mr-1"></i> List
+                  </button>
+                  <button
+                    className={`flex items-center px-3 py-1 ${viewMode === 'grid' ? 'bg-indigo-100 text-indigo-700' : 'bg-white text-gray-700'} border border-gray-300 rounded text-sm hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap`}
+                    onClick={() => setViewMode('grid')}
+                  >
+                    <i className="fas fa-th-large mr-1"></i> Grid
+                  </button>
+                  <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                    <i className="fas fa-filter mr-1"></i> Filter
+                  </button>
+                  <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                    <i className="fas fa-sort mr-1"></i> Sort
+                  </button>
+                  <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                    <i className="fas fa-file-export mr-1"></i> Export
+                  </button>
                 </div>
+              </div>
 
-                {viewMode === 'list' ? (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Item ID
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Name
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Category
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Quantity
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Last Updated
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Price
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Actions
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {filteredInventory.map((item) => (
-                          <tr key={item.id} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">
-                              {item.id}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {item.category}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStockLevelIndicator(item.quantity)}`}>
-                                {item.quantity}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeColor(item.status)}`}>
-                                {item.status}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {new Date(item.lastUpdated).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric'
-                              })}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                              ${item.price.toLocaleString()}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                              <div className="flex justify-end space-x-2">
-                                <button
-                                  id={`view-details-${item.id}`}
-                                  className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap"
-                                  title="View Details"
-                                  onClick={() => handleViewItemDetails(item)}
-                                >
-                                  <i className="fas fa-eye"></i>
-                                </button>
-                                <button
-                                  onClick={() => handleEditItem(item)}
-                                  className="text-blue-600 hover:text-blue-900 cursor-pointer !rounded-button whitespace-nowrap"
-                                  title="Edit Item"
-                                >
-                                  <i className="fas fa-edit"></i>
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteConfirmation(item.id)}
-                                  className="text-red-600 hover:text-red-900 cursor-pointer !rounded-button whitespace-nowrap"
-                                  title="Delete Item"
-                                >
-                                  <i className="fas fa-trash"></i>
-                                </button>
-                                <div className="relative inline-block text-left">
-                                  <button className="text-gray-600 hover:text-gray-900 cursor-pointer !rounded-button whitespace-nowrap">
-                                    <i className="fas fa-ellipsis-v"></i>
-                                  </button>
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredInventory.map((item) => (
-                      <div key={item.id} className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
-                        <div className="p-5">
-                          <div className="flex justify-between items-start">
-                            <h3 className="text-lg font-medium text-gray-900 truncate">{item.name}</h3>
+              {viewMode === 'list' ? (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Item ID
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Name
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Category
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Quantity
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Status
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Last Updated
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Price
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {filteredInventory.map((item) => (
+                        <tr key={item.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">
+                            {item.id}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">{item.name}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {item.category}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStockLevelIndicator(item.quantity)}`}>
+                              {item.quantity}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeColor(item.status)}`}>
                               {item.status}
                             </span>
-                          </div>
-                          <p className="mt-1 text-sm text-gray-500">{item.category}</p>
-                          <div className="mt-4 flex justify-between items-center">
-                            <div>
-                              <p className="text-sm text-gray-500">Quantity</p>
-                              <p className={`text-lg font-semibold ${item.quantity === 0 ? 'text-red-600' : 'text-gray-900'}`}>
-                                {item.quantity}
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-sm text-gray-500">Price</p>
-                              <p className="text-lg font-semibold text-gray-900">${item.price.toLocaleString()}</p>
-                            </div>
-                          </div>
-                          <div className="mt-4 text-sm text-gray-500">
-                            <p className="truncate">{item.notes}</p>
-                          </div>
-                          <div className="mt-5 flex justify-between items-center pt-4 border-t border-gray-200">
-                            <p className="text-xs text-gray-500">
-                              Last updated: {new Date(item.lastUpdated).toLocaleDateString()}
-                            </p>
-                            <div className="flex space-x-2">
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {new Date(item.lastUpdated).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric'
+                            })}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            ${item.price.toLocaleString()}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div className="flex justify-end space-x-2">
                               <button
                                 id={`view-details-${item.id}`}
                                 className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap"
@@ -871,280 +805,346 @@ const [demo, selectedItem] = useState()
                               >
                                 <i className="fas fa-trash"></i>
                               </button>
+                              <div className="relative inline-block text-left">
+                                <button className="text-gray-600 hover:text-gray-900 cursor-pointer !rounded-button whitespace-nowrap">
+                                  <i className="fas fa-ellipsis-v"></i>
+                                </button>
+                              </div>
                             </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredInventory.map((item) => (
+                    <div key={item.id} className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
+                      <div className="p-5">
+                        <div className="flex justify-between items-start">
+                          <h3 className="text-lg font-medium text-gray-900 truncate">{item.name}</h3>
+                          <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeColor(item.status)}`}>
+                            {item.status}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-sm text-gray-500">{item.category}</p>
+                        <div className="mt-4 flex justify-between items-center">
+                          <div>
+                            <p className="text-sm text-gray-500">Quantity</p>
+                            <p className={`text-lg font-semibold ${item.quantity === 0 ? 'text-red-600' : 'text-gray-900'}`}>
+                              {item.quantity}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm text-gray-500">Price</p>
+                            <p className="text-lg font-semibold text-gray-900">${item.price.toLocaleString()}</p>
+                          </div>
+                        </div>
+                        <div className="mt-4 text-sm text-gray-500">
+                          <p className="truncate">{item.notes}</p>
+                        </div>
+                        <div className="mt-5 flex justify-between items-center pt-4 border-t border-gray-200">
+                          <p className="text-xs text-gray-500">
+                            Last updated: {new Date(item.lastUpdated).toLocaleDateString()}
+                          </p>
+                          <div className="flex space-x-2">
+                            <button
+                              id={`view-details-${item.id}`}
+                              className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap"
+                              title="View Details"
+                              onClick={() => handleViewItemDetails(item)}
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                            <button
+                              onClick={() => handleEditItem(item)}
+                              className="text-blue-600 hover:text-blue-900 cursor-pointer !rounded-button whitespace-nowrap"
+                              title="Edit Item"
+                            >
+                              <i className="fas fa-edit"></i>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteConfirmation(item.id)}
+                              className="text-red-600 hover:text-red-900 cursor-pointer !rounded-button whitespace-nowrap"
+                              title="Delete Item"
+                            >
+                              <i className="fas fa-trash"></i>
+                            </button>
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Pagination */}
-                <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                  <div className="flex-1 flex justify-between sm:hidden">
-                    <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                      Previous
-                    </button>
-                    <button className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                      Next
-                    </button>
-                  </div>
-                  <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                      <p className="text-sm text-gray-700">
-                        Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredInventory.length}</span> of{' '}
-                        <span className="font-medium">{filteredInventory.length}</span> results
-                      </p>
                     </div>
-                    <div>
-                      <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                        <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                          <span className="sr-only">Previous</span>
-                          <i className="fas fa-chevron-left"></i>
-                        </button>
-                        <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-indigo-50 text-sm font-medium text-indigo-600 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                          1
-                        </button>
-                        <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                          2
-                        </button>
-                        <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                          <span className="sr-only">Next</span>
-                          <i className="fas fa-chevron-right"></i>
-                        </button>
-                      </nav>
+                  ))}
+                </div>
+              )}
+
+              {/* Pagination */}
+              <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                <div className="flex-1 flex justify-between sm:hidden">
+                  <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                    Previous
+                  </button>
+                  <button className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                    Next
+                  </button>
+                </div>
+                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredInventory.length}</span> of{' '}
+                      <span className="font-medium">{filteredInventory.length}</span> results
+                    </p>
+                  </div>
+                  <div>
+                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                      <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                        <span className="sr-only">Previous</span>
+                        <i className="fas fa-chevron-left"></i>
+                      </button>
+                      <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-indigo-50 text-sm font-medium text-indigo-600 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                        1
+                      </button>
+                      <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                        2
+                      </button>
+                      <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                        <span className="sr-only">Next</span>
+                        <i className="fas fa-chevron-right"></i>
+                      </button>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {activeTab === 'reports' && (
+          <div className="min-h-[600px]">
+            <div className="bg-white rounded-lg shadow p-6 mb-8">
+              <h2 className="text-lg font-medium text-gray-800 mb-4">Report Filters</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Report Type</label>
+                  <div className="relative">
+                    <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                      <option>Inventory Summary</option>
+                      <option>Stock Level Report</option>
+                      <option>Category Analysis</option>
+                      <option>Value Distribution</option>
+                      <option>Inventory Movement</option>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <i className="fas fa-chevron-down text-xs"></i>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Time Period</label>
+                  <div className="relative">
+                    <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                      <option>Last 30 Days</option>
+                      <option>Last Quarter</option>
+                      <option>Last 6 Months</option>
+                      <option>Year to Date</option>
+                      <option>Custom Range</option>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <i className="fas fa-chevron-down text-xs"></i>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Dealership</label>
+                  <div className="relative">
+                    <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                      <option>All Dealerships</option>
+                      <option>City Motors</option>
+                      <option>Highway Auto</option>
+                      <option>Luxury Cars Inc</option>
+                      <option>Downtown Autos</option>
+                      <option>Valley Vehicles</option>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <i className="fas fa-chevron-down text-xs"></i>
                     </div>
                   </div>
                 </div>
               </div>
-            </>
-          )}
+              <div className="mt-6 flex justify-end">
+                <button className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none cursor-pointer !rounded-button whitespace-nowrap">
+                  <i className="fas fa-sync-alt mr-2"></i> Generate Report
+                </button>
+              </div>
+            </div>
 
-          {activeTab === 'reports' && (
-            <div className="min-h-[600px]">
-              <div className="bg-white rounded-lg shadow p-6 mb-8">
-                <h2 className="text-lg font-medium text-gray-800 mb-4">Report Filters</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Report Type</label>
-                    <div className="relative">
-                      <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                        <option>Inventory Summary</option>
-                        <option>Stock Level Report</option>
-                        <option>Category Analysis</option>
-                        <option>Value Distribution</option>
-                        <option>Inventory Movement</option>
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <i className="fas fa-chevron-down text-xs"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Time Period</label>
-                    <div className="relative">
-                      <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                        <option>Last 30 Days</option>
-                        <option>Last Quarter</option>
-                        <option>Last 6 Months</option>
-                        <option>Year to Date</option>
-                        <option>Custom Range</option>
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <i className="fas fa-chevron-down text-xs"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Dealership</label>
-                    <div className="relative">
-                      <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                        <option>All Dealerships</option>
-                        <option>City Motors</option>
-                        <option>Highway Auto</option>
-                        <option>Luxury Cars Inc</option>
-                        <option>Downtown Autos</option>
-                        <option>Valley Vehicles</option>
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <i className="fas fa-chevron-down text-xs"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-6 flex justify-end">
-                  <button className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none cursor-pointer !rounded-button whitespace-nowrap">
-                    <i className="fas fa-sync-alt mr-2"></i> Generate Report
+            <div className="bg-white rounded-lg shadow p-6 mb-8">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-lg font-medium text-gray-800">Inventory Summary Report</h2>
+                <div className="flex space-x-2">
+                  <button className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none cursor-pointer !rounded-button whitespace-nowrap">
+                    <i className="fas fa-print mr-1"></i> Print
+                  </button>
+                  <button className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none cursor-pointer !rounded-button whitespace-nowrap">
+                    <i className="fas fa-file-pdf mr-1"></i> PDF
+                  </button>
+                  <button className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none cursor-pointer !rounded-button whitespace-nowrap">
+                    <i className="fas fa-file-excel mr-1"></i> Excel
                   </button>
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow p-6 mb-8">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-lg font-medium text-gray-800">Inventory Summary Report</h2>
-                  <div className="flex space-x-2">
-                    <button className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none cursor-pointer !rounded-button whitespace-nowrap">
-                      <i className="fas fa-print mr-1"></i> Print
-                    </button>
-                    <button className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none cursor-pointer !rounded-button whitespace-nowrap">
-                      <i className="fas fa-file-pdf mr-1"></i> PDF
-                    </button>
-                    <button className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none cursor-pointer !rounded-button whitespace-nowrap">
-                      <i className="fas fa-file-excel mr-1"></i> Excel
-                    </button>
-                  </div>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Category
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Total Models
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Total Units
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Low Stock
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Out of Stock
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Total Value
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">SUV</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$675,000</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Sedan</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$308,000</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Luxury</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$216,000</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Compact</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">22</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$572,000</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Electric</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Hybrid</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">7</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$297,500</td>
-                      </tr>
-                      <tr className="bg-gray-50 font-medium">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">TOTAL</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">6</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">55</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">2</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">1</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">$2,068,500</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="mt-6 text-sm text-gray-500">
-                  <p>Report generated on: June 19, 2025 at 10:30 AM</p>
-                </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Category
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Total Models
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Total Units
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Low Stock
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Out of Stock
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Total Value
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">SUV</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$675,000</td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Sedan</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$308,000</td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Luxury</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$216,000</td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Compact</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">22</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$572,000</td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Electric</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0</td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Hybrid</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">7</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$297,500</td>
+                    </tr>
+                    <tr className="bg-gray-50 font-medium">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">TOTAL</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">6</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">55</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">2</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">1</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">$2,068,500</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
 
-              <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-lg font-medium text-gray-800 mb-4">Recent Export History</h2>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Date
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Report Type
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Format
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          User
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 18, 2025</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Inventory Summary</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">PDF</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">John Doe</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <button className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap">Download</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 15, 2025</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Stock Level Report</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Excel</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">John Doe</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <button className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap">Download</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 10, 2025</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Category Analysis</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">PDF</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Sarah Johnson</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <button className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap">Download</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+              <div className="mt-6 text-sm text-gray-500">
+                <p>Report generated on: June 19, 2025 at 10:30 AM</p>
               </div>
             </div>
-          )}
-        </main>
 
-        {/* Add/Edit Item Modal */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-medium text-gray-800 mb-4">Recent Export History</h2>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Report Type
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Format
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        User
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 18, 2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Inventory Summary</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">PDF</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">John Doe</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap">Download</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 15, 2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Stock Level Report</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Excel</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">John Doe</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap">Download</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 10, 2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Category Analysis</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">PDF</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Sarah Johnson</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap">Download</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* Add/Edit Item Modal */}
       {showAddItemModal && (
         <div className="fixed z-20 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">

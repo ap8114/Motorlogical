@@ -51,11 +51,11 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
                     <>
                         {navItem("/dashboard", "fas fa-th-large", "Dashboard")}
                         {navItem("/dealershipmanagement", "fas fa-store", "Dealership Management")}
-                        {navItem("/inventorymanagement", "fas fa-users-cog", "User Management")}
+                        {navItem("/usermanagement", "fas fa-users-cog", "User Management")}
                         {navItem("/ordermanagement", "fas fa-industry", "Order Management")}
                         {navItem("/inventorymanagement", "fas fa-boxes-stacked", "Inventory Management")}
                         {navItem("/reporting", "fas fa-chart-line", "Reporting")}
-                        {navItem("/settings", "fas fa-sliders-h", "Settings")}
+                        {navItem("/setting", "fas fa-sliders-h", "Settings")}
                     </>
                 );
             case "Manager":
