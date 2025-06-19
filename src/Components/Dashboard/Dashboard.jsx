@@ -1,808 +1,380 @@
-
-import React, { useState, useEffect } from 'react';
-
-import './dashboard.css';
-import * as echarts from 'echarts';
+import React, { useState } from 'react';
 
 const Dashboard = () => {
+  const [showDealershipModal, setShowDealershipModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
 
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      {/* Welcome Section */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-800">Welcome back, Admin!</h1>
+        <p className="text-gray-600 mt-1">Here's what's happening with your dealerships today.</p>
+      </div>
 
-      const [selectedOrder, setSelectedOrder] = useState(null);
-
-  const orders = [
-    {
-      id: '#ORD-7829',
-      customer: 'James Donovan',
-      initials: 'JD',
-      vehicle: 'Tesla Model Y',
-      amount: '$58,990',
-      status: 'Completed',
-      statusClass: 'success',
-    },
-    {
-      id: '#ORD-7828',
-      customer: 'Rebecca Liu',
-      initials: 'RL',
-      vehicle: 'Ford F-150 Lightning',
-      amount: '$62,500',
-      status: 'Processing',
-      statusClass: 'warning',
-    },
-    {
-      id: '#ORD-7827',
-      customer: 'Alexander Martinez',
-      initials: 'AM',
-      vehicle: 'Rivian R1S',
-      amount: '$78,000',
-      status: 'In Production',
-      statusClass: 'info',
-    },
-    {
-      id: '#ORD-7826',
-      customer: 'Sarah Parker',
-      initials: 'SP',
-      vehicle: 'Lucid Air',
-      amount: '$87,400',
-      status: 'Pending',
-      statusClass: 'secondary',
-    },
-  ];
-
-  const handleView = (order) => {
-    setSelectedOrder(order);
-  };
-
-
-    useEffect(() => {
-        // Initialize charts after component mounts
-        const initCharts = () => {
-            // Sales Trend Chart
-            const salesChart = echarts.init(document.getElementById('salesChart'));
-            const salesOption = {
-                animation: false,
-                tooltip: {
-                    trigger: 'axis',
-                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                    borderColor: '#e5e7eb',
-                    textStyle: {
-                        color: '#1f2937'
-                    }
-                },
-                grid: {
-                    top: 10,
-                    right: 10,
-                    bottom: 20,
-                    left: 40
-                },
-                xAxis: {
-                    type: 'category',
-                    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    axisLine: {
-                        lineStyle: {
-                            color: '#e5e7eb'
-                        }
-                    },
-                    axisLabel: {
-                        color: '#6b7280'
-                    }
-                },
-                yAxis: {
-                    type: 'value',
-                    axisLine: {
-                        show: false
-                    },
-                    axisTick: {
-                        show: false
-                    },
-                    splitLine: {
-                        lineStyle: {
-                            color: '#f3f4f6'
-                        }
-                    },
-                    axisLabel: {
-                        color: '#6b7280'
-                    }
-                },
-                series: [
-                    {
-                        name: 'Sales',
-                        type: 'line',
-                        smooth: true,
-                        data: [42, 50, 65, 70, 78, 90, 105, 112, 120, 135, 142, 150],
-                        lineStyle: {
-                            width: 3,
-                            color: 'rgba(87, 181, 231, 1)'
-                        },
-                        symbol: 'none',
-                        areaStyle: {
-                            color: {
-                                type: 'linear',
-                                x: 0,
-                                y: 0,
-                                x2: 0,
-                                y2: 1,
-                                colorStops: [
-                                    {
-                                        offset: 0,
-                                        color: 'rgba(87, 181, 231, 0.2)'
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: 'rgba(87, 181, 231, 0.01)'
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                ]
-            };
-            salesChart.setOption(salesOption);
-
-            // Category Distribution Chart
-            const categoryChart = echarts.init(document.getElementById('categoryChart'));
-            const categoryOption = {
-                animation: false,
-                tooltip: {
-                    trigger: 'item',
-                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                    borderColor: '#e5e7eb',
-                    textStyle: {
-                        color: '#1f2937'
-                    }
-                },
-                legend: {
-                    orient: 'vertical',
-                    right: 10,
-                    top: 'center',
-                    textStyle: {
-                        color: '#1f2937'
-                    }
-                },
-                series: [
-                    {
-                        name: 'Vehicle Categories',
-                        type: 'pie',
-                        radius: ['40%', '70%'],
-                        center: ['40%', '50%'],
-                        avoidLabelOverlap: false,
-                        itemStyle: {
-                            borderRadius: 8,
-                            borderColor: '#fff',
-                            borderWidth: 2
-                        },
-                        label: {
-                            show: false
-                        },
-                        emphasis: {
-                            label: {
-                                show: false
-                            }
-                        },
-                        labelLine: {
-                            show: false
-                        },
-                        data: [
-                            { value: 42, name: 'Electric Sedans', itemStyle: { color: 'rgba(87, 181, 231, 1)' } },
-                            { value: 28, name: 'Electric SUVs', itemStyle: { color: 'rgba(141, 211, 199, 1)' } },
-                            { value: 18, name: 'Electric Trucks', itemStyle: { color: 'rgba(251, 191, 114, 1)' } },
-                            { value: 12, name: 'Hybrid Vehicles', itemStyle: { color: 'rgba(252, 141, 98, 1)' } }
-                        ]
-                    }
-                ]
-            };
-            categoryChart.setOption(categoryOption);
-
-            // Handle window resize
-            const handleResize = () => {
-                salesChart.resize();
-                categoryChart.resize();
-            };
-
-            window.addEventListener('resize', handleResize);
-
-            return () => {
-                window.removeEventListener('resize', handleResize);
-                salesChart.dispose();
-                categoryChart.dispose();
-            };
-        };
-
-        // Initialize sidebar interactions
-        const initSidebar = () => {
-            const sidebarLinks = document.querySelectorAll('.sidebar-link');
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
-                    sidebarLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-        };
-
-        // Initialize switch interactions
-        const initSwitches = () => {
-            const switchInputs = document.querySelectorAll('.form-check-input');
-            switchInputs.forEach(input => {
-                input.addEventListener('change', function () {
-                    const isChecked = this.checked;
-                    const switchId = this.id;
-                    console.log(`Switch ${switchId} is now ${isChecked ? 'ON' : 'OFF'}`);
-                });
-            });
-        };
-
-        initCharts();
-        initSidebar();
-        initSwitches();
-    }, []);
-
-    return (
-        <div className="container-fluid p-3 p-md-4">
-            <div className="mb-3 p-2 py-3 shadow-sm bg-white">
-                <h2 className="h3 mb-1 ms-2">Dashboard Overview</h2>
-                <p className="text-muted ms-2">Thursday, June 12, 2025</p>
+      {/* Metrics Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {[
+          { title: 'Total Dealerships', value: '24', change: '12%', icon: 'store', color: 'indigo' },
+          { title: 'Active Users', value: '142', change: '8%', icon: 'users', color: 'blue' },
+          { title: 'Pending Orders', value: '64', change: '5%', icon: 'shopping-cart', color: 'amber' },
+          { title: 'Total Inventory', value: '1,893', change: '3%', icon: 'warehouse', color: 'emerald' },
+        ].map((metric, index) => (
+          <div key={index} className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center">
+              <div className={`p-3 rounded-full bg-${metric.color}-100 text-${metric.color}-600`}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <h2 className="text-sm font-medium text-gray-600">{metric.title}</h2>
+                <p className="text-2xl font-bold text-gray-800">{metric.value}</p>
+              </div>
             </div>
-
-            {/* Quick Stats - Stack on mobile, 2x2 grid on sm, 4 columns on md+ */}
-            <div className="row g-3 mb-4">
-                <div className="col-12 col-sm-6 col-lg-3">
-                    <div className="dashboard-card h-100">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h3 className="text-muted mb-0">Total Orders</h3>
-                            <div className="stat-card-icon bg-primary bg-opacity-10">
-                                <i className="ri-shopping-cart-line text-primary"></i>
-                            </div>
-                        </div>
-                        <div className="d-flex align-items-end">
-                            <p className="display-5 fw-semibold mb-0">247</p>
-                            <div className="d-flex align-items-center ms-2 text-success small">
-                                <i className="ri-arrow-up-line me-1"></i>
-                                <span>12.5%</span>
-                            </div>
-                        </div>
-                        <p className="text-muted small mb-0">vs previous month</p>
-                    </div>
-                </div>
-
-                <div className="col-12 col-sm-6 col-lg-3">
-                    <div className="dashboard-card h-100">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h3 className="text-muted mb-0">Revenue</h3>
-                            <div className="stat-card-icon bg-success bg-opacity-10">
-                                <i className="ri-money-dollar-circle-line text-success"></i>
-                            </div>
-                        </div>
-                        <div className="d-flex align-items-end">
-                            <p className="display-5 fw-semibold mb-0">$1.28M</p>
-                            <div className="d-flex align-items-center ms-2 text-success small">
-                                <i className="ri-arrow-up-line me-1"></i>
-                                <span>8.3%</span>
-                            </div>
-                        </div>
-                        <p className="text-muted small mb-0">vs previous month</p>
-                    </div>
-                </div>
-
-                <div className="col-12 col-sm-6 col-lg-3">
-                    <div className="dashboard-card h-100">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h3 className="text-muted mb-0">Inventory</h3>
-                            <div className="stat-card-icon bg-info bg-opacity-10">
-                                <i className="ri-archive-line text-info"></i>
-                            </div>
-                        </div>
-                        <div className="d-flex align-items-end">
-                            <p className="display-5 fw-semibold mb-0">183</p>
-                            <div className="d-flex align-items-center ms-2 text-danger small">
-                                <i className="ri-arrow-down-line me-1"></i>
-                                <span>4.2%</span>
-                            </div>
-                        </div>
-                        <p className="text-muted small mb-0">vehicles in stock</p>
-                    </div>
-                </div>
-
-                <div className="col-12 col-sm-6 col-lg-3">
-                    <div className="dashboard-card h-100">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h3 className="text-muted mb-0">Production</h3>
-                            <div className="stat-card-icon bg-purple bg-opacity-10">
-                                <i className="ri-settings-line text-purple"></i>
-                            </div>
-                        </div>
-                        <div className="d-flex align-items-end">
-                            <p className="display-5 fw-semibold mb-0">92%</p>
-                            <div className="d-flex align-items-center ms-2 text-success small">
-                                <i className="ri-arrow-up-line me-1"></i>
-                                <span>3.1%</span>
-                            </div>
-                        </div>
-                        <p className="text-muted small mb-0">completion rate</p>
-                    </div>
-                </div>
+            <div className="mt-4 flex items-center text-sm">
+              <span className={`text-${metric.change.includes('-') ? 'red' : 'green'}-500 flex items-center`}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clipRule="evenodd" />
+                </svg>
+                {metric.change}
+              </span>
+              <span className="text-gray-500 ml-2">from last month</span>
             </div>
+          </div>
+        ))}
+      </div>
 
-            {/* Charts Row - Stack on mobile, side by side on lg+ */}
-            <div className="row g-3 mb-4">
-                <div className="col-12 col-lg-6">
-                    <div className="dashboard-card h-100">
-                        <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4">
-                            <h3 className="h5 mb-0">Sales Trend</h3>
-                            <div className="d-flex flex-wrap justify-content-end gap-2">
-                                <button className="btn btn-sm btn-outline-secondary rounded-pill">
-                                    Weekly
-                                </button>
-                                <button className="btn btn-sm btn-primary rounded-pill">
-                                    Monthly
-                                </button>
-                                <button className="btn btn-sm btn-outline-secondary rounded-pill">
-                                    Yearly
-                                </button>
-                            </div>
-                        </div>
-                        <div id="salesChart" className="chart-container" style={{ minHeight: '300px' }}></div>
-                    </div>
-                </div>
+      {/* Quick Actions */}
+      <div className="bg-white rounded-lg shadow p-6 mb-8">
+        <h2 className="text-lg font-medium text-gray-800 mb-4">Quick Actions</h2>
+        <div className="flex flex-wrap gap-4">
+          <button
+            onClick={() => setShowDealershipModal(true)}
+            className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+            </svg>
+            Add Dealership
+          </button>
 
-                <div className="col-12 col-lg-6">
-                    <div className="dashboard-card h-100">
-                        <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4">
-                            <h3 className="h5 mb-0">Vehicle Categories</h3>
+          <button
+            onClick={() => setShowUserModal(true)}
+            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
+            </svg>
+            Add User
+          </button>
 
-                        </div>
-                        <div id="categoryChart" className="chart-container" style={{ minHeight: '300px' }}></div>
-                    </div>
-                </div>
-            </div>
+          <button className="flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+            Export Reports
+          </button>
 
-            {/* Recent Orders and Inventory Status - Stack on mobile, 70/30 split on lg+ */}
-            <div className="row g-3 mb-4">
-                <div className="col-12 col-lg-8">
-                    <div className="dashboard-card h-100">
-                        <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4">
-                            <h3 className="h5 mb-0">Recent Orders</h3>
-
-                        </div>
-                        <div className="table-responsive">
-                            <table className="table table-hover mb-0">
-                                <thead className="table-light">
-                                    <tr>
-                                        <th className="text-muted small text-uppercase">Order ID</th>
-                                        <th className="text-muted small text-uppercase d-none d-sm-table-cell">Customer</th>
-                                        <th className="text-muted small text-uppercase">Vehicle</th>
-                                        <th className="text-muted small text-uppercase d-none d-md-table-cell">Amount</th>
-                                        <th className="text-muted small text-uppercase">Status</th>
-                                        <th className="text-muted small text-uppercase">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {orders.map((order, index) => (
-                                        <tr key={index}>
-                                            <td className="fw-medium">{order.id}</td>
-                                            <td className="d-none d-sm-table-cell">
-                                                <div className="d-flex align-items-center gap-2">
-                                                    <div className={`user-avatar bg-${order.statusClass} bg-opacity-10 text-${order.statusClass}`}>{order.initials}</div>
-                                                    <span>{order.customer}</span>
-                                                </div>
-                                            </td>
-                                            <td>{order.vehicle}</td>
-                                            <td className="fw-medium d-none d-md-table-cell">{order.amount}</td>
-                                            <td>
-                                                <span className={`badge-status bg-${order.statusClass} bg-opacity-10 text-${order.statusClass}`}>
-                                                    {order.status}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-sm btn-link text-muted"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#orderDetailModal"
-                                                    onClick={() => handleView(order)}
-                                                >
-                                                    <i className="fas fa-eye"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Modal */}
-                <div
-                    className="modal fade"
-                    id="orderDetailModal"
-                    tabIndex="-1"
-                    aria-labelledby="orderDetailModalLabel"
-                    aria-hidden="true"
-                >
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="orderDetailModalLabel">Order Details</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-                                {selectedOrder ? (
-                                    <>
-                                        <p><strong>Order ID:</strong> {selectedOrder.id}</p>
-                                        <p><strong>Customer:</strong> {selectedOrder.customer}</p>
-                                        <p><strong>Vehicle:</strong> {selectedOrder.vehicle}</p>
-                                        <p><strong>Amount:</strong> {selectedOrder.amount}</p>
-                                        <p><strong>Status:</strong> {selectedOrder.status}</p>
-                                    </>
-                                ) : (
-                                    <p>No order selected.</p>
-                                )}
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col-12 col-lg-4">
-                    <div className="dashboard-card h-100">
-                        <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4">
-                            <h3 className="h5 mb-0">Inventory Status</h3>
-
-                        </div>
-                        <div className="mb-4">
-                            <div className="d-flex justify-content-between mb-1">
-                                <span className="small">Electric Sedans</span>
-                                <span className="small fw-medium">68%</span>
-                            </div>
-                            <div className="progress progress-thin mb-3">
-                                <div
-                                    className="progress-bar"
-                                    role="progressbar"
-                                    style={{ width: "78%", minWidth: "30px", backgroundColor: "rgba(87, 181, 231, 1)" }}
-                                ></div>
-                            </div>
-
-                            <div className="d-flex justify-content-between mb-1">
-                                <span className="small">Electric SUVs</span>
-                                <span className="small fw-medium">92%</span>
-                            </div>
-                            <div className="progress progress-thin mb-3">
-                                <div
-                                    className="progress-bar"
-                                    role="progressbar"
-                                    style={{ width: "92%", backgroundColor: "rgba(87, 181, 231, 1)" }}
-                                ></div>
-                            </div>
-
-                            <div className="d-flex justify-content-between mb-1">
-                                <span className="small">Electric Trucks</span>
-                                <span className="small fw-medium">45%</span>
-                            </div>
-                            <div className="progress progress-thin mb-3">
-                                <div
-                                    className="progress-bar"
-                                    role="progressbar"
-                                    style={{ width: "45%", backgroundColor: "rgba(87, 181, 231, 1)" }}
-                                ></div>
-                            </div>
-
-                            <div className="d-flex justify-content-between mb-1">
-                                <span className="small">Hybrid Vehicles</span>
-                                <span className="small fw-medium">78%</span>
-                            </div>
-                            <div className="progress progress-thin">
-                                <div
-                                    className="progress-bar"
-                                    role="progressbar"
-                                    style={{ width: "78%", backgroundColor: "rgba(87, 181, 231, 1)" }}
-                                ></div>
-                            </div>
-                        </div>
-
-                        <div className="pt-3 mt-3 border-top">
-                            <h4 className="small fw-medium mb-3">Low Stock Alert</h4>
-                            <div className="mb-3">
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="d-flex align-items-center">
-                                        <div className="user-avatar bg-danger bg-opacity-10 text-danger">
-                                            <i className="ri-alert-line"></i>
-                                        </div>
-                                        <div className="ms-2">
-                                            <p className="small fw-medium mb-0">Tesla Model 3</p>
-                                            <p className="small text-muted mb-0">Only 3 left in stock</p>
-                                        </div>
-                                    </div>
-                                    <button className="btn btn-sm btn-primary rounded-pill">
-                                        Reorder
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="d-flex align-items-center">
-                                        <div className="user-avatar bg-danger bg-opacity-10 text-danger">
-                                            <i className="ri-alert-line"></i>
-                                        </div>
-                                        <div className="ms-2">
-                                            <p className="small fw-medium mb-0">Ford Mustang Mach-E</p>
-                                            <p className="small text-muted mb-0">Only 5 left in stock</p>
-                                        </div>
-                                    </div>
-                                    <button className="btn btn-sm btn-primary rounded-pill">
-                                        Reorder
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Production Timeline - Full width */}
-            <div className="row mb-4">
-                <div className="col-12">
-                    <div className="dashboard-card">
-                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 mb-md-4">
-                            <h3 className="h5 mb-2 mb-md-0">Production Timeline</h3>
-                            <div className="d-flex flex-wrap gap-2">
-                                <div className="dropdown">
-                                    <button className="btn btn-outline-secondary dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown">
-                                        This Month
-                                    </button>
-                                </div>
-                                <button className="btn btn-primary rounded-pill">
-                                    <i className="ri-download-line me-1"></i>
-                                    Export
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="table-responsive">
-                            <div className="border-bottom pb-3 mb-3 d-none d-md-block">
-                                <div className="row">
-                                    <div className="col-md-3">
-                                        <span className="small text-muted text-uppercase">Vehicle Model</span>
-                                    </div>
-                                    <div className="col-md-3">
-                                        <span className="small text-muted text-uppercase">Status</span>
-                                    </div>
-                                    <div className="col-md-3">
-                                        <span className="small text-muted text-uppercase">Completion</span>
-                                    </div>
-                                    <div className="col-md-3">
-                                        <span className="small text-muted text-uppercase">Estimated Delivery</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="timeline-item">
-                                <div className="row align-items-center">
-                                    <div className="col-12 col-md-3 mb-2 mb-md-0">
-                                        <div className="d-flex align-items-center">
-                                            <div className="user-avatar bg-info bg-opacity-10 text-info">
-                                                <i className="ri-car-line"></i>
-                                            </div>
-                                            <div className="ms-2">
-                                                <p className="mb-0">Tesla Model Y</p>
-                                                <p className="small text-muted mb-0">Batch #TY-2025-06</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-6 col-md-3 mb-2 mb-md-0">
-                                        <span className="badge-status bg-success bg-opacity-10 text-success">In Production</span>
-                                    </div>
-                                    <div className="col-6 col-md-3 mb-2 mb-md-0">
-                                        <div className="d-flex align-items-center">
-                                            <div className="progress progress-thin flex-grow-1 me-2">
-                                                <div
-                                                    className="progress-bar"
-                                                    role="progressbar"
-                                                    style={{ width: "75%", backgroundColor: "#0dcaf0" }}
-                                                ></div>
-                                            </div>
-                                            <span className="small fw-medium">75%</span>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-md-3">
-                                        <p className="mb-0">June 25, 2025</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="timeline-item">
-                                <div className="row align-items-center">
-                                    <div className="col-12 col-md-3 mb-2 mb-md-0">
-                                        <div className="d-flex align-items-center">
-                                            <div className="user-avatar bg-info bg-opacity-10 text-info">
-                                                <i className="ri-car-line"></i>
-                                            </div>
-                                            <div className="ms-2">
-                                                <p className="mb-0">Rivian R1T</p>
-                                                <p className="small text-muted mb-0">Batch #RT-2025-06</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-6 col-md-3 mb-2 mb-md-0">
-                                        <span className="badge-status bg-info bg-opacity-10 text-info">Assembly</span>
-                                    </div>
-                                    <div className="col-6 col-md-3 mb-2 mb-md-0">
-                                        <div className="d-flex align-items-center">
-                                            <div className="progress progress-thin flex-grow-1 me-2">
-                                                <div
-                                                    className="progress-bar"
-                                                    role="progressbar"
-                                                    style={{ width: "45%", backgroundColor: "#0dcaf0" }}
-                                                ></div>
-                                            </div>
-                                            <span className="small fw-medium">45%</span>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-md-3">
-                                        <p className="mb-0">July 10, 2025</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="timeline-item">
-                                <div className="row align-items-center">
-                                    <div className="col-12 col-md-3 mb-2 mb-md-0">
-                                        <div className="d-flex align-items-center">
-                                            <div className="user-avatar bg-info bg-opacity-10 text-info">
-                                                <i className="ri-car-line"></i>
-                                            </div>
-                                            <div className="ms-2">
-                                                <p className="mb-0">Lucid Air</p>
-                                                <p className="small text-muted mb-0">Batch #LA-2025-06</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-6 col-md-3 mb-2 mb-md-0">
-                                        <span className="badge-status bg-warning bg-opacity-10 text-warning">Quality Check</span>
-                                    </div>
-                                    <div className="col-6 col-md-3 mb-2 mb-md-0">
-                                        <div className="d-flex align-items-center">
-                                            <div className="progress progress-thin flex-grow-1 me-2">
-                                                <div
-                                                    className="progress-bar"
-                                                    role="progressbar"
-                                                    style={{ width: "92%", backgroundColor: "#ffc107" }}
-                                                ></div>
-                                            </div>
-                                            <span className="small fw-medium">92%</span>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-md-3">
-                                        <p className="mb-0">June 18, 2025</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="timeline-item">
-                                <div className="row align-items-center">
-                                    <div className="col-12 col-md-3 mb-2 mb-md-0">
-                                        <div className="d-flex align-items-center">
-                                            <div className="user-avatar bg-info bg-opacity-10 text-info">
-                                                <i className="ri-car-line"></i>
-                                            </div>
-                                            <div className="ms-2">
-                                                <p className="mb-0">Ford F-150 Lightning</p>
-                                                <p className="small text-muted mb-0">Batch #FL-2025-06</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-6 col-md-3 mb-2 mb-md-0">
-                                        <span className="badge-status bg-purple bg-opacity-10 text-purple">Materials Prep</span>
-                                    </div>
-                                    <div className="col-6 col-md-3 mb-2 mb-md-0">
-                                        <div className="d-flex align-items-center">
-                                            <div className="progress progress-thin flex-grow-1 me-2">
-                                                <div
-                                                    className="progress-bar"
-                                                    role="progressbar"
-                                                    style={{ width: "15%", backgroundColor: "#6f42c1" }}
-                                                ></div>
-                                            </div>
-                                            <span className="small fw-medium">15%</span>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-md-3">
-                                        <p className="mb-0">August 5, 2025</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Google Sheets Sync Status - Stack on mobile, 3 columns on md+ */}
-            <div className="row g-3">
-                <div className="col-12">
-                    <div className="dashboard-card">
-                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 mb-md-4">
-                            <h3 className="h5 mb-2 mb-md-0">Google Sheets Sync Status</h3>
-                            <button className="btn btn-primary rounded-pill">
-                                <i className="ri-refresh-line me-1"></i>
-                                Sync Now
-                            </button>
-                        </div>
-
-                        <div className="row g-3">
-                            <div className="col-12 col-md-4">
-                                <div className="sync-card h-100">
-                                    <div className="d-flex align-items-center mb-3">
-                                        <div className="user-avatar bg-success bg-opacity-10 text-success">
-                                            <i className="ri-check-line"></i>
-                                        </div>
-                                        <h4 className="small fw-medium mb-0 ms-2">Orders Spreadsheet</h4>
-                                    </div>
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <p className="small text-muted mb-0">Last synced: 10 minutes ago</p>
-                                        <div className="form-check form-switch">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                id="autoSyncOrders"
-                                                defaultChecked
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-12 col-md-4">
-                                <div className="sync-card h-100">
-                                    <div className="d-flex align-items-center mb-3">
-                                        <div className="user-avatar bg-success bg-opacity-10 text-success">
-                                            <i className="ri-check-line"></i>
-                                        </div>
-                                        <h4 className="small fw-medium mb-0 ms-2">Inventory Spreadsheet</h4>
-                                    </div>
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <p className="small text-muted mb-0">Last synced: 25 minutes ago</p>
-                                        <div className="form-check form-switch">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                id="autoSyncInventory"
-                                                defaultChecked
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-12 col-md-4">
-                                <div className="sync-card h-100">
-                                    <div className="d-flex align-items-center mb-3">
-                                        <div className="user-avatar bg-warning bg-opacity-10 text-warning">
-                                            <i className="ri-error-warning-line"></i>
-                                        </div>
-                                        <h4 className="small fw-medium mb-0 ms-2">Production Spreadsheet</h4>
-                                    </div>
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <p className="small text-muted mb-0">Last synced: 2 hours ago</p>
-                                        <div className="form-check form-switch">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                id="autoSyncProduction"
-                                                defaultChecked
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <button className="flex items-center px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+            </svg>
+            Sync Inventory
+          </button>
         </div>
-    );
+      </div>
+
+      {/* Charts Placeholder */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="h-64 flex items-center justify-center text-gray-400">
+            Monthly Sales Chart
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="h-64 flex items-center justify-center text-gray-400">
+            Order Status Chart
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="h-64 flex items-center justify-center text-gray-400">
+            Inventory Levels Chart
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Activities */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-lg shadow">
+          <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+            <h2 className="text-lg font-medium text-gray-800">Recent Orders</h2>
+            <button className="text-sm text-indigo-600 hover:text-indigo-800">View All</button>
+          </div>
+          <div className="p-4">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dealership</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {[
+                    { id: '#ORD-5293', dealership: 'City Motors', date: 'Jun 19, 2025', status: 'Completed', color: 'green' },
+                    { id: '#ORD-5292', dealership: 'Highway Auto', date: 'Jun 18, 2025', status: 'Processing', color: 'blue' },
+                    { id: '#ORD-5291', dealership: 'Luxury Cars Inc', date: 'Jun 18, 2025', status: 'Pending', color: 'amber' },
+                    { id: '#ORD-5290', dealership: 'Downtown Autos', date: 'Jun 17, 2025', status: 'Cancelled', color: 'red' },
+                  ].map((order, index) => (
+                    <tr key={index}>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-800">{order.id}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{order.dealership}</td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{order.date}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className={`px-2 py-1 text-xs rounded-full bg-${order.color}-100 text-${order.color}-800`}>
+                          {order.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow">
+          <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+            <h2 className="text-lg font-medium text-gray-800">Recent Activities</h2>
+            <button className="text-sm text-indigo-600 hover:text-indigo-800">View All</button>
+          </div>
+          <div className="p-4">
+            <ul className="divide-y divide-gray-200">
+              {[
+                { 
+                  icon: 'user-plus', 
+                  color: 'blue', 
+                  text: 'New user Sarah Johnson was added to City Motors', 
+                  time: '2 hours ago' 
+                },
+                { 
+                  icon: 'check-circle', 
+                  color: 'green', 
+                  text: 'Order #ORD-5293 was marked as completed', 
+                  time: '3 hours ago' 
+                },
+                { 
+                  icon: 'store', 
+                  color: 'indigo', 
+                  text: 'Dealership Luxury Cars Inc updated their inventory', 
+                  time: '5 hours ago' 
+                },
+                { 
+                  icon: 'sync', 
+                  color: 'amber', 
+                  text: 'System update v2.3.0 was successfully installed', 
+                  time: '1 day ago' 
+                },
+              ].map((activity, index) => (
+                <li key={index} className="py-3">
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      <div className={`w-8 h-8 rounded-full bg-${activity.color}-100 text-${activity.color}-600 flex items-center justify-center`}>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm text-gray-800">{activity.text}</p>
+                      <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Dealership Modal */}
+      {showDealershipModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-lg bg-white">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold text-gray-900">Add New Dealership</h3>
+              <button
+                onClick={() => setShowDealershipModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <form className="space-y-4">
+              <div>
+                <label htmlFor="dealershipName" className="block text-sm font-medium text-gray-700">Dealership Name *</label>
+                <input
+                  type="text"
+                  id="dealershipName"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-2"
+                  placeholder="Enter dealership name"
+                />
+              </div>
+              <div>
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address *</label>
+                <input
+                  type="text"
+                  id="address"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-2"
+                  placeholder="Enter address"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone *</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-2"
+                    placeholder="Enter phone number"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email *</label>
+                  <input
+                    type="email"
+                    id="email"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-2"
+                    placeholder="Enter email"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowDealershipModal(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition"
+                >
+                  Save Dealership
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* User Modal */}
+      {showUserModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-lg bg-white">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold text-gray-900">Add New User</h3>
+              <button
+                onClick={() => setShowUserModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <form className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name *</label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-2"
+                    placeholder="First name"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name *</label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-2"
+                    placeholder="Last name"
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="userEmail" className="block text-sm font-medium text-gray-700">Email *</label>
+                <input
+                  type="email"
+                  id="userEmail"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-2"
+                  placeholder="Email address"
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password *</label>
+                <input
+                  type="password"
+                  id="password"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-2"
+                  placeholder="Password"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="role" className="block text-sm font-medium text-gray-700">Role *</label>
+                  <select
+                    id="role"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-2"
+                  >
+                    <option value="">Select role</option>
+                    <option value="admin">Admin</option>
+                    <option value="manager">Manager</option>
+                    <option value="staff">Staff</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="dealership" className="block text-sm font-medium text-gray-700">Dealership *</label>
+                  <select
+                    id="dealership"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm p-2"
+                  >
+                    <option value="">Select dealership</option>
+                    <option value="1">City Motors</option>
+                    <option value="2">Highway Auto</option>
+                    <option value="3">Luxury Cars Inc</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowUserModal(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition"
+                >
+                  Save User
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Dashboard;

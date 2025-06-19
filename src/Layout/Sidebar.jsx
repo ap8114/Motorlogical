@@ -68,18 +68,17 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
                 <div className="text-uppercase text-secondary small mb-2">Main Menu</div>
                 <ul className="nav flex-column mb-4">
                     {navItem("/dashboard", "fas fa-th-large", "Dashboard")}
-                    {navItem("/ordermanagement", "fas fa-shopping-cart", "Finance Department")}
-                    {navItem("/inventorymanagement", "fas fa-boxes", "Inventory")}
-                    {navItem("/productionstatus", "fas fa-cog", "Aging Stock")}
-                    {navItem("/salesrecords", "fas fa-chart-line", "Sales Record")}
+                    {navItem("/dealershipmanagement", "fas fa-store", "Dealership Management")}
+                    {navItem("/inventorymanagement", "fas fa-users-cog", "User Management")}
+                    {navItem("/productionstatus", "fas fa-industry", "Order Management")}
+                    {navItem("/inventory", "fas fa-boxes-stacked", "Inventory Management")}
+                    {navItem("/reporting", "fas fa-chart-line", "Reporting")}
+                    {navItem("/settings", "fas fa-sliders-h", "Settings")}
                 </ul>
 
-                <div className="text-uppercase text-secondary small mb-2">Settings</div>
-                <ul className="nav flex-column">
-                    {navItem("/accountsetting", "fas fa-user", "User Management")}
-                    {navItem("/userpreferences", "fas fa-sliders-h", "Preferences")}
-                    {navItem("/helpsupport", "fas fa-question-circle", "Help & Support")}
-                </ul>
+
+
+
             </div>
         </div>
     );
