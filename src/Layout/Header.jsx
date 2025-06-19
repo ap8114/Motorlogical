@@ -60,7 +60,7 @@ const Header = ({ onToggleSidebar }) => {
 
           {/* Logout - icon only on mobile */}
          
-          <Link to="/signup">
+          <Link to="/">
           <button className="btn btn-outline-warning">
             <i className="fas fa-sign-out-alt me-1"></i> Logout
           </button>

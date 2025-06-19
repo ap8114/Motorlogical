@@ -1,127 +1,116 @@
-import React from 'react';
-
-
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate  } from "react-router-dom";
 
 const Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+    const navigate = useNavigate();
+
+    const handleLogin = () => {
+        // Static credentials
+        const users = [
+            { email: "admin@example.com", password: "123", role: "Admin" },
+            { email: "manager@example.com", password: "123", role: "Manager" },
+            { email: "salesperson@example.com", password: "123", role: "Salesperson" }
+        ];
+
+        const user = users.find(
+            (user) => user.email === email && user.password === password
+        );
+
+        if (user) {
+            // Store role in localStorage
+            localStorage.setItem("role", user.role);
+
+            // Redirect based on role
+            if (user.role === "Admin") {
+                navigate("/dashboard");
+            } else if (user.role === "Manager") {
+                navigate("/manager-dashboard");
+            } else if (user.role === "Salesperson") {
+                navigate("/salesperson-dashboard");
+            }
+        } else {
+            alert("Invalid email or password");
+        }
+    };
+
     return (
-        <div className="container d-flex justify-content-center align-items-center min-vh-100">
-            <div
-                className="card shadow border-0 rounded-4 p-4 w-100"
-                style={{ maxWidth: '500px', backgroundColor: '#023047', color: 'white' }}
-            >
-                {/* Top Illustration */}
-                <div className="text-center mb-4">
-                    <img
-                        src="https://i.ibb.co/KjTVLSrr/Login-rafiki-1.png"
-                        alt="Login Illustration"
-                        className="img-fluid"
-                        style={{ maxHeight: '200px' }}
-                    />
-                </div>
+        <div className="min-h-screen flex items-center justify-center p-4 " style={{ backgroundColor: "#023047" }}>
+            <div className="bg-white rounded-3xl w-full max-w-5xl overflow-hidden shadow-xl flex mainlogin">
 
-                {/* Username Input */}
-                <div className="mb-3">
-                    <label htmlFor="username" className="form-label text-white fw-semibold">
-                        Username:
-                    </label>
-                    <div className="input-group">
-                        <input
-                            type="text"
-                            className="form-control border-primary-subtle"
-                            placeholder="Enter your Username"
-                            id="username"
-                        />
-                        <span className="input-group-text bg-white">
-                            <i className="bi bi-person-fill" style={{ color: '#023047' }}></i>
-                        </span>
+                {/* Left Panel - Login Form */}
+                <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col ">
+                    <div className="mb-8">
+                        <div className="flex items-center mb-12">
+                            <img
+                                src="https://i.postimg.cc/T37mZZ0p/89b720af-5154-4d70-bb52-6882c2d51803.png"
+                                alt="Motorlogical Logo"
+                                className="img-fluid sidebar-logo"
+                                style={{ maxHeight: '60px' }}
+                            />
+                        </div>
+                        <h1 className="text-3xl font-bold text-gray-800 mb-8">Welcome Back</h1>
+
+                        <div className="flex items-center my-6">
+                            <div className="flex-grow h-px bg-gray-300"></div>
+                            <div className="flex-grow h-px bg-gray-300"></div>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <input
+                                    type="email"
+                                    placeholder="Your Email"
+                                    className="w-full px-4 py-3 fs-5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+                            <div className="mt-4">
+                                <input
+                                    type="password"
+                                    placeholder="Your Password"
+                                    className="w-full px-4 fs-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex justify-between items-center mb-5">
+                                <label className="flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="form-checkbox h-4 w-4 text-indigo-600 rounded"
+                                        checked={keepLoggedIn}
+                                        onChange={() => setKeepLoggedIn(!keepLoggedIn)}
+                                    />
+                                    <span className="ml-2 text-sm text-gray-600">
+                                        Keep me logged in
+                                    </span>
+                                </label>
+                            </div>
+                            <button
+                                onClick={handleLogin}
+                                className="w-full text-white py-3 rounded-lg flex items-center justify-center cursor-pointer whitespace-nowrap !rounded-button fs-5"
+                                style={{ backgroundColor: "#023047", border: "0" }}
+                            >
+                                <span>Log in</span>
+                                <i className="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                {/* Password Input */}
-                <div className="mb-2">
-                    <label htmlFor="password" className="form-label text-white fw-semibold">
-                        Password:
-                    </label>
-                    <div className="input-group">
-                        <input
-                            type="password"
-                            className="form-control border-primary-subtle"
-                            placeholder="***************"
-                            id="password"
+                {/* Right Panel - Illustration */}
+                <div className="hidden md:block md:w-1/2 bg-blue-100 p-8 md:p-12 relative ">
+                    <div className="flex justify-center items-center h-3/4 mt-5">
+                        <img
+                            src="https://file.aiquickdraw.com/imgcompressed/img/compressed_a0698d76179ca0e6b38e1dfc7f1a458c.webp"
+                            alt="Digital Connection"
+                            className="max-w-full max-h-full object-contain"
                         />
-                        <span className="input-group-text bg-white">
-                            <i className="bi bi-arrow-right-circle-fill" style={{ color: '#023047' }}></i>
-                        </span>
                     </div>
-                </div>
-
-                {/* Forgot Password */}
-                <div className="text-end mb-3">
-                    <a href="#" className="text-decoration-none text-white small">
-                        Forgot Password?
-                    </a>
-                </div>
-
-                {/* Divider */}
-                <div className="d-flex align-items-center my-3">
-                    <hr className="flex-grow-1 text-white" />
-                    <span className="mx-2 text-white small">or</span>
-                    <hr className="flex-grow-1 text-white" />
-                </div>
-
-                {/* Social Login Icons */}
-                <div className="d-flex justify-content-center gap-3 mb-4">
-                    {['google', 'facebook-f', 'instagram'].map((platform) => (
-                        <button
-                            key={platform}
-                            className="btn rounded-circle"
-                            style={{
-                                backgroundColor: 'white',
-                                color: '#FFB803',
-                                width: '45px',
-                                height: '45px',
-                            }}
-                        >
-                            <i className={`fab fa-${platform}`}></i>
-                        </button>
-                    ))}
-                </div>
-
-                {/* Login Button */}
-                <div className="d-grid mb-3">
-
-                    <Link to="/dashboard" className="text-decoration-none">
-                        <button
-                            type="button"
-                            className="btn rounded-pill py-2 fs-5 fw-bold shadow-sm w-100"
-                            style={{
-                                backgroundColor: 'white',
-                                color: '#023047',
-                                transition: 'all 0.3s ease',
-                                border: '2px solid #023047',
-                            }}
-                            onMouseOver={(e) => {
-                                e.target.style.backgroundColor = '#FFB803';
-                                e.target.style.color = 'white';
-                            }}
-                            onMouseOut={(e) => {
-                                e.target.style.backgroundColor = 'white';
-                                e.target.style.color = '#023047';
-                            }}
-                        >
-                            Login
-                        </button>
-                    </Link>
-
-                </div>
-
-                {/* Sign Up Prompt */}
-                <div className="text-center">
-                    <span className="text-white">Don’t have an account?</span>{' '}
-                    <a href="/signup" className="text-decoration-none fw-semibold" style={{ color: '#FFB803' }}>
-                        Sign Up
-                    </a>
+                    <div className="absolute bottom-0 right-0 w-32 h-32 bg-blue-200 rounded-full -mr-16 -mb-16 opacity-70"></div>
+                    <div className="absolute top-1/4 left-0 w-16 h-16 bg-blue-200 rounded-full -ml-8 opacity-70"></div>
                 </div>
             </div>
         </div>
