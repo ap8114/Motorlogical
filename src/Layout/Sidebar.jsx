@@ -81,12 +81,7 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
         <div className="sidebar d-flex flex-column vh-100 position-fixed start-0">
             {/* Header Row */}
             <div className="d-flex justify-content-between align-items-center py-2">
-                <img
-                    src="https://i.postimg.cc/T37mZZ0p/89b720af-5154-4d70-bb52-6882c2d51803.png"
-                    alt="Motorlogical Logo"
-                    className="img-fluid sidebar-logo"
-                    style={{ maxHeight: '60px' }}
-                />
+               
                 <button
                     type="button"
                     className="btn btn-outline-light ms-auto d-lg-none"
@@ -98,8 +93,8 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
             </div>
 
             {/* Role-specific Navigation */}
-            <div className="flex-grow-1 px-3">
-                <div className="text-uppercase text-secondary small mb-2">Main Menu</div>
+            <div className="flex-grow-1 px-3 mt-4">
+                {/* <div className="text-uppercase text-secondary small mb-2">Main Menu</div> */}
                 <ul className="nav flex-column mb-4">
                     {getMenuItems()}
                 </ul>

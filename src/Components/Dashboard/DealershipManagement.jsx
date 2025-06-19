@@ -2,16 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import * as echarts from 'echarts';
 const DealershipManagement = () => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [activeMenu, setActiveMenu] = useState('dealership');
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [notifications, setNotifications] = useState(3);
+
   const [showAddDealershipModal, setShowAddDealershipModal] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [dateRange, setDateRange] = useState({ start: '', end: '' });
+ 
   // Form state for add/edit dealership
   const [isEditing, setIsEditing] = useState(false);
   const [dealershipForm, setDealershipForm] = useState({
@@ -133,86 +129,8 @@ const DealershipManagement = () => {
     }
   ]);
   // Initialize charts
-  useEffect(() => {
-    const dealershipStatsChart = echarts.init(document.getElementById('dealership-stats-chart'));
-    const statsOption = {
-      animation: false,
-      title: {
-        text: 'Dealership Performance',
-        left: 'center',
-        textStyle: {
-          fontSize: 14
-        }
-      },
-      tooltip: {
-        trigger: 'axis'
-      },
-      legend: {
-        data: ['Sales', 'Orders', 'Inventory'],
-        bottom: 0
-      },
-      xAxis: {
-        type: 'category',
-        data: dealerships.slice(0, 5).map(d => d.name),
-        axisLabel: {
-          rotate: 45,
-          interval: 0
-        }
-      },
-      yAxis: [
-        {
-          type: 'value',
-          name: 'Sales ($)',
-          position: 'left'
-        },
-        {
-          type: 'value',
-          name: 'Count',
-          position: 'right'
-        }
-      ],
-      series: [
-        {
-          name: 'Sales',
-          type: 'bar',
-          data: dealerships.slice(0, 5).map(d => d.sales / 1000),
-          yAxisIndex: 0,
-          color: '#4F46E5'
-        },
-        {
-          name: 'Orders',
-          type: 'line',
-          data: dealerships.slice(0, 5).map(d => d.orders),
-          yAxisIndex: 1,
-          color: '#10B981'
-        },
-        {
-          name: 'Inventory',
-          type: 'line',
-          data: dealerships.slice(0, 5).map(d => d.inventory),
-          yAxisIndex: 1,
-          color: '#F59E0B'
-        }
-      ]
-    };
-    dealershipStatsChart.setOption(statsOption);
-    const handleResize = () => {
-      dealershipStatsChart.resize();
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      dealershipStatsChart.dispose();
-    };
-  }, [dealerships]);
-  // Toggle sidebar
-  const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
-  };
-  // Toggle user dropdown
-  const toggleUserDropdown = () => {
-    setShowUserDropdown(!showUserDropdown);
-  };
+
+
   // Handle add dealership
   const handleAddDealership = () => {
     setDealershipForm({
@@ -296,11 +214,7 @@ const DealershipManagement = () => {
       (statusFilter === 'inactive' && !dealership.status);
     return matchesSearch && matchesStatus;
   });
-  // Calculate statistics
-  const totalDealerships = dealerships.length;
-  const activeDealerships = dealerships.filter(d => d.status).length;
-  const totalSales = dealerships.reduce((sum, d) => sum + d.sales, 0);
-  const totalInventory = dealerships.reduce((sum, d) => sum + d.inventory, 0);
+
   return (
    <div>
        <main className="p-6">
@@ -318,170 +232,8 @@ const DealershipManagement = () => {
               <i className="fas fa-plus mr-2"></i> Add New Dealership
             </button>
           </div>
-          {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className="p-3 rounded-full bg-indigo-100 text-indigo-600">
-                  <i className="fas fa-store text-xl"></i>
-                </div>
-                <div className="ml-4">
-                  <h2 className="text-sm font-medium text-gray-600">Total Dealerships</h2>
-                  <p className="text-2xl font-bold text-gray-800">{totalDealerships}</p>
-                </div>
-              </div>
-              <div className="mt-4 flex items-center text-sm">
-                <span className="text-green-500 flex items-center">
-                  <i className="fas fa-arrow-up mr-1"></i> 12%
-                </span>
-                <span className="text-gray-500 ml-2">from last month</span>
-              </div>
-            </div>
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className="p-3 rounded-full bg-green-100 text-green-600">
-                  <i className="fas fa-check-circle text-xl"></i>
-                </div>
-                <div className="ml-4">
-                  <h2 className="text-sm font-medium text-gray-600">Active Dealerships</h2>
-                  <p className="text-2xl font-bold text-gray-800">{activeDealerships}</p>
-                </div>
-              </div>
-              <div className="mt-4 flex items-center text-sm">
-                <span className="text-green-500 flex items-center">
-                  <i className="fas fa-arrow-up mr-1"></i> 8%
-                </span>
-                <span className="text-gray-500 ml-2">from last month</span>
-              </div>
-            </div>
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className="p-3 rounded-full bg-blue-100 text-blue-600">
-                  <i className="fas fa-dollar-sign text-xl"></i>
-                </div>
-                <div className="ml-4">
-                  <h2 className="text-sm font-medium text-gray-600">Total Sales</h2>
-                  <p className="text-2xl font-bold text-gray-800">${(totalSales / 1000000).toFixed(2)}M</p>
-                </div>
-              </div>
-              <div className="mt-4 flex items-center text-sm">
-                <span className="text-green-500 flex items-center">
-                  <i className="fas fa-arrow-up mr-1"></i> 15%
-                </span>
-                <span className="text-gray-500 ml-2">from last month</span>
-              </div>
-            </div>
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className="p-3 rounded-full bg-amber-100 text-amber-600">
-                  <i className="fas fa-warehouse text-xl"></i>
-                </div>
-                <div className="ml-4">
-                  <h2 className="text-sm font-medium text-gray-600">Total Inventory</h2>
-                  <p className="text-2xl font-bold text-gray-800">{totalInventory}</p>
-                </div>
-              </div>
-              <div className="mt-4 flex items-center text-sm">
-                <span className="text-red-500 flex items-center">
-                  <i className="fas fa-arrow-down mr-1"></i> 3%
-                </span>
-                <span className="text-gray-500 ml-2">from last month</span>
-              </div>
-            </div>
-          </div>
-          {/* Filters and Chart */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <div className="lg:col-span-1 bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-medium text-gray-800 mb-4">Filters</h2>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <div className="relative">
-                  <select
-                    className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                  >
-                    <option value="all">All Dealerships</option>
-                    <option value="active">Active Only</option>
-                    <option value="inactive">Inactive Only</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <i className="fas fa-chevron-down text-xs"></i>
-                  </div>
-                </div>
-              </div>
-              <div className="mb-4">
-                <button
-                  onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                  className="flex items-center text-indigo-600 hover:text-indigo-800 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap"
-                >
-                  <i className={`fas ${showAdvancedFilters ? 'fa-chevron-up' : 'fa-chevron-down'} mr-2`}></i>
-                  Advanced Filters
-                </button>
-              </div>
-              {showAdvancedFilters && (
-                <div className="space-y-4 mt-4 border-t pt-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Date Created</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <label className="block text-xs text-gray-500">From</label>
-                        <input
-                          type="date"
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          value={dateRange.start}
-                          onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs text-gray-500">To</label>
-                        <input
-                          type="date"
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          value={dateRange.end}
-                          onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                    <div className="relative">
-                      <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                        <option>All Locations</option>
-                        <option>New York, NY</option>
-                        <option>Los Angeles, CA</option>
-                        <option>Miami, FL</option>
-                        <option>Chicago, IL</option>
-                        <option>Phoenix, AZ</option>
-                        <option>Boston, MA</option>
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <i className="fas fa-chevron-down text-xs"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex space-x-2 pt-2">
-                    <button className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap">
-                      Apply Filters
-                    </button>
-                    <button className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap">
-                      Reset
-                    </button>
-                  </div>
-                </div>
-              )}
-              <div className="mt-6 pt-6 border-t">
-                <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                  <i className="fas fa-file-export mr-2"></i> Export Data
-                </button>
-              </div>
-            </div>
-            <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-medium text-gray-800 mb-4">Performance Overview</h2>
-              <div id="dealership-stats-chart" style={{ height: '300px' }}></div>
-            </div>
-          </div>
+     
+      
           {/* Dealership Table */}
           <div className="bg-white rounded-lg shadow overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-200">
@@ -500,9 +252,7 @@ const DealershipManagement = () => {
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Contact Details
                     </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Performance
-                    </th>
+                
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
@@ -543,22 +293,7 @@ const DealershipManagement = () => {
                         <div className="text-sm text-gray-500">{dealership.email}</div>
                         <div className="text-sm text-gray-500">{dealership.phone}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex flex-col space-y-1">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-500">Sales:</span>
-                            <span className="text-sm font-medium text-gray-900">${(dealership.sales / 1000).toFixed(1)}K</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-500">Orders:</span>
-                            <span className="text-sm font-medium text-gray-900">{dealership.orders}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-500">Inventory:</span>
-                            <span className="text-sm font-medium text-gray-900">{dealership.inventory}</span>
-                          </div>
-                        </div>
-                      </td>
+                    
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <button
