@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Sidebar.css"
-
+import logo from "../assets/image.png"
 const Header = ({ onToggleSidebar }) => {
   return (
     <header className="py-4 px-3 header">
@@ -18,8 +18,12 @@ const Header = ({ onToggleSidebar }) => {
 
         {/* Welcome message - hidden on mobile, visible on tablet and up */}
         <div className="d-none d-md-block">
-          <span className="fw-semibold fw-bold fs-5">Welcome back, </span>
-          <span className="fw-bold fs-5 ">Michael</span>
+          <img
+                    src={logo}
+                    alt="Motorlogical Logo"
+                    className="img-fluid sidebar-logo"
+                   
+                />
         </div>
 
         {/* Synced button */}

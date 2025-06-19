@@ -577,12 +577,8 @@ left: 100%;
                                     </form>
                                 </div>
                             </div>
-                            <button className="flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition cursor-pointer !rounded-button whitespace-nowrap">
-                                <i className="fas fa-file-export mr-2"></i> Export Reports
-                            </button>
-                            <button className="flex items-center px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition cursor-pointer !rounded-button whitespace-nowrap">
-                                <i className="fas fa-sync mr-2"></i> Sync Inventory
-                            </button>
+                            
+                        
                         </div>
                     </div>
                     {/* Charts */}

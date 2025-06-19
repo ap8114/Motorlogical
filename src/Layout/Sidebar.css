@@ -1,7 +1,7 @@
 .sidebar {
   background-color: #032D45; /* Dark navy background */
   color: #ffffff;
-  width: 250px;
+  width: 280px;
   border-right: none;
   z-index: 1000!important;
 }
@@ -11,9 +11,9 @@
 }
 
 .sidebar-logo {
-  max-height: 60px;
-  width: 200px;
-  margin-top: 15px;
+  /* max-height: 60px; */
+  /* width: 200px;
+  margin-top: 15px; */
 
 }
 
