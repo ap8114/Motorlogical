@@ -112,134 +112,6 @@ const InventoryManagement = () => {
     price: 0
   });
 
-  // Initialize charts
-  useEffect(() => {
-    const inventoryStatsChart = echarts.init(document.getElementById('inventory-stats-chart'));
-    const statsOption = {
-      animation: false,
-      title: {
-        text: 'Inventory Statistics',
-        left: 'center',
-        textStyle: {
-          fontSize: 14
-        }
-      },
-      tooltip: {
-        trigger: 'axis'
-      },
-      legend: {
-        data: ['Stock Level', 'Value'],
-        bottom: 0
-      },
-      xAxis: {
-        type: 'category',
-        data: ['SUV', 'Sedan', 'Luxury', 'Compact', 'Electric', 'Hybrid'],
-        axisLabel: {
-          interval: 0
-        }
-      },
-      yAxis: [
-        {
-          type: 'value',
-          name: 'Stock',
-          position: 'left'
-        },
-        {
-          type: 'value',
-          name: 'Value ($)',
-          position: 'right',
-          axisLabel: {
-            formatter: '${value}k'
-          }
-        }
-      ],
-      series: [
-        {
-          name: 'Stock Level',
-          type: 'bar',
-          data: [15, 8, 3, 22, 0, 7],
-          color: '#4F46E5'
-        },
-        {
-          name: 'Value',
-          type: 'line',
-          yAxisIndex: 1,
-          data: [675, 308, 216, 572, 0, 297],
-          color: '#10B981'
-        }
-      ]
-    };
-    inventoryStatsChart.setOption(statsOption);
-
-    const categoryDistributionChart = echarts.init(document.getElementById('category-distribution-chart'));
-    const categoryOption = {
-      animation: false,
-      title: {
-        text: 'Category Distribution',
-        left: 'center',
-        textStyle: {
-          fontSize: 14
-        }
-      },
-      tooltip: {
-        trigger: 'item'
-      },
-      legend: {
-        orient: 'vertical',
-        left: 'left',
-        bottom: 0
-      },
-      series: [
-        {
-          name: 'Category',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: '#fff',
-            borderWidth: 2
-          },
-          label: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: '12',
-              fontWeight: 'bold'
-            }
-          },
-          labelLine: {
-            show: false
-          },
-          data: [
-            { value: 15, name: 'SUV', itemStyle: { color: '#F59E0B' } },
-            { value: 8, name: 'Sedan', itemStyle: { color: '#3B82F6' } },
-            { value: 3, name: 'Luxury', itemStyle: { color: '#8B5CF6' } },
-            { value: 22, name: 'Compact', itemStyle: { color: '#10B981' } },
-            { value: 0, name: 'Electric', itemStyle: { color: '#EF4444' } },
-            { value: 7, name: 'Hybrid', itemStyle: { color: '#6366F1' } }
-          ]
-        }
-      ]
-    };
-    categoryDistributionChart.setOption(categoryOption);
-
-    const handleResize = () => {
-      inventoryStatsChart.resize();
-      categoryDistributionChart.resize();
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      inventoryStatsChart.dispose();
-      categoryDistributionChart.dispose();
-    };
-  }, [inventory]);
 
   // Initialize item details chart
   const itemDetailsChartRef = useRef < HTMLDivElement > (null);
@@ -456,7 +328,7 @@ const InventoryManagement = () => {
           </div>
           <div className="flex mt-4 md:mt-0 space-x-3">
             <a
-              href="https://readdy.ai/home/c8a6bcde-470a-4a15-8148-ac3671c15e32/a52cc47e-9a13-4d7b-ba7f-f2308dbea63f"
+              href="#"
               data-readdy="true"
               className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition cursor-pointer !rounded-button whitespace-nowrap"
             >
@@ -497,221 +369,22 @@ const InventoryManagement = () => {
 
         {activeTab === 'inventory' && (
           <>
-            {/* Statistics Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <div className="p-3 rounded-full bg-indigo-100 text-indigo-600">
-                    <i className="fas fa-car text-xl"></i>
-                  </div>
-                  <div className="ml-4">
-                    <h2 className="text-sm font-medium text-gray-600">Total Models</h2>
-                    <p className="text-2xl font-bold text-gray-800">{totalItems}</p>
-                  </div>
-                </div>
-                <div className="mt-4 flex items-center text-sm">
-                  <span className="text-green-500 flex items-center">
-                    <i className="fas fa-arrow-up mr-1"></i> 8%
-                  </span>
-                  <span className="text-gray-500 ml-2">from last month</span>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <div className="p-3 rounded-full bg-green-100 text-green-600">
-                    <i className="fas fa-cubes text-xl"></i>
-                  </div>
-                  <div className="ml-4">
-                    <h2 className="text-sm font-medium text-gray-600">Total Stock</h2>
-                    <p className="text-2xl font-bold text-gray-800">{totalStock}</p>
-                  </div>
-                </div>
-                <div className="mt-4 flex items-center text-sm">
-                  <span className="text-green-500 flex items-center">
-                    <i className="fas fa-arrow-up mr-1"></i> 12%
-                  </span>
-                  <span className="text-gray-500 ml-2">from last month</span>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <div className="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                    <i className="fas fa-exclamation-triangle text-xl"></i>
-                  </div>
-                  <div className="ml-4">
-                    <h2 className="text-sm font-medium text-gray-600">Low Stock</h2>
-                    <p className="text-2xl font-bold text-gray-800">{lowStockItems}</p>
-                  </div>
-                </div>
-                <div className="mt-4 flex items-center text-sm">
-                  <span className="text-red-500 flex items-center">
-                    <i className="fas fa-arrow-up mr-1"></i> 3%
-                  </span>
-                  <span className="text-gray-500 ml-2">from last month</span>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <div className="p-3 rounded-full bg-blue-100 text-blue-600">
-                    <i className="fas fa-dollar-sign text-xl"></i>
-                  </div>
-                  <div className="ml-4">
-                    <h2 className="text-sm font-medium text-gray-600">Total Value</h2>
-                    <p className="text-2xl font-bold text-gray-800">${totalValue.toLocaleString()}</p>
-                  </div>
-                </div>
-                <div className="mt-4 flex items-center text-sm">
-                  <span className="text-green-500 flex items-center">
-                    <i className="fas fa-arrow-up mr-1"></i> 15%
-                  </span>
-                  <span className="text-gray-500 ml-2">from last month</span>
-                </div>
-              </div>
-            </div>
+         
 
             {/* Filters and Charts */}
-            <div className="bg-white rounded-lg shadow mb-8">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
-                <div className="lg:col-span-1 bg-white rounded-lg border border-gray-200 p-6">
-                  <h2 className="text-lg font-medium text-gray-800 mb-4">Filters</h2>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                    <div className="relative">
-                      <select
-                        className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                        value={categoryFilter}
-                        onChange={(e) => setCategoryFilter(e.target.value)}
-                      >
-                        <option value="all">All Categories</option>
-                        {categories.map(category => (
-                          <option key={category.id} value={category.name.toLowerCase()}>{category.name}</option>
-                        ))}
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <i className="fas fa-chevron-down text-xs"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                    <div className="relative">
-                      <select
-                        className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
-                      >
-                        <option value="all">All Statuses</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <i className="fas fa-chevron-down text-xs"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mb-4">
-                    <button
-                      onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                      className="flex items-center text-indigo-600 hover:text-indigo-800 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap"
-                    >
-                      <i className={`fas ${showAdvancedFilters ? 'fa-chevron-up' : 'fa-chevron-down'} mr-2`}></i>
-                      Advanced Filters
-                    </button>
-                  </div>
-                  {showAdvancedFilters && (
-                    <div className="space-y-4 mt-4 border-t pt-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Stock Level</label>
-                        <div className="grid grid-cols-2 gap-2">
-                          <div>
-                            <label className="block text-xs text-gray-500">Min</label>
-                            <input
-                              type="number"
-                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                              placeholder="0"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs text-gray-500">Max</label>
-                            <input
-                              type="number"
-                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                              placeholder="100"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
-                        <div className="grid grid-cols-2 gap-2">
-                          <div>
-                            <label className="block text-xs text-gray-500">Min ($)</label>
-                            <input
-                              type="number"
-                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                              placeholder="0"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs text-gray-500">Max ($)</label>
-                            <input
-                              type="number"
-                              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                              placeholder="100000"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex space-x-2 pt-2">
-                        <button className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap">
-                          Apply Filters
-                        </button>
-                        <button className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap">
-                          Reset
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  <div className="mt-6 pt-6 border-t">
-                    <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                      <i className="fas fa-file-export mr-2"></i> Export Inventory
-                    </button>
-                  </div>
-                </div>
-                <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-white rounded-lg border border-gray-200 p-6">
-                    <div id="inventory-stats-chart" style={{ height: '250px' }}></div>
-                  </div>
-                  <div className="bg-white rounded-lg border border-gray-200 p-6">
-                    <div id="category-distribution-chart" style={{ height: '250px' }}></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+           
 
             {/* Inventory Table */}
             <div className="bg-white rounded-lg shadow overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
                 <h3 className="text-lg font-medium text-gray-800">Inventory List</h3>
                 <div className="flex items-center space-x-2">
-                  <button
-                    className={`flex items-center px-3 py-1 ${viewMode === 'list' ? 'bg-indigo-100 text-indigo-700' : 'bg-white text-gray-700'} border border-gray-300 rounded text-sm hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap`}
-                    onClick={() => setViewMode('list')}
-                  >
-                    <i className="fas fa-list mr-1"></i> List
-                  </button>
-                  <button
-                    className={`flex items-center px-3 py-1 ${viewMode === 'grid' ? 'bg-indigo-100 text-indigo-700' : 'bg-white text-gray-700'} border border-gray-300 rounded text-sm hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap`}
-                    onClick={() => setViewMode('grid')}
-                  >
-                    <i className="fas fa-th-large mr-1"></i> Grid
-                  </button>
+                 
+              
                   <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
                     <i className="fas fa-filter mr-1"></i> Filter
                   </button>
-                  <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    <i className="fas fa-sort mr-1"></i> Sort
-                  </button>
+                
                   <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
                     <i className="fas fa-file-export mr-1"></i> Export
                   </button>
