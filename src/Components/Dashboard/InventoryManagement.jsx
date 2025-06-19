@@ -445,182 +445,12 @@ const [demo, selectedItem] = useState()
   const totalValue = inventory.reduce((sum, item) => sum + (item.quantity * item.price), 0);
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
-      <div className={`bg-indigo-900 text-white transition-all duration-300 ${sidebarCollapsed ? 'w-20' : 'w-64'} fixed h-full z-10`}>
-        <div className="flex items-center justify-between p-4 border-b border-indigo-800">
-          {!sidebarCollapsed && (
-            <div className="text-xl font-bold">AutoDealerPro</div>
-          )}
-          <button
-            onClick={toggleSidebar}
-            className="p-2 rounded-lg hover:bg-indigo-800 cursor-pointer !rounded-button whitespace-nowrap"
-          >
-            <i className={`fas ${sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'}`}></i>
-          </button>
-        </div>
-        <nav className="mt-5">
-          <ul>
-            <li className={`mb-1 ${activeMenu === 'dashboard' ? 'bg-indigo-800' : ''}`}>
-              <a
-                href="#"
-                className="flex items-center py-3 px-4 text-gray-200 hover:bg-indigo-800 cursor-pointer relative group transition-all duration-300 ease-in-out"
-                onClick={() => setActiveMenu('dashboard')}
-              >
-                <i className="fas fa-tachometer-alt w-6 transition-transform duration-300"></i>
-                {!sidebarCollapsed && (
-                  <>
-                    <span className="ml-2">Dashboard</span>
-                    <div className={`absolute left-0 top-0 h-full w-1 bg-indigo-500 transform scale-y-0 group-hover:scale-y-100 transition-transform duration-200 ${activeMenu === 'dashboard' ? 'scale-y-100' : ''}`}></div>
-                  </>
-                )}
-              </a>
-            </li>
-            <li className={`mb-1 ${activeMenu === 'dealership' ? 'bg-indigo-800' : ''}`}>
-              <a
-                href="https://readdy.ai/home/c8a6bcde-470a-4a15-8148-ac3671c15e32/fd13b7d6-2b2f-4d70-854e-11b4241178cf"
-                data-readdy="true"
-                className="flex items-center py-3 px-4 text-gray-200 hover:bg-indigo-800 cursor-pointer"
-                onClick={() => setActiveMenu('dealership')}
-              >
-                <i className="fas fa-store w-6"></i>
-                {!sidebarCollapsed && <span className="ml-2">Dealership Management</span>}
-              </a>
-            </li>
-            <li className={`mb-1 ${activeMenu === 'users' ? 'bg-indigo-800' : ''}`}>
-              <a
-                href="https://readdy.ai/home/c8a6bcde-470a-4a15-8148-ac3671c15e32/b862fa09-45cb-42e3-9321-7e08bb6054b4"
-                data-readdy="true"
-                className="flex items-center py-3 px-4 text-gray-200 hover:bg-indigo-800 cursor-pointer"
-                onClick={() => setActiveMenu('users')}
-              >
-                <i className="fas fa-users w-6"></i>
-                {!sidebarCollapsed && <span className="ml-2">User Management</span>}
-              </a>
-            </li>
-            <li className={`mb-1 ${activeMenu === 'orders' ? 'bg-indigo-800' : ''}`}>
-              <a
-                href="https://readdy.ai/home/c8a6bcde-470a-4a15-8148-ac3671c15e32/a52cc47e-9a13-4d7b-ba7f-f2308dbea63f"
-                data-readdy="true"
-                className="flex items-center py-3 px-4 text-gray-200 hover:bg-indigo-800 cursor-pointer"
-                onClick={() => setActiveMenu('orders')}
-              >
-                <i className="fas fa-shopping-cart w-6"></i>
-                {!sidebarCollapsed && <span className="ml-2">Order Management</span>}
-              </a>
-            </li>
-            <li className={`mb-1 ${activeMenu === 'inventory' ? 'bg-indigo-800' : ''}`}>
-              <a
-                href="#"
-                className="flex items-center py-3 px-4 text-gray-200 hover:bg-indigo-800 cursor-pointer"
-                onClick={() => setActiveMenu('inventory')}
-              >
-                <i className="fas fa-warehouse w-6"></i>
-                {!sidebarCollapsed && <span className="ml-2">Inventory Management</span>}
-              </a>
-            </li>
-            <li className={`mb-1 ${activeMenu === 'reporting' ? 'bg-indigo-800' : ''}`}>
-              <a
-                href="#"
-                className="flex items-center py-3 px-4 text-gray-200 hover:bg-indigo-800 cursor-pointer"
-                onClick={() => setActiveMenu('reporting')}
-              >
-                <i className="fas fa-chart-bar w-6"></i>
-                {!sidebarCollapsed && <span className="ml-2">Reporting</span>}
-              </a>
-            </li>
-            <li className={`mb-1 ${activeMenu === 'settings' ? 'bg-indigo-800' : ''}`}>
-              <a
-                href="#"
-                className="flex items-center py-3 px-4 text-gray-200 hover:bg-indigo-800 cursor-pointer"
-                onClick={() => setActiveMenu('settings')}
-              >
-                <i className="fas fa-cog w-6"></i>
-                {!sidebarCollapsed && <span className="ml-2">Settings</span>}
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-
-      {/* Main Content */}
-      <div className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'ml-20' : 'ml-64'}`}>
-        {/* Header */}
-        <header className="bg-white shadow-sm">
-          <div className="flex justify-between items-center px-6 py-4">
-            <div className="flex items-center">
-              <div className="text-gray-700 text-lg font-medium">Inventory Management</div>
-              <div className="ml-4 text-sm text-gray-500">
-                <span>Home</span>
-                <span className="mx-2">/</span>
-                <span className="text-gray-700">Inventory Management</span>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="py-2 pl-10 pr-4 w-64 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <i className="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-              </div>
-              <div className="relative">
-                <button
-                  className="relative p-2 rounded-full hover:bg-gray-100 cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={() => setNotifications(0)}
-                >
-                  <i className="fas fa-bell text-gray-600"></i>
-                  {notifications > 0 && (
-                    <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">
-                      {notifications}
-                    </span>
-                  )}
-                </button>
-              </div>
-              <div className="relative">
-                <button
-                  className="flex items-center space-x-2 cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={toggleUserDropdown}
-                >
-                  <img
-                    src="https://readdy.ai/api/search-image?query=professional%252520headshot%252520of%252520a%252520business%252520person%252520with%252520neutral%252520background%25252C%252520high%252520quality%252520portrait%252520photo%25252C%252520professional%252520looking%25252C%252520business%252520attire&width=40&height=40&seq=1&orientation=squarish"
-                    alt="User"
-                    className="w-10 h-10 rounded-full object-cover object-top"
-                  />
-                  <div className="hidden md:block text-left">
-                    <div className="text-sm font-medium">John Doe</div>
-                    <div className="text-xs text-gray-500">Admin</div>
-                  </div>
-                  <i className={`fas fa-chevron-down text-xs text-gray-500 transition-transform ${showUserDropdown ? 'rotate-180' : ''}`}></i>
-                </button>
-                {showUserDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <i className="fas fa-user mr-2"></i> Profile
-                    </a>
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <i className="fas fa-cog mr-2"></i> Settings
-                    </a>
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <i className="fas fa-sign-out-alt mr-2"></i> Logout
-                    </a>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </header>
-
+    <div>
         {/* Main Content */}
         <main className="p-6">
           <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-800 flex items-center">
-                <i className="fas fa-warehouse text-indigo-600 mr-2"></i> Inventory Management
+              <h1 className="text-2xl font-bold text-gray-800 flex items-center"> Inventory Management
               </h1>
               <p className="text-gray-600 mt-1">Manage all vehicle inventory in one place</p>
             </div>
@@ -1313,9 +1143,8 @@ const [demo, selectedItem] = useState()
             </div>
           )}
         </main>
-      </div>
 
-      {/* Add/Edit Item Modal */}
+        {/* Add/Edit Item Modal */}
       {showAddItemModal && (
         <div className="fixed z-20 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
