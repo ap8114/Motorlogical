@@ -10,6 +10,11 @@ import UserManagement from './Components/Dashboard/UserManagement';
 import InventoryManagement from './Components/Dashboard/InventoryManagement';
 import Setting from './Components/Dashboard/Setting';
 import Reporting from './Components/Dashboard/Reporting';
+import ManagerDashboard from './Components/Manager-Dashboard/ManagerDashboard';
+import ManagerOrderManagement from './Components/Manager-Dashboard/ManagerOrderManagement';
+import ManagerStaff from './Components/Manager-Dashboard/ManagerStaff';
+import ManagerReports from './Components/Manager-Dashboard/ManagerReports';
+import ManagerInventory from './Components/Manager-Dashboard/ManagerInventory';
 
 function App() {
   return (
@@ -19,7 +24,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Protected routes with MainLayout */}
+        {/* Admin Dashboard routes with MainLayout */}
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dealershipmanagement" element={<DealershipManagement />} />
@@ -38,6 +43,17 @@ function App() {
           <Route path="/helpsupport" element={<HelpSupport />} /> */}
           {/* Add more nested routes here */}
         </Route>
+
+        {/* Manager Dashboard routes with MainLayout */}
+        <Route element={<MainLayout />}>
+          <Route path="/manager/dashboard" element={<ManagerDashboard />} />
+          <Route path="/manager/ordermanagement" element={<ManagerOrderManagement />} />
+           <Route path="/manager/managerstaff" element={<ManagerStaff />} />
+            <Route path="/manager/managerreports" element={<ManagerReports />} />
+            <Route path="/manager/managerinventory" element={<ManagerInventory />} />
+        </Route>
+
+
       </Routes>
     </Router>
   );

@@ -1788,3 +1788,346 @@ transition: background-color 0.3s;
     );
 };
 export default Setting
+
+
+
+// The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
+
+// import React, { useState, useEffect } from 'react';
+
+// const Setting= () => {
+//   const [activeTab, setActiveTab] = useState<string>('systemPreferences');
+//   const [timeZone, setTimeZone] = useState<string>('UTC');
+//   const [language, setLanguage] = useState<string>('English');
+//   const [apiKey, setApiKey] = useState<string>('');
+//   const [showDropdown, setShowDropdown] = useState<string | null>(null);
+//   const [isSaving, setIsSaving] = useState<boolean>(false);
+//   const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
+//   const [sheetMappings, setSheetMappings] = useState<Array<{id: string, sheetName: string, localField: string, remoteField: string}>>([
+//     { id: '1', sheetName: 'Customers', localField: 'customer_id', remoteField: 'id' },
+//     { id: '2', sheetName: 'Customers', localField: 'customer_name', remoteField: 'name' },
+//     { id: '3', sheetName: 'Orders', localField: 'order_id', remoteField: 'order_number' },
+//     { id: '4', sheetName: 'Orders', localField: 'order_date', remoteField: 'date' }
+//   ]);
+
+//   const timeZones = [
+//     'UTC', 'UTC+1:00', 'UTC+2:00', 'UTC+3:00', 'UTC+4:00', 'UTC+5:00', 
+//     'UTC+6:00', 'UTC+7:00', 'UTC+8:00', 'UTC+9:00', 'UTC+10:00', 'UTC+11:00', 'UTC+12:00',
+//     'UTC-1:00', 'UTC-2:00', 'UTC-3:00', 'UTC-4:00', 'UTC-5:00', 'UTC-6:00', 
+//     'UTC-7:00', 'UTC-8:00', 'UTC-9:00', 'UTC-10:00', 'UTC-11:00', 'UTC-12:00'
+//   ];
+
+//   const languages = [
+//     'English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese', 
+//     'Russian', 'Japanese', 'Chinese', 'Korean', 'Arabic'
+//   ];
+
+//   const handleSaveChanges = () => {
+//     setIsSaving(true);
+    
+//     // Simulate API call
+//     setTimeout(() => {
+//       setIsSaving(false);
+//       setSaveSuccess(true);
+      
+//       // Hide success message after 3 seconds
+//       setTimeout(() => {
+//         setSaveSuccess(false);
+//       }, 3000);
+//     }, 1500);
+//   };
+
+//   const addNewMapping = () => {
+//     const newId = (sheetMappings.length + 1).toString();
+//     setSheetMappings([...sheetMappings, { 
+//       id: newId, 
+//       sheetName: '', 
+//       localField: '', 
+//       remoteField: '' 
+//     }]);
+//   };
+
+//   const updateMapping = (id, field, value) => {
+//     setSheetMappings(sheetMappings.map(mapping => 
+//       mapping.id === id ? { ...mapping, [field]: value } : mapping
+//     ));
+//   };
+
+//   const removeMapping = (id) => {
+//     setSheetMappings(sheetMappings.filter(mapping => mapping.id !== id));
+//   };
+
+//   useEffect(() => {
+//     // Close dropdowns when clicking outside
+//     const handleClickOutside = (event) => {
+//       const target = event.target;
+//       if (!target.closest('.dropdown-container')) {
+//         setShowDropdown(null);
+//       }
+//     };
+    
+//     document.addEventListener('mousedown', handleClickOutside);
+    
+//     return () => {
+//       document.removeEventListener('mousedown', handleClickOutside);
+//     };
+//   }, []);
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 py-8 px-4">
+//       <div className="max-w-7xl mx-auto">
+//         <header className="mb-8">
+//           <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+//           <p className="text-gray-600 mt-2">Configure your system preferences and integrations</p>
+//         </header>
+        
+//         {/* Tabs */}
+//         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+//           <div className="flex border-b border-gray-200">
+//             <button
+//               className={`px-6 py-4 text-sm font-medium ${activeTab === 'systemPreferences' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'} cursor-pointer whitespace-nowrap`}
+//               onClick={() => setActiveTab('systemPreferences')}
+//             >
+//               <i className="fas fa-cog mr-2"></i>
+//               System Preferences
+//             </button>
+//             <button
+//               className={`px-6 py-4 text-sm font-medium ${activeTab === 'integrations' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'} cursor-pointer whitespace-nowrap`}
+//               onClick={() => setActiveTab('integrations')}
+//             >
+//               <i className="fas fa-plug mr-2"></i>
+//               Integrations
+//             </button>
+//           </div>
+          
+//           <div className="p-6">
+//             {activeTab === 'systemPreferences' && (
+//               <div>
+//                 <h2 className="text-xl font-semibold text-gray-800 mb-6">System Preferences</h2>
+                
+//                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+//                   {/* Time Zone Dropdown */}
+//                   <div className="dropdown-container relative">
+//                     <label htmlFor="time-zone" className="block text-sm font-medium text-gray-700 mb-1">Time Zone</label>
+//                     <button
+//                       id="time-zone"
+//                       type="button"
+//                       className="w-full bg-white border border-gray-300 rounded-lg py-2 px-3 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 !rounded-button cursor-pointer whitespace-nowrap"
+//                       onClick={() => setShowDropdown(showDropdown === 'timeZone' ? null : 'timeZone')}
+//                     >
+//                       <div className="flex items-center justify-between">
+//                         <span>{timeZone}</span>
+//                         <i className="fas fa-chevron-down text-gray-400"></i>
+//                       </div>
+//                     </button>
+//                     {showDropdown === 'timeZone' && (
+//                       <div className="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md border border-gray-200 py-1 max-h-60 overflow-y-auto">
+//                         {timeZones.map((tz) => (
+//                           <div
+//                             key={tz}
+//                             className="px-4 py-2 hover:bg-blue-50 cursor-pointer"
+//                             onClick={() => {
+//                               setTimeZone(tz);
+//                               setShowDropdown(null);
+//                             }}
+//                           >
+//                             {tz}
+//                           </div>
+//                         ))}
+//                       </div>
+//                     )}
+//                   </div>
+                  
+//                   {/* Language Dropdown */}
+//                   <div className="dropdown-container relative">
+//                     <label htmlFor="language" className="block text-sm font-medium text-gray-700 mb-1">Language</label>
+//                     <button
+//                       id="language"
+//                       type="button"
+//                       className="w-full bg-white border border-gray-300 rounded-lg py-2 px-3 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 !rounded-button cursor-pointer whitespace-nowrap"
+//                       onClick={() => setShowDropdown(showDropdown === 'language' ? null : 'language')}
+//                     >
+//                       <div className="flex items-center justify-between">
+//                         <span>{language}</span>
+//                         <i className="fas fa-chevron-down text-gray-400"></i>
+//                       </div>
+//                     </button>
+//                     {showDropdown === 'language' && (
+//                       <div className="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md border border-gray-200 py-1 max-h-60 overflow-y-auto">
+//                         {languages.map((lang) => (
+//                           <div
+//                             key={lang}
+//                             className="px-4 py-2 hover:bg-blue-50 cursor-pointer"
+//                             onClick={() => {
+//                               setLanguage(lang);
+//                               setShowDropdown(null);
+//                             }}
+//                           >
+//                             {lang}
+//                           </div>
+//                         ))}
+//                       </div>
+//                     )}
+//                   </div>
+//                 </div>
+//               </div>
+//             )}
+            
+//             {activeTab === 'integrations' && (
+//               <div>
+//                 <h2 className="text-xl font-semibold text-gray-800 mb-6">Google Sheets Integration</h2>
+                
+//                 <div className="mb-6">
+//                   <label htmlFor="api-key" className="block text-sm font-medium text-gray-700 mb-1">Google Sheets API Key</label>
+//                   <div className="flex">
+//                     <input
+//                       type="text"
+//                       id="api-key"
+//                       className="flex-1 border border-gray-300 rounded-l-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border-r-0"
+//                       value={apiKey}
+//                       onChange={(e) => setApiKey(e.target.value)}
+//                       placeholder="Enter your Google Sheets API key"
+//                     />
+//                     <button
+//                       type="button"
+//                       className="bg-gray-100 border border-gray-300 rounded-r-lg px-4 hover:bg-gray-200 !rounded-button cursor-pointer whitespace-nowrap"
+//                       onClick={() => window.open('https://console.cloud.google.com/apis/credentials', '_blank')}
+//                     >
+//                       <i className="fas fa-external-link-alt"></i>
+//                     </button>
+//                   </div>
+//                   <p className="mt-1 text-sm text-gray-500">
+//                     Get your API key from the Google Cloud Console
+//                   </p>
+//                 </div>
+                
+//                 <div className="mb-6">
+//                   <div className="flex justify-between items-center mb-2">
+//                     <h3 className="text-lg font-medium text-gray-800">Sheet Mapping Configuration</h3>
+//                     <button
+//                       type="button"
+//                       className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center !rounded-button cursor-pointer whitespace-nowrap"
+//                       onClick={addNewMapping}
+//                     >
+//                       <i className="fas fa-plus mr-1"></i>
+//                       Add Mapping
+//                     </button>
+//                   </div>
+                  
+//                   <div className="overflow-x-auto">
+//                     <table className="min-w-full divide-y divide-gray-200">
+//                       <thead className="bg-gray-50">
+//                         <tr>
+//                           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                             Sheet Name
+//                           </th>
+//                           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                             Local Field
+//                           </th>
+//                           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                             Remote Field
+//                           </th>
+//                           <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+//                             Actions
+//                           </th>
+//                         </tr>
+//                       </thead>
+//                       <tbody className="bg-white divide-y divide-gray-200">
+//                         {sheetMappings.map((mapping) => (
+//                           <tr key={mapping.id}>
+//                             <td className="px-6 py-4 whitespace-nowrap">
+//                               <input
+//                                 type="text"
+//                                 className="border border-gray-300 rounded-lg py-1 px-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+//                                 value={mapping.sheetName}
+//                                 onChange={(e) => updateMapping(mapping.id, 'sheetName', e.target.value)}
+//                                 placeholder="Sheet name"
+//                               />
+//                             </td>
+//                             <td className="px-6 py-4 whitespace-nowrap">
+//                               <input
+//                                 type="text"
+//                                 className="border border-gray-300 rounded-lg py-1 px-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+//                                 value={mapping.localField}
+//                                 onChange={(e) => updateMapping(mapping.id, 'localField', e.target.value)}
+//                                 placeholder="Local field"
+//                               />
+//                             </td>
+//                             <td className="px-6 py-4 whitespace-nowrap">
+//                               <input
+//                                 type="text"
+//                                 className="border border-gray-300 rounded-lg py-1 px-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+//                                 value={mapping.remoteField}
+//                                 onChange={(e) => updateMapping(mapping.id, 'remoteField', e.target.value)}
+//                                 placeholder="Remote field"
+//                               />
+//                             </td>
+//                             <td className="px-6 py-4 whitespace-nowrap text-right">
+//                               <button
+//                                 type="button"
+//                                 className="text-red-600 hover:text-red-900 !rounded-button cursor-pointer whitespace-nowrap"
+//                                 onClick={() => removeMapping(mapping.id)}
+//                               >
+//                                 <i className="fas fa-trash"></i>
+//                               </button>
+//                             </td>
+//                           </tr>
+//                         ))}
+//                       </tbody>
+//                     </table>
+//                   </div>
+                  
+//                   {sheetMappings.length === 0 && (
+//                     <div className="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+//                       <i className="fas fa-table text-gray-400 text-3xl mb-2"></i>
+//                       <p className="text-gray-500">No mappings configured yet</p>
+//                       <button
+//                         type="button"
+//                         className="mt-3 text-blue-600 hover:text-blue-800 text-sm font-medium !rounded-button cursor-pointer whitespace-nowrap"
+//                         onClick={addNewMapping}
+//                       >
+//                         <i className="fas fa-plus mr-1"></i>
+//                         Add your first mapping
+//                       </button>
+//                     </div>
+//                   )}
+//                 </div>
+//               </div>
+//             )}
+            
+//             {/* Save Button - Always visible */}
+//             <div className="mt-8 flex items-center">
+//               <button
+//                 type="button"
+//                 className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg shadow-sm transition-colors duration-200 flex items-center !rounded-button cursor-pointer whitespace-nowrap"
+//                 onClick={handleSaveChanges}
+//                 disabled={isSaving}
+//               >
+//                 {isSaving ? (
+//                   <>
+//                     <i className="fas fa-spinner fa-spin mr-2"></i>
+//                     Saving...
+//                   </>
+//                 ) : (
+//                   <>
+//                     <i className="fas fa-save mr-2"></i>
+//                     Save Changes
+//                   </>
+//                 )}
+//               </button>
+              
+//               {saveSuccess && (
+//                 <div className="ml-4 text-green-600 flex items-center">
+//                   <i className="fas fa-check-circle mr-1"></i>
+//                   Changes saved successfully!
+//                 </div>
+//               )}
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Setting;

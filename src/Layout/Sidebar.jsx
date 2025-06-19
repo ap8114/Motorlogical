@@ -61,8 +61,12 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
             case "Manager":
                 return (
                     <>
-                        {navItem("/ordermanagement", "fas fa-shopping-cart", "Finance Department")}
-                        {navItem("/userpreferences", "fas fa-sliders-h", "Preferences")}
+                        {navItem("/manager/dashboard", "fas fa-tachometer-alt", "Dashboard")}
+                        {navItem("/manager/ordermanagement", "fas fa-box-open", "Order Management")}
+                        {navItem("/manager/managerinventory", "fas fa-warehouse", "Inventory Management")}
+                        {navItem("/manager/managerreports", "fas fa-chart-line", "Reports")}
+                        {navItem("/manager/managerstaff", "fas fa-users-cog", "Staff Management")}
+
                     </>
                 );
             case "Salesperson":
@@ -81,7 +85,7 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
         <div className="sidebar d-flex flex-column vh-100 position-fixed start-0">
             {/* Header Row */}
             <div className="d-flex justify-content-between align-items-center py-2">
-               
+
                 <button
                     type="button"
                     className="btn btn-outline-light ms-auto d-lg-none"

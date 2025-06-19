@@ -1,6 +1,7 @@
 // The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
 import React, { useState, useEffect } from 'react';
 import * as echarts from 'echarts';
+import { Link } from 'react-router-dom';
 const UserManagement = () => {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
     const [activeMenu, setActiveMenu] = useState('users');
@@ -327,13 +328,13 @@ const UserManagement = () => {
                         <p className="text-gray-600 mt-1">Manage all your system users in one place</p>
                     </div>
                     <div className="flex mt-4 md:mt-0 space-x-3">
-                        <a
-                            href="https://readdy.ai/home/c8a6bcde-470a-4a15-8148-ac3671c15e32/fd13b7d6-2b2f-4d70-854e-11b4241178cf"
+                        <Link
+                            to="/dashboard"
                             data-readdy="true"
                             className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition cursor-pointer !rounded-button whitespace-nowrap"
                         >
                             <i className="fas fa-arrow-left mr-2"></i> Back to Dealership
-                        </a>
+                        </Link>
                         <button
                             onClick={handleAddUser}
                             className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer !rounded-button whitespace-nowrap"
