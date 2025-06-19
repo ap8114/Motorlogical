@@ -915,7 +915,7 @@ const Reporting = () => {
         };
     }, []);
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 p-2">
             <div className="max-w-[1440px] mx-auto">
                 <div className="bg-white mt-4 shadow-sm">
                     <div className="px-6 py-4">
