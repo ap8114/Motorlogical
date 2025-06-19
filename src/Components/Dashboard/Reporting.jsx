@@ -917,40 +917,41 @@ const Reporting = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-[1440px] mx-auto">
-                <div className="bg-white mt-4 shadow-sm">
-                    <div className="px-6 py-4">
-                        <div className="flex justify-between items-center">
-                            <div className="flex items-center">
+                <div className="mt-4 px-0 sm:px-6 lg:px-8">
+                    <div className=" py-4 px-6 rounded-lg">
+                        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
 
-                                <div>
-                                    <h1 className="text-xl font-bold text-gray-800 flex items-center">Reports
+                            {/* Heading */}
+                            <h2 className="text-2xl font-semibold text-gray-800">Reports</h2>
+ 
+                            {/* Right Side Controls */}
+                            <div className="flex flex-col md:flex-row items-center gap-3">
 
-                                    </h1>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                                <div className="relative">
+                                {/* Search Input */}
+                                <div className="relative w-full md:w-auto">
                                     <input
                                         type="text"
                                         placeholder="Search reports..."
-                                        className="py-2 pl-10 pr-4 w-64 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                        className="py-2 pl-10 pr-4 w-full md:w-64 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                                     />
                                     <i className="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                                 </div>
-                                <div className="flex">
-                                    <button className="flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition cursor-pointer !rounded-button whitespace-nowrap">
+
+                                {/* Buttons */}
+                                <div className="flex gap-2">
+                                    <button className="flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition whitespace-nowrap">
                                         <i className="fas fa-cog mr-2"></i> Settings
                                     </button>
-                                    <button>
+                                    <button className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition whitespace-nowrap">
                                         <i className="fas fa-plus mr-2"></i> New Report
                                     </button>
-
-
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
+
                 {/* Main Content */}
                 <div className="p-3">
                     {/* Report Filter Form Section */}
