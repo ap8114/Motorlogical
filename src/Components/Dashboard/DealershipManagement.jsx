@@ -1,15 +1,34 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Modal, Button, Tab, Nav } from 'react-bootstrap';
-
+// The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
+import React, { useState, useEffect } from 'react';
+import * as echarts from 'echarts';
 const DealershipManagement = () => {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [activeMenu, setActiveMenu] = useState('dealership');
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [notifications, setNotifications] = useState(3);
   const [showAddDealershipModal, setShowAddDealershipModal] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [activeTab, setActiveTab] = useState('dealerships');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-
+  const [dateRange, setDateRange] = useState({ start: '', end: '' });
+  // Form state for add/edit dealership
+  const [isEditing, setIsEditing] = useState(false);
+  const [dealershipForm, setDealershipForm] = useState({
+    id: '',
+    name: '',
+    code: 'DLR-' + Math.floor(1000 + Math.random() * 9000),
+    location: '',
+    address: '',
+    city: '',
+    state: '',
+    contactPerson: '',
+    email: '',
+    phone: '',
+    status: true
+  });
   // Sample dealership data
-  const dealerships = [
+  const [dealerships, setDealerships] = useState([
     {
       id: '1',
       name: 'City Motors',
@@ -60,276 +79,540 @@ const DealershipManagement = () => {
       orders: 98,
       inventory: 45,
       dateCreated: '2025-02-10'
+    },
+    {
+      id: '4',
+      name: 'Downtown Autos',
+      code: 'DLR-3456',
+      location: 'Chicago, IL',
+      address: '321 Michigan Ave',
+      city: 'Chicago',
+      state: 'IL',
+      contactPerson: 'David Wilson',
+      email: 'david@downtownautos.com',
+      phone: '(312) 555-3456',
+      status: false,
+      sales: 765000,
+      orders: 87,
+      inventory: 53,
+      dateCreated: '2025-03-05'
+    },
+    {
+      id: '5',
+      name: 'Valley Vehicles',
+      code: 'DLR-7890',
+      location: 'Phoenix, AZ',
+      address: '654 Desert Rd',
+      city: 'Phoenix',
+      state: 'AZ',
+      contactPerson: 'Jessica Brown',
+      email: 'jessica@valleyvehicles.com',
+      phone: '(602) 555-7890',
+      status: true,
+      sales: 1120000,
+      orders: 132,
+      inventory: 67,
+      dateCreated: '2025-04-18'
+    },
+    {
+      id: '6',
+      name: 'Metro Motors',
+      code: 'DLR-2345',
+      location: 'Boston, MA',
+      address: '987 Commonwealth Ave',
+      city: 'Boston',
+      state: 'MA',
+      contactPerson: 'Robert Lee',
+      email: 'robert@metromotors.com',
+      phone: '(617) 555-2345',
+      status: false,
+      sales: 895000,
+      orders: 104,
+      inventory: 42,
+      dateCreated: '2025-05-01'
     }
-  ];
+  ]);
+  // Initialize charts
+  useEffect(() => {
+    const dealershipStatsChart = echarts.init(document.getElementById('dealership-stats-chart'));
+    const statsOption = {
+      animation: false,
+      title: {
+        text: 'Dealership Performance',
+        left: 'center',
+        textStyle: {
+          fontSize: 14
+        }
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['Sales', 'Orders', 'Inventory'],
+        bottom: 0
+      },
+      xAxis: {
+        type: 'category',
+        data: dealerships.slice(0, 5).map(d => d.name),
+        axisLabel: {
+          rotate: 45,
+          interval: 0
+        }
+      },
+      yAxis: [
+        {
+          type: 'value',
+          name: 'Sales ($)',
+          position: 'left'
+        },
+        {
+          type: 'value',
+          name: 'Count',
+          position: 'right'
+        }
+      ],
+      series: [
+        {
+          name: 'Sales',
+          type: 'bar',
+          data: dealerships.slice(0, 5).map(d => d.sales / 1000),
+          yAxisIndex: 0,
+          color: '#4F46E5'
+        },
+        {
+          name: 'Orders',
+          type: 'line',
+          data: dealerships.slice(0, 5).map(d => d.orders),
+          yAxisIndex: 1,
+          color: '#10B981'
+        },
+        {
+          name: 'Inventory',
+          type: 'line',
+          data: dealerships.slice(0, 5).map(d => d.inventory),
+          yAxisIndex: 1,
+          color: '#F59E0B'
+        }
+      ]
+    };
+    dealershipStatsChart.setOption(statsOption);
+    const handleResize = () => {
+      dealershipStatsChart.resize();
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      dealershipStatsChart.dispose();
+    };
+  }, [dealerships]);
+  // Toggle sidebar
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+  // Toggle user dropdown
+  const toggleUserDropdown = () => {
+    setShowUserDropdown(!showUserDropdown);
+  };
+  // Handle add dealership
+  const handleAddDealership = () => {
+    setDealershipForm({
+      name: '',
+      code: 'DLR-' + Math.floor(1000 + Math.random() * 9000),
+      location: '',
+      address: '',
+      city: '',
+      state: '',
+      contactPerson: '',
+      email: '',
+      phone: '',
+      status: true
+    });
+    setShowAddDealershipModal(true);
+  };
+  // Handle save dealership
+  const handleSaveDealership = () => {
+    if (isEditing) {
+      setDealerships(dealerships.map(d =>
+        d.id === dealershipForm.id ? {
+          ...d,
+          name: dealershipForm.name,
+          location: dealershipForm.location,
+          address: dealershipForm.address,
+          city: dealershipForm.city,
+          state: dealershipForm.state,
+          contactPerson: dealershipForm.contactPerson,
+          email: dealershipForm.email,
+          phone: dealershipForm.phone,
+          status: dealershipForm.status
+        } : d
+      ));
+    } else {
+      const newDealership = {
+        id: (dealerships.length + 1).toString(),
+        ...dealershipForm,
+        sales: Math.floor(Math.random() * 1000000) + 500000,
+        orders: Math.floor(Math.random() * 100) + 50,
+        inventory: Math.floor(Math.random() * 50) + 30,
+        dateCreated: new Date().toISOString().split('T')[0]
+      };
+      setDealerships([...dealerships, newDealership]);
+    }
+    setShowAddDealershipModal(false);
+    setIsEditing(false);
+    setDealershipForm({
+      id: '',
+      name: '',
+      code: 'DLR-' + Math.floor(1000 + Math.random() * 9000),
+      location: '',
+      address: '',
+      city: '',
+      state: '',
+      contactPerson: '',
+      email: '',
+      phone: '',
+      status: true
+    });
+  };
+  // Handle delete confirmation
 
+  // Handle delete dealership
+  const handleDeleteDealership = () => {
+    if (dealershipToDelete) {
+      setDealerships(dealerships.filter(d => d.id !== dealershipToDelete));
+      setShowDeleteConfirmation(false);
+      setDealershipToDelete(null);
+    }
+  };
+  // Filter dealerships based on search and filters
+  const filteredDealerships = dealerships.filter(dealership => {
+    const matchesSearch =
+      dealership.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      dealership.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      dealership.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      dealership.contactPerson.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === 'all' ||
+      (statusFilter === 'active' && dealership.status) ||
+      (statusFilter === 'inactive' && !dealership.status);
+    return matchesSearch && matchesStatus;
+  });
   // Calculate statistics
   const totalDealerships = dealerships.length;
   const activeDealerships = dealerships.filter(d => d.status).length;
   const totalSales = dealerships.reduce((sum, d) => sum + d.sales, 0);
   const totalInventory = dealerships.reduce((sum, d) => sum + d.inventory, 0);
-
   return (
-    <div className="container-fluid p-0">
-      {/* Main Content */}
-      <main className="p-3 p-md-4">
-        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
-          <div className="mb-3 mb-md-0">
-            <h1 className="h3 mb-1">
-              <i className="fas fa-store text-primary me-2"></i> Dealership Management
-            </h1>
-            <p className="text-muted mb-0">Manage all your dealerships in one place</p>
+   <div>
+       <main className="p-6">
+          <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-800 flex items-center">
+                Dealership Management
+              </h1>
+              <p className="text-gray-600 mt-1">Manage all your dealerships in one place</p>
+            </div>
+            <button
+              onClick={handleAddDealership}
+              className="mt-4 md:mt-0 flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer !rounded-button whitespace-nowrap"
+            >
+              <i className="fas fa-plus mr-2"></i> Add New Dealership
+            </button>
           </div>
-          <Button 
-            variant="primary" 
-            onClick={() => setShowAddDealershipModal(true)}
-          >
-            <i className="fas fa-plus me-2"></i> Add New Dealership
-          </Button>
-        </div>
-
-        {/* Statistics Cards */}
-        <div className="row mb-4">
-          <div className="col-12 col-md-6 col-lg-3 mb-3">
-            <div className="card h-100">
-              <div className="card-body">
-                <div className="d-flex align-items-center">
-                  <div className="p-3 rounded-circle bg-primary bg-opacity-10 text-primary me-3">
-                    <i className="fas fa-store fs-4"></i>
-                  </div>
-                  <div>
-                    <h6 className="text-muted mb-1">Total Dealerships</h6>
-                    <h4 className="mb-0">{totalDealerships}</h4>
-                  </div>
+          {/* Statistics Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center">
+                <div className="p-3 rounded-full bg-indigo-100 text-indigo-600">
+                  <i className="fas fa-store text-xl"></i>
                 </div>
-                <div className="mt-3">
-                  <span className="text-success">
-                    <i className="fas fa-arrow-up me-1"></i> 12%
-                  </span>
-                  <span className="text-muted ms-2">from last month</span>
+                <div className="ml-4">
+                  <h2 className="text-sm font-medium text-gray-600">Total Dealerships</h2>
+                  <p className="text-2xl font-bold text-gray-800">{totalDealerships}</p>
                 </div>
               </div>
-            </div>
-          </div>
-          
-          <div className="col-12 col-md-6 col-lg-3 mb-3">
-            <div className="card h-100">
-              <div className="card-body">
-                <div className="d-flex align-items-center">
-                  <div className="p-3 rounded-circle bg-success bg-opacity-10 text-success me-3">
-                    <i className="fas fa-check-circle fs-4"></i>
-                  </div>
-                  <div>
-                    <h6 className="text-muted mb-1">Active Dealerships</h6>
-                    <h4 className="mb-0">{activeDealerships}</h4>
-                  </div>
-                </div>
-                <div className="mt-3">
-                  <span className="text-success">
-                    <i className="fas fa-arrow-up me-1"></i> 8%
-                  </span>
-                  <span className="text-muted ms-2">from last month</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="col-12 col-md-6 col-lg-3 mb-3">
-            <div className="card h-100">
-              <div className="card-body">
-                <div className="d-flex align-items-center">
-                  <div className="p-3 rounded-circle bg-info bg-opacity-10 text-info me-3">
-                    <i className="fas fa-dollar-sign fs-4"></i>
-                  </div>
-                  <div>
-                    <h6 className="text-muted mb-1">Total Sales</h6>
-                    <h4 className="mb-0">${(totalSales / 1000000).toFixed(2)}M</h4>
-                  </div>
-                </div>
-                <div className="mt-3">
-                  <span className="text-success">
-                    <i className="fas fa-arrow-up me-1"></i> 15%
-                  </span>
-                  <span className="text-muted ms-2">from last month</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="col-12 col-md-6 col-lg-3 mb-3">
-            <div className="card h-100">
-              <div className="card-body">
-                <div className="d-flex align-items-center">
-                  <div className="p-3 rounded-circle bg-warning bg-opacity-10 text-warning me-3">
-                    <i className="fas fa-warehouse fs-4"></i>
-                  </div>
-                  <div>
-                    <h6 className="text-muted mb-1">Total Inventory</h6>
-                    <h4 className="mb-0">{totalInventory}</h4>
-                  </div>
-                </div>
-                <div className="mt-3">
-                  <span className="text-danger">
-                    <i className="fas fa-arrow-down me-1"></i> 3%
-                  </span>
-                  <span className="text-muted ms-2">from last month</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Filters and Content */}
-        <div className="card mb-4">
-          <div className="card-header d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">Dealership List</h5>
-            <div className="d-flex">
-              <div className="input-group me-2" style={{ width: '200px' }}>
-                <span className="input-group-text">
-                  <i className="fas fa-search"></i>
+              <div className="mt-4 flex items-center text-sm">
+                <span className="text-green-500 flex items-center">
+                  <i className="fas fa-arrow-up mr-1"></i> 12%
                 </span>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  placeholder="Search..." 
-                />
+                <span className="text-gray-500 ml-2">from last month</span>
               </div>
-              <select className="form-select me-2" style={{ width: '150px' }}>
-                <option>All Status</option>
-                <option>Active</option>
-                <option>Inactive</option>
-              </select>
-              <Button 
-                variant="outline-secondary" 
-                onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-              >
-                <i className={`fas fa-${showAdvancedFilters ? 'chevron-up' : 'chevron-down'} me-1`}></i>
-                Filters
-              </Button>
+            </div>
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center">
+                <div className="p-3 rounded-full bg-green-100 text-green-600">
+                  <i className="fas fa-check-circle text-xl"></i>
+                </div>
+                <div className="ml-4">
+                  <h2 className="text-sm font-medium text-gray-600">Active Dealerships</h2>
+                  <p className="text-2xl font-bold text-gray-800">{activeDealerships}</p>
+                </div>
+              </div>
+              <div className="mt-4 flex items-center text-sm">
+                <span className="text-green-500 flex items-center">
+                  <i className="fas fa-arrow-up mr-1"></i> 8%
+                </span>
+                <span className="text-gray-500 ml-2">from last month</span>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center">
+                <div className="p-3 rounded-full bg-blue-100 text-blue-600">
+                  <i className="fas fa-dollar-sign text-xl"></i>
+                </div>
+                <div className="ml-4">
+                  <h2 className="text-sm font-medium text-gray-600">Total Sales</h2>
+                  <p className="text-2xl font-bold text-gray-800">${(totalSales / 1000000).toFixed(2)}M</p>
+                </div>
+              </div>
+              <div className="mt-4 flex items-center text-sm">
+                <span className="text-green-500 flex items-center">
+                  <i className="fas fa-arrow-up mr-1"></i> 15%
+                </span>
+                <span className="text-gray-500 ml-2">from last month</span>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center">
+                <div className="p-3 rounded-full bg-amber-100 text-amber-600">
+                  <i className="fas fa-warehouse text-xl"></i>
+                </div>
+                <div className="ml-4">
+                  <h2 className="text-sm font-medium text-gray-600">Total Inventory</h2>
+                  <p className="text-2xl font-bold text-gray-800">{totalInventory}</p>
+                </div>
+              </div>
+              <div className="mt-4 flex items-center text-sm">
+                <span className="text-red-500 flex items-center">
+                  <i className="fas fa-arrow-down mr-1"></i> 3%
+                </span>
+                <span className="text-gray-500 ml-2">from last month</span>
+              </div>
             </div>
           </div>
-          
-          {showAdvancedFilters && (
-            <div className="card-body border-bottom">
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Date Created</label>
-                  <div className="row g-2">
-                    <div className="col">
-                      <input type="date" className="form-control" placeholder="From" />
-                    </div>
-                    <div className="col">
-                      <input type="date" className="form-control" placeholder="To" />
-                    </div>
+          {/* Filters and Chart */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div className="lg:col-span-1 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-medium text-gray-800 mb-4">Filters</h2>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <div className="relative">
+                  <select
+                    className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                  >
+                    <option value="all">All Dealerships</option>
+                    <option value="active">Active Only</option>
+                    <option value="inactive">Inactive Only</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <i className="fas fa-chevron-down text-xs"></i>
                   </div>
                 </div>
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">Location</label>
-                  <select className="form-select">
-                    <option>All Locations</option>
-                    <option>New York, NY</option>
-                    <option>Los Angeles, CA</option>
-                    <option>Miami, FL</option>
-                  </select>
-                </div>
               </div>
-              <div className="d-flex justify-content-end">
-                <Button variant="light" className="me-2">Reset</Button>
-                <Button variant="primary">Apply Filters</Button>
+              <div className="mb-4">
+                <button
+                  onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                  className="flex items-center text-indigo-600 hover:text-indigo-800 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap"
+                >
+                  <i className={`fas ${showAdvancedFilters ? 'fa-chevron-up' : 'fa-chevron-down'} mr-2`}></i>
+                  Advanced Filters
+                </button>
+              </div>
+              {showAdvancedFilters && (
+                <div className="space-y-4 mt-4 border-t pt-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Date Created</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-xs text-gray-500">From</label>
+                        <input
+                          type="date"
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          value={dateRange.start}
+                          onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-500">To</label>
+                        <input
+                          type="date"
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          value={dateRange.end}
+                          onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                    <div className="relative">
+                      <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option>All Locations</option>
+                        <option>New York, NY</option>
+                        <option>Los Angeles, CA</option>
+                        <option>Miami, FL</option>
+                        <option>Chicago, IL</option>
+                        <option>Phoenix, AZ</option>
+                        <option>Boston, MA</option>
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <i className="fas fa-chevron-down text-xs"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2 pt-2">
+                    <button className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap">
+                      Apply Filters
+                    </button>
+                    <button className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 text-sm font-medium cursor-pointer !rounded-button whitespace-nowrap">
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              )}
+              <div className="mt-6 pt-6 border-t">
+                <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                  <i className="fas fa-file-export mr-2"></i> Export Data
+                </button>
               </div>
             </div>
-          )}
-          
-          <div className="card-body p-0">
-            <div className="table-responsive">
-              <table className="table table-hover mb-0">
-                <thead>
+            <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-medium text-gray-800 mb-4">Performance Overview</h2>
+              <div id="dealership-stats-chart" style={{ height: '300px' }}></div>
+            </div>
+          </div>
+          {/* Dealership Table */}
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-medium text-gray-800">Dealership List</h2>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th>Dealership Name & Code</th>
-                    <th>Location</th>
-                    <th>Contact Details</th>
-                    <th>Performance</th>
-                    <th>Status</th>
-                    <th>Date Created</th>
-                    <th>Actions</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Dealership Name & Code
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Location
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Contact Details
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Performance
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date Created
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
-                <tbody>
-                  {dealerships.map((dealership) => (
-                    <tr key={dealership.id}>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <div className="flex-shrink-0 bg-primary bg-opacity-10 rounded-circle p-2 me-3">
-                            <i className="fas fa-store text-primary"></i>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredDealerships.map((dealership) => (
+                    <tr key={dealership.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">
+                            <i className="fas fa-store"></i>
                           </div>
-                          <div>
-                            <div className="fw-semibold">{dealership.name}</div>
-                            <div className="text-muted small">{dealership.code}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>{dealership.location}</div>
-                        <div className="text-muted small">{dealership.address}</div>
-                      </td>
-                      <td>
-                        <div>{dealership.contactPerson}</div>
-                        <div className="text-muted small">{dealership.email}</div>
-                        <div className="text-muted small">{dealership.phone}</div>
-                      </td>
-                      <td>
-                        <div className="d-flex flex-column">
-                          <div className="d-flex justify-content-between">
-                            <span className="text-muted small">Sales:</span>
-                            <span className="fw-semibold">${(dealership.sales / 1000).toFixed(1)}K</span>
-                          </div>
-                          <div className="d-flex justify-content-between">
-                            <span className="text-muted small">Orders:</span>
-                            <span className="fw-semibold">{dealership.orders}</span>
-                          </div>
-                          <div className="d-flex justify-content-between">
-                            <span className="text-muted small">Inventory:</span>
-                            <span className="fw-semibold">{dealership.inventory}</span>
+                          <div className="ml-4">
+                            <a
+                              href="https://readdy.ai/home/c8a6bcde-470a-4a15-8148-ac3671c15e32/f1a0a25b-4eff-44bb-8633-94b68d66f227"
+                              data-readdy="true"
+                              className="text-sm font-medium text-indigo-600 hover:text-indigo-900"
+                            >
+                              {dealership.name}
+                            </a>
+                            <div className="text-sm text-gray-500">{dealership.code}</div>
                           </div>
                         </div>
                       </td>
-                      <td>
-                        <div className="form-check form-switch">
-                          <input 
-                            className="form-check-input" 
-                            type="checkbox" 
-                            checked={dealership.status}
-                            readOnly
-                          />
-                          <label className="form-check-label">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">{dealership.location}</div>
+                        <div className="text-sm text-gray-500">{dealership.address}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">{dealership.contactPerson}</div>
+                        <div className="text-sm text-gray-500">{dealership.email}</div>
+                        <div className="text-sm text-gray-500">{dealership.phone}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex flex-col space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500">Sales:</span>
+                            <span className="text-sm font-medium text-gray-900">${(dealership.sales / 1000).toFixed(1)}K</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500">Orders:</span>
+                            <span className="text-sm font-medium text-gray-900">{dealership.orders}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500">Inventory:</span>
+                            <span className="text-sm font-medium text-gray-900">{dealership.inventory}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <button
+                            className={`relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none ${dealership.status ? 'bg-green-500' : 'bg-gray-300'} !rounded-button whitespace-nowrap`}
+                          >
+                            <span
+                              className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${dealership.status ? 'translate-x-5' : 'translate-x-0'}`}
+                            ></span>
+                          </button>
+                          <span className={`ml-2 text-sm ${dealership.status ? 'text-green-600' : 'text-gray-500'}`}>
                             {dealership.status ? 'Active' : 'Inactive'}
-                          </label>
+                          </span>
                         </div>
                       </td>
-                      <td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(dealership.dateCreated).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric'
                         })}
                       </td>
-                      <td>
-                        <div className="d-flex">
-                          <Button 
-                            variant="outline-primary" 
-                            size="sm" 
-                            className="me-2"
-                            onClick={() => setShowAddDealershipModal(true)}
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="flex justify-end space-x-2">
+                          <button
+                            onClick={() => {
+                              setIsEditing(true);
+                              setDealershipForm({
+                                id: dealership.id,
+                                name: dealership.name,
+                                code: dealership.code,
+                                location: dealership.location,
+                                address: dealership.address,
+                                city: dealership.city,
+                                state: dealership.state,
+                                contactPerson: dealership.contactPerson,
+                                email: dealership.email,
+                                phone: dealership.phone,
+                                status: dealership.status
+                              });
+                              setShowAddDealershipModal(true);
+                            }}
+                            className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap"
                           >
                             <i className="fas fa-edit"></i>
-                          </Button>
-                          <Button 
-                            variant="outline-danger" 
-                            size="sm"
-                            onClick={() => setShowDeleteConfirmation(true)}
+                          </button>
+                          <button
+                            onClick={() => handleDeleteConfirmation(dealership.id)}
+                            className="text-red-600 hover:text-red-900 cursor-pointer !rounded-button whitespace-nowrap"
                           >
                             <i className="fas fa-trash"></i>
-                          </Button>
+                          </button>
+                          <button className="text-gray-600 hover:text-gray-900 cursor-pointer !rounded-button whitespace-nowrap">
+                            <i className="fas fa-ellipsis-v"></i>
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -337,135 +620,291 @@ const DealershipManagement = () => {
                 </tbody>
               </table>
             </div>
-          </div>
-          
-          <div className="card-footer d-flex justify-content-between align-items-center">
-            <div className="text-muted">
-              Showing <span className="fw-semibold">1</span> to <span className="fw-semibold">{dealerships.length}</span> of{' '}
-              <span className="fw-semibold">{dealerships.length}</span> entries
-            </div>
-            <nav aria-label="Page navigation">
-              <ul className="pagination pagination-sm mb-0">
-                <li className="page-item disabled">
-                  <a className="page-link" href="#" tabIndex="-1">Previous</a>
-                </li>
-                <li className="page-item active"><a className="page-link" href="#">1</a></li>
-                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                <li className="page-item"><a className="page-link" href="#">3</a></li>
-                <li className="page-item">
-                  <a className="page-link" href="#">Next</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </main>
-
-      {/* Add Dealership Modal */}
-      <Modal show={showAddDealershipModal} onHide={() => setShowAddDealershipModal(false)} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <i className="fas fa-store text-primary me-2"></i> Add New Dealership
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <form>
-            <div className="row mb-3">
-              <div className="col-md-8">
-                <label className="form-label">Dealership Name *</label>
-                <input type="text" className="form-control" />
+            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+              <div className="flex-1 flex justify-between sm:hidden">
+                <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                  Previous
+                </button>
+                <button className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                  Next
+                </button>
               </div>
-              <div className="col-md-4">
-                <label className="form-label">Dealership Code</label>
-                <input type="text" className="form-control" value="DLR-1234" disabled />
-                <small className="text-muted">Auto-generated code</small>
-              </div>
-            </div>
-            
-            <div className="row mb-3">
-              <div className="col-md-8">
-                <div className="form-check form-switch">
-                  <input 
-                    className="form-check-input" 
-                    type="checkbox" 
-                    id="statusSwitch" 
-                    checked
-                  />
-                  <label className="form-check-label" htmlFor="statusSwitch">Active</label>
+              <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-sm text-gray-700">
+                    Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredDealerships.length}</span> of{' '}
+                    <span className="font-medium">{filteredDealerships.length}</span> results
+                  </p>
+                </div>
+                <div>
+                  <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                    <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                      <span className="sr-only">Previous</span>
+                      <i className="fas fa-chevron-left"></i>
+                    </button>
+                    <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                      1
+                    </button>
+                    <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-indigo-50 text-sm font-medium text-indigo-600 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                      2
+                    </button>
+                    <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                      3
+                    </button>
+                    <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                      ...
+                    </span>
+                    <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                      8
+                    </button>
+                    <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                      9
+                    </button>
+                    <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                      10
+                    </button>
+                    <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
+                      <span className="sr-only">Next</span>
+                      <i className="fas fa-chevron-right"></i>
+                    </button>
+                  </nav>
                 </div>
               </div>
             </div>
-            
-            <h6 className="mb-3 border-bottom pb-2">Location Details</h6>
-            <div className="row mb-3">
-              <div className="col-md-12">
-                <label className="form-label">Address</label>
-                <input type="text" className="form-control" />
+          </div>
+        </main>
+        {/* Add Dealership Modal */}
+      <div>
+          {showAddDealershipModal && (
+          <div className="fixed z-20 inset-0 overflow-y-auto">
+            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              </div>
+              <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+              <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <div className="sm:flex sm:items-start">
+                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+                      <i className="fas fa-store text-indigo-600"></i>
+                    </div>
+                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                      <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                        {isEditing ? 'Edit Dealership' : 'Add New Dealership'}
+                      </h3>
+                      <div className="mt-4">
+                        <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                          <div className="sm:col-span-6">
+                            <label htmlFor="dealership-name" className="block text-sm font-medium text-gray-700">
+                              Dealership Name *
+                            </label>
+                            <div className="mt-1">
+                              <input
+                                type="text"
+                                id="dealership-name"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                value={dealershipForm.name}
+                                onChange={(e) => setDealershipForm({ ...dealershipForm, name: e.target.value })}
+                              />
+                            </div>
+                          </div>
+                          <div className="sm:col-span-3">
+                            <label htmlFor="dealership-code" className="block text-sm font-medium text-gray-700">
+                              Dealership Code
+                            </label>
+                            <div className="mt-1">
+                              <input
+                                type="text"
+                                id="dealership-code"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md bg-gray-50"
+                                value={dealershipForm.code}
+                                disabled
+                              />
+                            </div>
+                            <p className="mt-1 text-xs text-gray-500">Auto-generated code</p>
+                          </div>
+                          <div className="sm:col-span-3">
+                            <label htmlFor="dealership-status" className="block text-sm font-medium text-gray-700">
+                              Status
+                            </label>
+                            <div className="mt-1 flex items-center">
+                              <button
+                                type="button"
+                                className={`${dealershipForm.status ? 'bg-green-500' : 'bg-gray-300'} relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none !rounded-button whitespace-nowrap`}
+                                onClick={() => setDealershipForm({ ...dealershipForm, status: !dealershipForm.status })}
+                              >
+                                <span
+                                  className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${dealershipForm.status ? 'translate-x-5' : 'translate-x-0'}`}
+                                ></span>
+                              </button>
+                              <span className="ml-2 text-sm text-gray-700">
+                                {dealershipForm.status ? 'Active' : 'Inactive'}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="sm:col-span-6">
+                            <h4 className="text-sm font-medium text-gray-700 border-b pb-2">Location Details</h4>
+                          </div>
+                          <div className="sm:col-span-6">
+                            <label htmlFor="dealership-address" className="block text-sm font-medium text-gray-700">
+                              Address
+                            </label>
+                            <div className="mt-1">
+                              <input
+                                type="text"
+                                id="dealership-address"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                value={dealershipForm.address}
+                                onChange={(e) => setDealershipForm({ ...dealershipForm, address: e.target.value })}
+                              />
+                            </div>
+                          </div>
+                          <div className="sm:col-span-3">
+                            <label htmlFor="dealership-city" className="block text-sm font-medium text-gray-700">
+                              City
+                            </label>
+                            <div className="mt-1">
+                              <input
+                                type="text"
+                                id="dealership-city"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                value={dealershipForm.city}
+                                onChange={(e) => setDealershipForm({ ...dealershipForm, city: e.target.value })}
+                              />
+                            </div>
+                          </div>
+                          <div className="sm:col-span-3">
+                            <label htmlFor="dealership-state" className="block text-sm font-medium text-gray-700">
+                              State/Region
+                            </label>
+                            <div className="mt-1">
+                              <input
+                                type="text"
+                                id="dealership-state"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                value={dealershipForm.state}
+                                onChange={(e) => setDealershipForm({ ...dealershipForm, state: e.target.value })}
+                              />
+                            </div>
+                          </div>
+                          <div className="sm:col-span-6">
+                            <h4 className="text-sm font-medium text-gray-700 border-b pb-2">Contact Information</h4>
+                          </div>
+                          <div className="sm:col-span-6">
+                            <label htmlFor="contact-person" className="block text-sm font-medium text-gray-700">
+                              Contact Person
+                            </label>
+                            <div className="mt-1">
+                              <input
+                                type="text"
+                                id="contact-person"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                value={dealershipForm.contactPerson}
+                                onChange={(e) => setDealershipForm({ ...dealershipForm, contactPerson: e.target.value })}
+                              />
+                            </div>
+                          </div>
+                          <div className="sm:col-span-3">
+                            <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700">
+                              Email
+                            </label>
+                            <div className="mt-1">
+                              <input
+                                type="email"
+                                id="contact-email"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                value={dealershipForm.email}
+                                onChange={(e) => setDealershipForm({ ...dealershipForm, email: e.target.value })}
+                              />
+                            </div>
+                          </div>
+                          <div className="sm:col-span-3">
+                            <label htmlFor="contact-phone" className="block text-sm font-medium text-gray-700">
+                              Phone
+                            </label>
+                            <div className="mt-1">
+                              <input
+                                type="text"
+                                id="contact-phone"
+                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                value={dealershipForm.phone}
+                                onChange={(e) => setDealershipForm({ ...dealershipForm, phone: e.target.value })}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                  <button
+                    type="button"
+                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
+                    onClick={handleSaveDealership}
+                  >
+                    {isEditing ? 'Update Dealership' : 'Save Dealership'}
+                  </button>
+                  <button
+                    type="button"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
+                    onClick={() => setShowAddDealershipModal(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
-            
-            <div className="row mb-3">
-              <div className="col-md-6">
-                <label className="form-label">City</label>
-                <input type="text" className="form-control" />
+          </div>
+        )}
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirmation && (
+          <div className="fixed z-20 inset-0 overflow-y-auto">
+            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
               </div>
-              <div className="col-md-6">
-                <label className="form-label">State/Region</label>
-                <input type="text" className="form-control" />
+              <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+              <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <div className="sm:flex sm:items-start">
+                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                      <i className="fas fa-exclamation-triangle text-red-600"></i>
+                    </div>
+                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                      <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                        Delete Dealership
+                      </h3>
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-500">
+                          Are you sure you want to delete this dealership? This action cannot be undone.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                  <button
+                    type="button"
+                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
+                    onClick={handleDeleteDealership}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
+                    onClick={() => setShowDeleteConfirmation(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
-            
-            <h6 className="mb-3 border-bottom pb-2">Contact Information</h6>
-            <div className="row mb-3">
-              <div className="col-md-12">
-                <label className="form-label">Contact Person</label>
-                <input type="text" className="form-control" />
-              </div>
-            </div>
-            
-            <div className="row">
-              <div className="col-md-6">
-                <label className="form-label">Email</label>
-                <input type="email" className="form-control" />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">Phone</label>
-                <input type="tel" className="form-control" />
-              </div>
-            </div>
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowAddDealershipModal(false)}>
-            Cancel
-          </Button>
-          <Button variant="primary">
-            Save Dealership
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Delete Confirmation Modal */}
-      <Modal show={showDeleteConfirmation} onHide={() => setShowDeleteConfirmation(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <i className="fas fa-exclamation-triangle text-danger me-2"></i> Delete Dealership
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to delete this dealership? This action cannot be undone.</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteConfirmation(false)}>
-            Cancel
-          </Button>
-          <Button variant="danger">
-            Delete
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+          </div>
+        )}
+      </div>
+   </div>
   );
 };
-
-export default DealershipManagement;
+export default DealershipManagement

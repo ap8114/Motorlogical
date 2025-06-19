@@ -5,6 +5,9 @@ import MainLayout from './Layout/MainLayout';
 import Login from './Components/Auth/Login';
 import Signup from './Components/Auth/Signup';
 import DealershipManagement from './Components/Dashboard/DealershipManagement';
+import OrderManagement from './Components/Dashboard/Ordermanagement';
+import UserManagement from './Components/Dashboard/UserManagement';
+import InventoryManagement from './Components/Dashboard/InventoryManagement';
 
 function App() {
   return (
@@ -17,7 +20,10 @@ function App() {
         {/* Protected routes with MainLayout */}
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-           <Route path="/dealershipmanagement" element={<DealershipManagement />} />
+          <Route path="/dealershipmanagement" element={<DealershipManagement />} />
+          <Route path="/ordermanagement" element={<OrderManagement />} />
+           <Route path="/usermanagement" element={<UserManagement />} />
+            <Route path="/inventorymanagement" element={<InventoryManagement />} />
 
           {/* <Route path="/ordermanagement" element={<OrdersManagement />} />
           <Route path="/inventorymanagement" element={<InventoryManagement />} />
