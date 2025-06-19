@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate  } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css"; // Don't forget to import the CSS
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -22,7 +24,7 @@ const Login = () => {
         if (user) {
             // Store role in localStorage
             localStorage.setItem("role", user.role);
-
+            toast.success("Login Successfully!"); // This will show the success toast
             // Redirect based on role
             if (user.role === "Admin") {
                 navigate("/dashboard");
@@ -32,16 +34,16 @@ const Login = () => {
                 navigate("/salesperson-dashboard");
             }
         } else {
-            alert("Invalid email or password");
+            toast.error("Invalid email or password"); // This will show the error toast
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 " style={{ backgroundColor: "#023047" }}>
-            <div className="bg-white rounded-3xl w-full max-w-5xl overflow-hidden shadow-xl flex mainlogin">
-
+        <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: "#023047" }}>
+            <div className="bg-white rounded-3xl w-full max-w-6xl overflow-hidden shadow-xl flex mainlogin">
+                <ToastContainer position="top-right" autoClose={2000} />
                 {/* Left Panel - Login Form */}
-                <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col ">
+                <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col">
                     <div className="mb-8">
                         <div className="flex items-center mb-12">
                             <img
@@ -84,9 +86,7 @@ const Login = () => {
                                         checked={keepLoggedIn}
                                         onChange={() => setKeepLoggedIn(!keepLoggedIn)}
                                     />
-                                    <span className="ml-2 text-sm text-gray-600">
-                                        Keep me logged in
-                                    </span>
+                                    <span className="ml-2 text-sm text-gray-600">Keep me logged in</span>
                                 </label>
                             </div>
                             <button
@@ -101,7 +101,7 @@ const Login = () => {
                     </div>
                 </div>
                 {/* Right Panel - Illustration */}
-                <div className="hidden md:block md:w-1/2 bg-blue-100 p-8 md:p-12 relative ">
+                <div className="hidden md:block md:w-1/2 bg-blue-100 p-8 md:p-12 relative">
                     <div className="flex justify-center items-center h-3/4 mt-5">
                         <img
                             src="https://file.aiquickdraw.com/imgcompressed/img/compressed_a0698d76179ca0e6b38e1dfc7f1a458c.webp"
