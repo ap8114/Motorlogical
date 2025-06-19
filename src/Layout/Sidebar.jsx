@@ -72,8 +72,11 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
             case "Salesperson":
                 return (
                     <>
-                        {navItem("/salesrecords", "fas fa-chart-line", "Sales Record")}
-                        {navItem("/helpsupport", "fas fa-question-circle", "Support")}
+                        {navItem("/salesperson/salespersondashboard", "fas fa-tachometer-alt", "Dashboard")}
+                        {navItem("/salesperson/salespersonorder", "fas fa-shopping-cart", "Order Management")}
+                        {navItem("/salesperson/salespersoninventory", "fas fa-boxes", "Inventory")}
+                        {navItem("/salesperson/salespersoncustomerinfo", "fas fa-user-friends", "Customer Information")}
+
                     </>
                 );
             default:

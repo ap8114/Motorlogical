@@ -31,7 +31,7 @@ const Login = () => {
             } else if (user.role === "Manager") {
                 navigate("/manager/dashboard");
             } else if (user.role === "Salesperson") {
-                navigate("/salesperson-dashboard");
+                navigate("/salesperson/salespersondashboard");
             }
         } else {
             toast.error("Invalid email or password"); // This will show the error toast
