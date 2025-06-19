@@ -2,16 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import * as echarts from 'echarts';
 const DealershipManagement = () => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [activeMenu, setActiveMenu] = useState('dealership');
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [notifications, setNotifications] = useState(3);
+
   const [showAddDealershipModal, setShowAddDealershipModal] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [dateRange, setDateRange] = useState({ start: '', end: '' });
+ 
   // Form state for add/edit dealership
   const [isEditing, setIsEditing] = useState(false);
   const [dealershipForm, setDealershipForm] = useState({
@@ -218,11 +214,7 @@ const DealershipManagement = () => {
       (statusFilter === 'inactive' && !dealership.status);
     return matchesSearch && matchesStatus;
   });
-  // Calculate statistics
-  const totalDealerships = dealerships.length;
-  const activeDealerships = dealerships.filter(d => d.status).length;
-  const totalSales = dealerships.reduce((sum, d) => sum + d.sales, 0);
-  const totalInventory = dealerships.reduce((sum, d) => sum + d.inventory, 0);
+
   return (
    <div>
        <main className="p-6">
