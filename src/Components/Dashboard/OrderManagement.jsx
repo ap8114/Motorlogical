@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import * as echarts from 'echarts';
-
+import * as XLSX from 'xlsx';
+import { utils, writeFile } from 'xlsx';
 const OrderManagement= () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeMenu, setActiveMenu] = useState('orders');
@@ -132,143 +133,8 @@ const OrderManagement= () => {
     totalAmount: 0
   });
 
-  // Initialize charts
-  useEffect(() => {
-    const orderStatsChart = echarts.init(document.getElementById('order-stats-chart'));
-    const statsOption = {
-      animation: false,
-      title: {
-        text: 'Order Statistics',
-        left: 'center',
-        textStyle: {
-          fontSize: 14
-        }
-      },
-      tooltip: {
-        trigger: 'axis'
-      },
-      legend: {
-        data: ['Orders', 'Revenue'],
-        bottom: 0
-      },
-      xAxis: {
-        type: 'category',
-        data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-        axisLabel: {
-          interval: 0
-        }
-      },
-      yAxis: [
-        {
-          type: 'value',
-          name: 'Orders',
-          position: 'left'
-        },
-        {
-          type: 'value',
-          name: 'Revenue ($)',
-          position: 'right',
-          axisLabel: {
-            formatter: '${value}k'
-          }
-        }
-      ],
-      series: [
-        {
-          name: 'Orders',
-          type: 'bar',
-          data: [24, 32, 28, 35, 42, 38],
-          color: '#4F46E5'
-        },
-        {
-          name: 'Revenue',
-          type: 'line',
-          yAxisIndex: 1,
-          data: [120, 160, 140, 175, 210, 190],
-          color: '#10B981'
-        }
-      ]
-    };
-    orderStatsChart.setOption(statsOption);
 
-    const statusDistributionChart = echarts.init(document.getElementById('status-distribution-chart'));
-    const statusOption = {
-      animation: false,
-      title: {
-        text: 'Order Status Distribution',
-        left: 'center',
-        textStyle: {
-          fontSize: 14
-        }
-      },
-      tooltip: {
-        trigger: 'item'
-      },
-      legend: {
-        orient: 'vertical',
-        left: 'left',
-        bottom: 0
-      },
-      series: [
-        {
-          name: 'Order Status',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: '#fff',
-            borderWidth: 2
-          },
-          label: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: '12',
-              fontWeight: 'bold'
-            }
-          },
-          labelLine: {
-            show: false
-          },
-          data: [
-            { value: 1, name: 'Pending', itemStyle: { color: '#F59E0B' } },
-            { value: 2, name: 'Processing', itemStyle: { color: '#3B82F6' } },
-            { value: 1, name: 'Shipped', itemStyle: { color: '#8B5CF6' } },
-            { value: 1, name: 'Delivered', itemStyle: { color: '#10B981' } },
-            { value: 1, name: 'Cancelled', itemStyle: { color: '#EF4444' } }
-          ]
-        }
-      ]
-    };
-    statusDistributionChart.setOption(statusOption);
 
-    const handleResize = () => {
-      orderStatsChart.resize();
-      statusDistributionChart.resize();
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      orderStatsChart.dispose();
-      statusDistributionChart.dispose();
-    };
-  }, [orders]);
-
-  // Toggle sidebar
-  const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
-  };
-
-  // Toggle user dropdown
-  const toggleUserDropdown = () => {
-    setShowUserDropdown(!showUserDropdown);
-  };
 
   // Handle view order details
   const handleViewOrderDetails = () => {
@@ -378,12 +244,61 @@ const OrderManagement= () => {
     }
   };
 
-  // Calculate statistics
-  const totalOrders = orders.length;
-  const pendingOrders = orders.filter(o => o.status === 'Pending').length;
-  const processingOrders = orders.filter(o => o.status === 'Processing').length;
-  const totalRevenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);
 
+  const handleSheetUpload = (e) => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+
+  reader.onload = (evt) => {
+    const bstr = evt.target.result;
+    const wb = XLSX.read(bstr, { type: 'binary' });
+    const wsname = wb.SheetNames[0];
+    const ws = wb.Sheets[wsname];
+    const sheetData = XLSX.utils.sheet_to_json(ws);
+
+    // Update existing orders with the new data from the uploaded file
+    const updatedOrders = orders.map(existingOrder => {
+      const updatedOrder = sheetData.find(row => row.id === existingOrder.id); // Match by order ID
+      return updatedOrder
+        ? {
+            ...existingOrder, // Merge existing order
+            ...updatedOrder,   // Update with the new data
+            status: updatedOrder.status || existingOrder.status, // Ensure the status is preserved
+            totalAmount: updatedOrder.totalAmount || existingOrder.totalAmount // Handle totalAmount
+          }
+        : existingOrder; // If order doesn't match, keep it as is
+    });
+
+    // Add new orders from the uploaded data
+    const newOrders = sheetData.filter(row =>
+      !orders.find(existing => existing.id === row.id) // Add if the order ID doesn't exist in the current list
+    ).map(item => ({
+      id: item.id,
+      customerName: item.customerName,
+      dealership: item.dealership,
+      products: item.products || [],
+      quantity: item.quantity || 1,
+      status: item.status || 'Pending',
+      orderDate: item.orderDate || new Date().toISOString().split('T')[0],
+      estimatedDelivery: item.estimatedDelivery || '',
+      notes: item.notes || '',
+      totalAmount: item.totalAmount || 0
+    }));
+
+    // Combine updated orders with newly added orders
+    setOrders([...updatedOrders, ...newOrders]);
+  };
+
+  reader.readAsBinaryString(file);
+};
+
+
+const handleDownloadCSV = () => {
+    const ws = utils.json_to_sheet(orders);
+    const wb = utils.book_new();
+    utils.book_append_sheet(wb, ws, "Orders");
+    writeFile(wb, "Orders_Export.csv");
+  };
   return (
     <div>
           {/* Main Content */}
@@ -395,13 +310,12 @@ const OrderManagement= () => {
               <p className="text-gray-600 mt-1">Manage all vehicle orders in one place</p>
             </div>
             <div className="flex mt-4 md:mt-0 space-x-3">
-              <a
-                href="https://readdy.ai/home/c8a6bcde-470a-4a15-8148-ac3671c15e32/b862fa09-45cb-42e3-9321-7e08bb6054b4"
-                data-readdy="true"
-                className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition cursor-pointer !rounded-button whitespace-nowrap"
-              >
-                <i className="fas fa-users mr-2"></i> User Management
-              </a>
+          <button
+              onClick={handleDownloadCSV}
+              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition whitespace-nowrap"
+            >
+              <i className="fas fa-download mr-2"></i> Download CSV
+            </button>
               <button
                 onClick={handleCreateNewOrder}
                 className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer !rounded-button whitespace-nowrap"
@@ -419,15 +333,13 @@ const OrderManagement= () => {
             <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
               <h3 className="text-lg font-medium text-gray-800">Order List</h3>
               <div className="flex items-center space-x-2">
-                <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                  <i className="fas fa-filter mr-1"></i> Filter
-                </button>
-                <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                  <i className="fas fa-sort mr-1"></i> Sort
-                </button>
-                <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                  <i className="fas fa-file-export mr-1"></i> Export
-                </button>
+                <input
+                type="file"
+                accept=".csv, .xlsx"
+                onChange={handleSheetUpload}
+                className="px-4 py-2 border rounded-lg text-sm cursor-pointer text-gray-700 bg-white hover:bg-gray-100 whitespace-nowrap"
+                title="Upload Dealership Sheet"
+              />
               </div>
             </div>
             <div className="overflow-x-auto">
@@ -480,7 +392,7 @@ const OrderManagement= () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <div className="max-w-xs truncate">
-                          {order.products.join(', ')}
+                          {order.products}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
