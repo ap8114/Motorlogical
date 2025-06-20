@@ -521,7 +521,7 @@ const ManagerStaff = () => {
             <div className="mb-3 form-check">
               <input
                 type="checkbox"
-                className="form-check-input"
+                className="form-check-input me-1"
                 id="status"
                 name="status"
                 checked={formData.status}
