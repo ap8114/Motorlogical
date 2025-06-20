@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
-
+import { utils, writeFile } from 'xlsx';
+import * as XLSX from 'xlsx';
 const InventoryManagement = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeMenu, setActiveMenu] = useState('inventory');
@@ -309,13 +310,12 @@ const InventoryManagement = () => {
       return 'bg-green-100 text-green-800';
     }
   };
-
-  // Calculate statistics
-  const totalItems = inventory.length;
-  const totalStock = inventory.reduce((sum, item) => sum + item.quantity, 0);
-  const lowStockItems = inventory.filter(item => item.quantity < 5).length;
-  const totalValue = inventory.reduce((sum, item) => sum + (item.quantity * item.price), 0);
-
+const handleDownloadCSV = () => {
+    const ws = utils.json_to_sheet(inventory);
+    const wb = utils.book_new();
+    utils.book_append_sheet(wb, ws, "inventory");
+    writeFile(wb, "inventory_Export.csv");
+  };
   return (
     <div>
       {/* Main Content */}
@@ -327,13 +327,12 @@ const InventoryManagement = () => {
             <p className="text-gray-600 mt-1">Manage all vehicle inventory in one place</p>
           </div>
           <div className="flex mt-4 md:mt-0 space-x-3">
-            <a
-              href="#"
-              data-readdy="true"
-              className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition cursor-pointer !rounded-button whitespace-nowrap"
+               <button
+              onClick={handleDownloadCSV}
+              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition whitespace-nowrap"
             >
-              <i className="fas fa-shopping-cart mr-2"></i> Order Management
-            </a>
+              <i className="fas fa-download mr-2"></i> Download CSV
+            </button>
             <button
               onClick={handleCreateNewItem}
               className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer !rounded-button whitespace-nowrap"

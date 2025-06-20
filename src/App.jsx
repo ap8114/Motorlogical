@@ -15,6 +15,10 @@ import ManagerOrderManagement from './Components/Manager-Dashboard/ManagerOrderM
 import ManagerStaff from './Components/Manager-Dashboard/ManagerStaff';
 import ManagerReports from './Components/Manager-Dashboard/ManagerReports';
 import ManagerInventory from './Components/Manager-Dashboard/ManagerInventory';
+import SalespersonDashboard from './Components/Salesperson-Dashboard/SalespersonDashboard';
+import SalespersonInventory from './Components/Salesperson-Dashboard/SalespersonInventory';
+import SalespersonOrder from './Components/Salesperson-Dashboard/SalespersonOrder';
+import SalespersonCustomerInfo from './Components/Salesperson-Dashboard/SalespersonCustomerInfo';
 
 function App() {
   return (
@@ -51,6 +55,15 @@ function App() {
            <Route path="/manager/managerstaff" element={<ManagerStaff />} />
             <Route path="/manager/managerreports" element={<ManagerReports />} />
             <Route path="/manager/managerinventory" element={<ManagerInventory />} />
+        </Route>
+
+         {/* Salesperson Dashboard routes with MainLayout */}
+        <Route element={<MainLayout />}>
+          <Route path="/salesperson/salespersondashboard" element={<SalespersonDashboard />} />
+          <Route path="/salesperson/salespersoninventory" element={<SalespersonInventory />} />
+            <Route path="/salesperson/salespersonorder" element={<SalespersonOrder />} /> 
+           <Route path="/salesperson/salespersoncustomerinfo" element={<SalespersonCustomerInfo />} /> 
+          
         </Route>
 
 
