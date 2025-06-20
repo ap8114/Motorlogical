@@ -128,9 +128,9 @@ const SalespersonOrder = ({ orders, userId }) => {
       <div className="container">
         {/* Place Order Form */}
         <div className="mb-5">
-          <h4 className="h2 text-dark mb-3">
+          <h2 className="h5 text-dark mb-3">
             Place Order
-          </h4>
+          </h2>
 
           <div className="card shadow-sm">
             <div className="card-body">
@@ -233,7 +233,7 @@ const SalespersonOrder = ({ orders, userId }) => {
 
         {/* Order Status Tracker */}
         <div className="mb-5">
-          <h2 className="h2 text-dark mb-3">
+          <h2 className="h5 text-dark mb-3">
             Order Status Tracker 
           </h2>
 
@@ -300,7 +300,7 @@ const SalespersonOrder = ({ orders, userId }) => {
         {/* My Orders Table */}
         <div>
           <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
-            <h2 className="h2 text-dark mb-3 mb-md-0">
+            <h2 className="h5 text-dark mb-3 mb-md-0">
               My Orders
             </h2>
             <span className="badge bg-light text-dark fs-6 px-3 py-2">

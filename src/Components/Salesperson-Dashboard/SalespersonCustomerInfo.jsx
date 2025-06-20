@@ -373,7 +373,7 @@ const SalespersonCustomerInfo = () => {
             <div className="row mb-4">
               <div className="col-md-8 mb-3 mb-md-0">
                 <div className="input-group">
-                  <span className="input-group-text">
+                  <span className="mt-3 me-2">
                     <i className="fas fa-search"></i>
                   </span>
                   <input
