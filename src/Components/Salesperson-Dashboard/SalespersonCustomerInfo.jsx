@@ -67,7 +67,7 @@ const SalespersonCustomerInfo = () => {
       lastOrderDate: '2025-06-14T14:45:00'
     }
   ]);
-  
+
   const [orders, setOrders] = useState([
     {
       id: 1,
@@ -160,7 +160,7 @@ const SalespersonCustomerInfo = () => {
       items: 2
     }
   ]);
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -177,7 +177,7 @@ const SalespersonCustomerInfo = () => {
     phone: '',
     email: null
   });
-  
+
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: 'ascending'
@@ -197,7 +197,7 @@ const SalespersonCustomerInfo = () => {
     setNewCustomer({ name: '', phone: '', email: '' });
     setIsAddModalOpen(false);
   };
-  
+
   const handleEditClick = (e, customer) => {
     e.stopPropagation();
     setEditCustomer({
@@ -208,7 +208,7 @@ const SalespersonCustomerInfo = () => {
     });
     setIsEditModalOpen(true);
   };
-  
+
   const handleEditCustomer = (e) => {
     e.preventDefault();
     const updatedCustomers = customers.map(customer => {
@@ -222,10 +222,10 @@ const SalespersonCustomerInfo = () => {
       }
       return customer;
     });
-    
+
     setCustomers(updatedCustomers);
     setIsEditModalOpen(false);
-    
+
     if (selectedCustomer && selectedCustomer.id === editCustomer.id) {
       setSelectedCustomer({
         ...selectedCustomer,
@@ -235,7 +235,7 @@ const SalespersonCustomerInfo = () => {
       });
     }
   };
-  
+
   const itemsPerPage = 5;
   const filteredCustomers = customers.filter(customer => {
     const matchesSearch =
@@ -244,7 +244,7 @@ const SalespersonCustomerInfo = () => {
       (customer.email && customer.email.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesSearch;
   });
-  
+
   const sortedCustomers = React.useMemo(() => {
     let sortableItems = [...filteredCustomers];
     if (sortConfig.key) {
@@ -260,16 +260,16 @@ const SalespersonCustomerInfo = () => {
     }
     return sortableItems;
   }, [filteredCustomers, sortConfig]);
-  
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentCustomers = sortedCustomers.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(sortedCustomers.length / itemsPerPage);
-  
+
   const customerOrders = selectedCustomer
     ? orders.filter(order => order.customerId === selectedCustomer.id)
     : [];
-  
+
   const requestSort = (key) => {
     let direction = 'ascending';
     if (sortConfig.key === key && sortConfig.direction === 'ascending') {
@@ -277,7 +277,7 @@ const SalespersonCustomerInfo = () => {
     }
     setSortConfig({ key, direction });
   };
-  
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -286,7 +286,7 @@ const SalespersonCustomerInfo = () => {
       day: 'numeric'
     });
   };
-  
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'Completed': return 'bg-success text-white';
@@ -295,7 +295,7 @@ const SalespersonCustomerInfo = () => {
       default: return 'bg-secondary text-white';
     }
   };
-  
+
   return (
     <div className="min-vh-100 bg-light py-4">
       <div className="container">
@@ -306,7 +306,7 @@ const SalespersonCustomerInfo = () => {
             View and manage your customer information and order history
           </p>
         </div>
-        
+
         {/* Customer Stats */}
         <div className="row mb-5">
           <div className="col-md-4 mb-3 mb-md-0">
@@ -324,7 +324,7 @@ const SalespersonCustomerInfo = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="col-md-4 mb-3 mb-md-0">
             <div className="card border-left-success h-100">
               <div className="card-body">
@@ -340,12 +340,12 @@ const SalespersonCustomerInfo = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="col-md-4">
             <div className="card border-left-purple h-100">
               <div className="card-body">
                 <div className="d-flex align-items-center">
-                  <div className="mr-3 bg-purple text-white rounded-circle p-3">
+                  <div className="mr-3 bg-danger text-white rounded-circle p-3">
                     <i className="fas fa-chart-line"></i>
                   </div>
                   <div>
@@ -359,7 +359,7 @@ const SalespersonCustomerInfo = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Customer List */}
         <div className="card shadow mb-5">
           <div className="card-header bg-white py-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center">
@@ -386,8 +386,8 @@ const SalespersonCustomerInfo = () => {
                 </div>
               </div>
               <div className="col-md-4 text-md-end">
-                <button 
-                  onClick={() => setIsAddModalOpen(true)} 
+                <button
+                  onClick={() => setIsAddModalOpen(true)}
                   className="btn btn-primary"
                 >
                   <i className="fas fa-plus me-2"></i>
@@ -395,128 +395,78 @@ const SalespersonCustomerInfo = () => {
                 </button>
               </div>
             </div>
-            
+
             <div className="table-responsive">
-              <table className="table table-hover">
+              <table className="table table-hover align-middle">
                 <thead className="table-light">
                   <tr>
-                    <th
-                      onClick={() => requestSort('name')}
-                      className="cursor-pointer"
-                    >
-                      <div className="d-flex align-items-center">
-                        Customer Name
-                        {sortConfig.key === 'name' && (
-                          <span className="ms-1">
-                            {sortConfig.direction === 'ascending' ?
-                              <i className="fas fa-sort-up"></i> :
-                              <i className="fas fa-sort-down"></i>
-                            }
-                          </span>
-                        )}
-                      </div>
-                    </th>
-                    <th
-                      onClick={() => requestSort('phone')}
-                      className="cursor-pointer"
-                    >
-                      <div className="d-flex align-items-center">
-                        Phone
-                        {sortConfig.key === 'phone' && (
-                          <span className="ms-1">
-                            {sortConfig.direction === 'ascending' ?
-                              <i className="fas fa-sort-up"></i> :
-                              <i className="fas fa-sort-down"></i>
-                            }
-                          </span>
-                        )}
-                      </div>
-                    </th>
-                    <th
-                      onClick={() => requestSort('email')}
-                      className="cursor-pointer"
-                    >
-                      <div className="d-flex align-items-center">
-                        Email
-                        {sortConfig.key === 'email' && (
-                          <span className="ms-1">
-                            {sortConfig.direction === 'ascending' ?
-                              <i className="fas fa-sort-up"></i> :
-                              <i className="fas fa-sort-down"></i>
-                            }
-                          </span>
-                        )}
-                      </div>
-                    </th>
-                    <th
-                      onClick={() => requestSort('totalOrders')}
-                      className="cursor-pointer"
-                    >
-                      <div className="d-flex align-items-center">
-                        Total Orders
-                        {sortConfig.key === 'totalOrders' && (
-                          <span className="ms-1">
-                            {sortConfig.direction === 'ascending' ?
-                              <i className="fas fa-sort-up"></i> :
-                              <i className="fas fa-sort-down"></i>
-                            }
-                          </span>
-                        )}
-                      </div>
-                    </th>
-                    <th
-                      onClick={() => requestSort('lastOrderDate')}
-                      className="cursor-pointer"
-                    >
-                      <div className="d-flex align-items-center">
-                        Last Order Date
-                        {sortConfig.key === 'lastOrderDate' && (
-                          <span className="ms-1">
-                            {sortConfig.direction === 'ascending' ?
-                              <i className="fas fa-sort-up"></i> :
-                              <i className="fas fa-sort-down"></i>
-                            }
-                          </span>
-                        )}
-                      </div>
-                    </th>
+                    {['name', 'phone', 'email', 'totalOrders', 'lastOrderDate'].map((key) => (
+                      <th key={key} onClick={() => requestSort(key)} className="cursor-pointer">
+                        <div className="d-flex align-items-center">
+                          {key === 'name' && 'Customer Name'}
+                          {key === 'phone' && 'Phone'}
+                          {key === 'email' && 'Email'}
+                          {key === 'totalOrders' && 'Total Orders'}
+                          {key === 'lastOrderDate' && 'Last Order Date'}
+                          {sortConfig.key === key && (
+                            <span className="ms-1">
+                              <i className={`fas ${sortConfig.direction === 'ascending' ? 'fa-sort-up' : 'fa-sort-down'}`}></i>
+                            </span>
+                          )}
+                        </div>
+                      </th>
+                    ))}
                     <th className="text-end">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentCustomers.length > 0 ? (
-                    currentCustomers.map((customer, index) => (
+                    currentCustomers.map((customer) => (
                       <tr
                         key={customer.id}
                         className={selectedCustomer?.id === customer.id ? 'table-active' : ''}
-                        onClick={() => setSelectedCustomer(customer)}
                         style={{ cursor: 'pointer' }}
+                        onClick={() => setSelectedCustomer(customer)}
                       >
                         <td>
                           <div className="d-flex align-items-center">
-                            <div className="bg-primary text-white rounded-circle p-2 me-3">
-                              {customer.name.charAt(0)}
+                            <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: 32, height: 32 }}>
+                              {customer.name?.charAt(0)}
                             </div>
-                            <div>
-                              <div className="fw-bold">{customer.name}</div>
+                            <div className="ms-3">
+                              <div className="fw-bold text-truncate" style={{ maxWidth: 120 }}>{customer.name}</div>
                             </div>
                           </div>
                         </td>
-                        <td>{customer.phone}</td>
-                        <td>{customer.email || <span className="text-muted fst-italic">Not provided</span>}</td>
+                        <td className="text-truncate" style={{ maxWidth: 140 }}>{customer.phone}</td>
+                        <td className="text-truncate" style={{ maxWidth: 180 }}>
+                          {customer.email || <span className="text-muted fst-italic">Not provided</span>}
+                        </td>
                         <td className="fw-bold">{customer.totalOrders}</td>
                         <td>{formatDate(customer.lastOrderDate)}</td>
                         <td className="text-end">
-                          <button 
-                            className="btn btn-sm btn-outline-primary me-2"
-                            onClick={(e) => handleEditClick(e, customer)}
-                          >
-                            <i className="fas fa-edit"></i>
-                          </button>
-                          <button className="btn btn-sm btn-outline-danger">
-                            <i className="fas fa-trash-alt"></i>
-                          </button>
+                          <div className="d-flex flex-wrap justify-content-end gap-2">
+                            <button
+                              className="btn btn-sm btn-outline-primary"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEditClick(e, customer);
+                              }}
+                            >
+                              <i className="fas fa-edit"></i>
+                            </button>
+                            <button
+                              className="btn btn-sm btn-outline-danger"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // handleDeleteClick(customer);
+                              }}
+                            >
+                              <i className="fas fa-trash-alt"></i>
+                            </button>
+                          </div>
                         </td>
+
                       </tr>
                     ))
                   ) : (
@@ -530,7 +480,8 @@ const SalespersonCustomerInfo = () => {
                 </tbody>
               </table>
             </div>
-            
+
+
             {/* Pagination */}
             {filteredCustomers.length > 0 && (
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
@@ -551,11 +502,11 @@ const SalespersonCustomerInfo = () => {
                       </button>
                     </li>
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                      <li 
-                        key={page} 
+                      <li
+                        key={page}
                         className={`page-item ${currentPage === page ? 'active' : ''}`}
                       >
-                        <button 
+                        <button
                           className="page-link"
                           onClick={() => setCurrentPage(page)}
                         >
@@ -578,7 +529,7 @@ const SalespersonCustomerInfo = () => {
             )}
           </div>
         </div>
-        
+
         {/* Customer Order History */}
         {selectedCustomer && (
           <div className="card shadow mb-5">
@@ -611,7 +562,7 @@ const SalespersonCustomerInfo = () => {
                   <div className="h4">{selectedCustomer.totalOrders}</div>
                 </div>
               </div>
-              
+
               <div className="table-responsive">
                 <table className="table table-hover">
                   <thead className="table-light">
@@ -658,7 +609,7 @@ const SalespersonCustomerInfo = () => {
             </div>
           </div>
         )}
-        
+
         {/* Add Customer Modal */}
         {isAddModalOpen && (
           <div className="modal fade show" style={{ display: 'block' }}>
@@ -666,8 +617,8 @@ const SalespersonCustomerInfo = () => {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">Add New Customer</h5>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="btn-close"
                     onClick={() => setIsAddModalOpen(false)}
                   ></button>
@@ -680,7 +631,7 @@ const SalespersonCustomerInfo = () => {
                         type="text"
                         required
                         value={newCustomer.name}
-                        onChange={(e) => setNewCustomer({...newCustomer, name: e.target.value})}
+                        onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
                         className="form-control"
                         placeholder="Enter customer name"
                       />
@@ -691,7 +642,7 @@ const SalespersonCustomerInfo = () => {
                         type="tel"
                         required
                         value={newCustomer.phone}
-                        onChange={(e) => setNewCustomer({...newCustomer, phone: e.target.value})}
+                        onChange={(e) => setNewCustomer({ ...newCustomer, phone: e.target.value })}
                         className="form-control"
                         placeholder="Enter phone number"
                       />
@@ -701,7 +652,7 @@ const SalespersonCustomerInfo = () => {
                       <input
                         type="email"
                         value={newCustomer.email}
-                        onChange={(e) => setNewCustomer({...newCustomer, email: e.target.value})}
+                        onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
                         className="form-control"
                         placeholder="Enter email address"
                       />
@@ -727,7 +678,7 @@ const SalespersonCustomerInfo = () => {
             </div>
           </div>
         )}
-        
+
         {/* Edit Customer Modal */}
         {isEditModalOpen && (
           <div className="modal fade show" style={{ display: 'block' }}>
@@ -735,8 +686,8 @@ const SalespersonCustomerInfo = () => {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">Edit Customer</h5>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="btn-close"
                     onClick={() => setIsEditModalOpen(false)}
                   ></button>
@@ -749,7 +700,7 @@ const SalespersonCustomerInfo = () => {
                         type="text"
                         required
                         value={editCustomer.name}
-                        onChange={(e) => setEditCustomer({...editCustomer, name: e.target.value})}
+                        onChange={(e) => setEditCustomer({ ...editCustomer, name: e.target.value })}
                         className="form-control"
                         placeholder="Enter customer name"
                       />
@@ -760,7 +711,7 @@ const SalespersonCustomerInfo = () => {
                         type="tel"
                         required
                         value={editCustomer.phone}
-                        onChange={(e) => setEditCustomer({...editCustomer, phone: e.target.value})}
+                        onChange={(e) => setEditCustomer({ ...editCustomer, phone: e.target.value })}
                         className="form-control"
                         placeholder="Enter phone number"
                       />
@@ -770,7 +721,7 @@ const SalespersonCustomerInfo = () => {
                       <input
                         type="email"
                         value={editCustomer.email || ''}
-                        onChange={(e) => setEditCustomer({...editCustomer, email: e.target.value || null})}
+                        onChange={(e) => setEditCustomer({ ...editCustomer, email: e.target.value || null })}
                         className="form-control"
                         placeholder="Enter email address"
                       />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 
 const SalespersonInventory = () => {
     const [inventoryItems, setInventoryItems] = useState([
@@ -101,7 +101,7 @@ const SalespersonInventory = () => {
     });
     
     // Sort items
-    const sortedItems = React.useMemo(() => {
+    const sortedItems = useMemo(() => {
         let sortableItems = [...filteredItems];
         if (sortConfig.key) {
             sortableItems.sort((a, b) => {
@@ -148,53 +148,73 @@ const SalespersonInventory = () => {
     // Get status color
     const getStatusColor = (status) => {
         switch (status) {
-            case 'In Stock': return 'bg-success text-white';
+            case 'In Stock': return 'bg-success';
             case 'Low': return 'bg-warning text-dark';
-            case 'Out of Stock': return 'bg-danger text-white';
-            default: return 'bg-secondary text-white';
+            case 'Out of Stock': return 'bg-danger';
+            default: return 'bg-secondary';
         }
     };
     
     return (
-        <div className="min-vh-100 bg-light py-4">
-            <div className="container">
-                {/* Inventory Header */}
-                <div className="mb-4">
-                    <h1 className="h2">Inventory Management</h1>
-                    <p className="lead text-muted">
-                        View and manage your product inventory
-                    </p>
-                </div>
-                
-                {/* Inventory Stats */}
-                <div className="row mb-4">
-                    <div className="col-md-4 mb-3 mb-md-0">
-                        <div className="card border-left-primary h-100">
-                            <div className="card-body">
-                                <div className="d-flex align-items-center">
-                                    <div className="mr-3 bg-primary text-white rounded-circle p-3">
-                                        <i className="fas fa-box"></i>
-                                    </div>
-                                    <div>
-                                        <div className="text-sm text-muted">Total Items</div>
-                                        <div className="h4 font-weight-bold">{inventoryItems.length}</div>
+        <div className="container-fluid py-4">
+            <div className="row">
+                <div className="col-12">
+                    {/* Inventory Header */}
+                    <div className="mb-4">
+                        <h1 className="h2">Inventory Management</h1>
+                        <p className="lead text-muted mb-0">
+                            View and manage your product inventory
+                        </p>
+                    </div>
+                    
+                    {/* Inventory Stats */}
+                    <div className="row mb-4 g-3">
+                        <div className="col-md-4">
+                            <div className="card h-100 border-start">
+                                <div className="card-body">
+                                    <div className="d-flex align-items-center">
+                                        <div className="me-3 bg-primary text-white rounded-circle p-3">
+                                            <i className="fas fa-box"></i>
+                                        </div>
+                                        <div>
+                                            <div className="text-muted small">Total Items</div>
+                                            <div className="h4 mb-0">{inventoryItems.length}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div className="col-md-4 mb-3 mb-md-0">
-                        <div className="card border-left-success h-100">
-                            <div className="card-body">
-                                <div className="d-flex align-items-center">
-                                    <div className="mr-3 bg-success text-white rounded-circle p-3">
-                                        <i className="fas fa-check-circle"></i>
+                        
+                        <div className="col-md-4">
+                            <div className="card h-100 border-start">
+                                <div className="card-body">
+                                    <div className="d-flex align-items-center">
+                                        <div className="me-3 bg-success text-white rounded-circle p-3">
+                                            <i className="fas fa-check-circle"></i>
+                                        </div>
+                                        <div>
+                                            <div className="text-muted small">In Stock</div>
+                                            <div className="h4 mb-0">
+                                                {inventoryItems.filter(item => item.status === 'In Stock').length}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div className="text-sm text-muted">In Stock</div>
-                                        <div className="h4 font-weight-bold">
-                                            {inventoryItems.filter(item => item.status === 'In Stock').length}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="col-md-4">
+                            <div className="card h-100 border-start">
+                                <div className="card-body">
+                                    <div className="d-flex align-items-center">
+                                        <div className="me-3 bg-danger text-white rounded-circle p-3">
+                                            <i className="fas fa-exclamation-circle"></i>
+                                        </div>
+                                        <div>
+                                            <div className="text-muted small">Low/Out of Stock</div>
+                                            <div className="h4 mb-0">
+                                                {inventoryItems.filter(item => item.status === 'Low' || item.status === 'Out of Stock').length}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -202,211 +222,220 @@ const SalespersonInventory = () => {
                         </div>
                     </div>
                     
-                    <div className="col-md-4">
-                        <div className="card border-left-danger h-100">
-                            <div className="card-body">
-                                <div className="d-flex align-items-center">
-                                    <div className="mr-3 bg-danger text-white rounded-circle p-3">
-                                        <i className="fas fa-exclamation-circle"></i>
-                                    </div>
-                                    <div>
-                                        <div className="text-sm text-muted">Low/Out of Stock</div>
-                                        <div className="h4 font-weight-bold">
-                                            {inventoryItems.filter(item => item.status === 'Low' || item.status === 'Out of Stock').length}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                {/* Inventory List */}
-                <div className="card shadow-sm">
-                    <div className="card-header bg-white py-3">
-                        <div className="d-flex justify-content-between align-items-center">
-                            <h2 className="h5 mb-0">Inventory List</h2>
-                            <span className="badge bg-light text-dark">
-                                {filteredItems.length} items
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div className="card-body">
-                        <div className="row mb-3">
-                            <div className="col-md-6 mb-3 mb-md-0">
-                                <div className="input-group">
-                                    <span className="input-group-text">
-                                        <i className="fas fa-search"></i>
-                                    </span>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Search by name or SKU..."
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                            
-                            <div className="col-md-3 mb-3 mb-md-0">
-                                <select
-                                    value={statusFilter}
-                                    onChange={(e) => setStatusFilter(e.target.value)}
-                                    className="form-select"
-                                >
-                                    <option value="All">All Statuses</option>
-                                    <option value="In Stock">In Stock</option>
-                                    <option value="Low">Low</option>
-                                    <option value="Out of Stock">Out of Stock</option>
-                                </select>
-                            </div>
-                            
-                            <div className="col-md-3">
-                                <select
-                                    value={categoryFilter}
-                                    onChange={(e) => setCategoryFilter(e.target.value)}
-                                    className="form-select"
-                                >
-                                    {categories.map(category => (
-                                        <option key={category} value={category}>{category}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div className="table-responsive">
-                            <table className="table table-hover">
-                                <thead className="table-light">
-                                    <tr>
-                                        <th onClick={() => requestSort('name')} className="cursor-pointer">
-                                            <div className="d-flex align-items-center">
-                                                Item Name
-                                                {sortConfig.key === 'name' && (
-                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
-                                                )}
-                                            </div>
-                                        </th>
-                                        <th onClick={() => requestSort('sku')} className="cursor-pointer">
-                                            <div className="d-flex align-items-center">
-                                                SKU
-                                                {sortConfig.key === 'sku' && (
-                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
-                                                )}
-                                            </div>
-                                        </th>
-                                        <th onClick={() => requestSort('category')} className="cursor-pointer">
-                                            <div className="d-flex align-items-center">
-                                                Category
-                                                {sortConfig.key === 'category' && (
-                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
-                                                )}
-                                            </div>
-                                        </th>
-                                        <th onClick={() => requestSort('quantity')} className="cursor-pointer">
-                                            <div className="d-flex align-items-center">
-                                                Quantity
-                                                {sortConfig.key === 'quantity' && (
-                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
-                                                )}
-                                            </div>
-                                        </th>
-                                        <th onClick={() => requestSort('status')} className="cursor-pointer">
-                                            <div className="d-flex align-items-center">
-                                                Status
-                                                {sortConfig.key === 'status' && (
-                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
-                                                )}
-                                            </div>
-                                        </th>
-                                        <th onClick={() => requestSort('lastUpdated')} className="cursor-pointer">
-                                            <div className="d-flex align-items-center">
-                                                Last Updated
-                                                {sortConfig.key === 'lastUpdated' && (
-                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
-                                                )}
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {currentItems.length > 0 ? (
-                                        currentItems.map((item) => (
-                                            <tr key={item.id}>
-                                                <td>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="bg-light rounded-circle p-2 me-3">
-                                                            <i className="fas fa-box text-muted"></i>
-                                                        </div>
-                                                        <div className="fw-medium">{item.name}</div>
-                                                    </div>
-                                                </td>
-                                                <td>{item.sku}</td>
-                                                <td>{item.category}</td>
-                                                <td>{item.quantity}</td>
-                                                <td>
-                                                    <span className={`badge ${getStatusColor(item.status)}`}>
-                                                        {item.status}
-                                                    </span>
-                                                </td>
-                                                <td>{formatDate(item.lastUpdated)}</td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan={6} className="text-center py-4">
-                                                <i className="fas fa-inbox fa-2x text-muted mb-3"></i>
-                                                <p className="text-muted">No inventory items found</p>
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        {/* Pagination */}
-                        {filteredItems.length > 0 && (
-                            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
-                                <div className="mb-3 mb-md-0">
-                                    Showing {indexOfFirstItem + 1} to{' '}
-                                    {Math.min(indexOfLastItem, filteredItems.length)} of{' '}
+                    {/* Inventory List */}
+                    <div className="card shadow-sm mb-4">
+                        <div className="card-header bg-white py-3">
+                            <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                                <h2 className="h5 mb-2 mb-md-0">Inventory List</h2>
+                                <span className="badge bg-light text-dark fs-6">
                                     {filteredItems.length} items
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div className="card-body">
+                            {/* Filters */}
+                            <div className="row g-3 mb-3">
+                                <div className="col-md-6">
+                                    <div className="input-group">
+                                        <div className="mt-3 me-2 bg-white">
+                                            <i className="fas fa-search text-muted"></i>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Search by name or SKU..."
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                        />
+                                    </div>
                                 </div>
-                                <nav>
-                                    <ul className="pagination mb-0">
-                                        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                            <button
-                                                className="page-link"
-                                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                
+                                <div className="col-md-3">
+                                    <select
+                                        value={statusFilter}
+                                        onChange={(e) => setStatusFilter(e.target.value)}
+                                        className="form-select"
+                                    >
+                                        <option value="All">All Statuses</option>
+                                        <option value="In Stock">In Stock</option>
+                                        <option value="Low">Low</option>
+                                        <option value="Out of Stock">Out of Stock</option>
+                                    </select>
+                                </div>
+                                
+                                <div className="col-md-3">
+                                    <select
+                                        value={categoryFilter}
+                                        onChange={(e) => setCategoryFilter(e.target.value)}
+                                        className="form-select"
+                                    >
+                                        {categories.map(category => (
+                                            <option key={category} value={category}>{category}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            {/* Table */}
+                            <div className="table-responsive">
+                                <table className="table table-hover mb-0">
+                                    <thead className="table-light">
+                                        <tr>
+                                            <th 
+                                                onClick={() => requestSort('name')} 
+                                                className="cursor-pointer"
                                             >
-                                                <i className="fas fa-chevron-left"></i>
-                                            </button>
-                                        </li>
-                                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                                            <li 
-                                                key={page} 
-                                                className={`page-item ${currentPage === page ? 'active' : ''}`}
+                                                <div className="d-flex align-items-center">
+                                                    Item Name
+                                                    {sortConfig.key === 'name' && (
+                                                        <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
+                                                    )}
+                                                </div>
+                                            </th>
+                                            <th 
+                                                onClick={() => requestSort('sku')} 
+                                                className="cursor-pointer d-none d-md-table-cell"
                                             >
-                                                <button 
+                                                <div className="d-flex align-items-center">
+                                                    SKU
+                                                    {sortConfig.key === 'sku' && (
+                                                        <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
+                                                    )}
+                                                </div>
+                                            </th>
+                                            <th 
+                                                onClick={() => requestSort('category')} 
+                                                className="cursor-pointer d-none d-lg-table-cell"
+                                            >
+                                                <div className="d-flex align-items-center">
+                                                    Category
+                                                    {sortConfig.key === 'category' && (
+                                                        <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
+                                                    )}
+                                                </div>
+                                            </th>
+                                            <th 
+                                                onClick={() => requestSort('quantity')} 
+                                                className="cursor-pointer"
+                                            >
+                                                <div className="d-flex align-items-center">
+                                                    Qty
+                                                    {sortConfig.key === 'quantity' && (
+                                                        <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
+                                                    )}
+                                                </div>
+                                            </th>
+                                            <th 
+                                                onClick={() => requestSort('status')} 
+                                                className="cursor-pointer"
+                                            >
+                                                <div className="d-flex align-items-center">
+                                                    Status
+                                                    {sortConfig.key === 'status' && (
+                                                        <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
+                                                    )}
+                                                </div>
+                                            </th>
+                                            <th 
+                                                onClick={() => requestSort('lastUpdated')} 
+                                                className="cursor-pointer d-none d-xl-table-cell"
+                                            >
+                                                <div className="d-flex align-items-center">
+                                                    Last Updated
+                                                    {sortConfig.key === 'lastUpdated' && (
+                                                        <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
+                                                    )}
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {currentItems.length > 0 ? (
+                                            currentItems.map((item) => (
+                                                <tr key={item.id}>
+                                                    <td>
+                                                        <div className="d-flex align-items-center">
+                                                            <div className="bg-light rounded-circle p-2 me-2">
+                                                                <i className="fas fa-box text-muted"></i>
+                                                            </div>
+                                                            <div>
+                                                                <div className="fw-medium">{item.name}</div>
+                                                                <div className="small text-muted d-md-none">{item.sku}</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td className="d-none d-md-table-cell">{item.sku}</td>
+                                                    <td className="d-none d-lg-table-cell">{item.category}</td>
+                                                    <td>{item.quantity}</td>
+                                                    <td>
+                                                        <span className={`badge ${getStatusColor(item.status)}`}>
+                                                            {item.status}
+                                                        </span>
+                                                    </td>
+                                                    <td className="d-none d-xl-table-cell">
+                                                        {formatDate(item.lastUpdated)}
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan={6} className="text-center py-4">
+                                                    <i className="fas fa-inbox fa-2x text-muted mb-3"></i>
+                                                    <p className="text-muted mb-0">No inventory items found</p>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            {/* Pagination */}
+                            {filteredItems.length > 0 && (
+                                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mt-3">
+                                    <div className="mb-2 mb-md-0">
+                                        <small className="text-muted">
+                                            Showing {indexOfFirstItem + 1} to{' '}
+                                            {Math.min(indexOfLastItem, filteredItems.length)} of{' '}
+                                            {filteredItems.length} items
+                                        </small>
+                                    </div>
+                                    <nav>
+                                        <ul className="pagination pagination-sm mb-0">
+                                            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                                <button
                                                     className="page-link"
-                                                    onClick={() => setCurrentPage(page)}
+                                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                                                 >
-                                                    {page}
+                                                    <i className="fas fa-chevron-left"></i>
                                                 </button>
                                             </li>
-                                        ))}
-                                        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                            <button
-                                                className="page-link"
-                                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                            >
-                                                <i className="fas fa-chevron-right"></i>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        )}
+                                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                                                <li 
+                                                    key={page} 
+                                                    className={`page-item ${currentPage === page ? 'active' : ''}`}
+                                                >
+                                                    <button 
+                                                        className="page-link"
+                                                        onClick={() => setCurrentPage(page)}
+                                                    >
+                                                        {page}
+                                                    </button>
+                                                </li>
+                                            ))}
+                                            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                                >
+                                                    <i className="fas fa-chevron-right"></i>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
