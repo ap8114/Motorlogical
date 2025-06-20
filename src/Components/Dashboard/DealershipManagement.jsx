@@ -488,186 +488,163 @@ const DealershipManagement = () => {
       {/* Add Dealership Modal */}
       <div>
         {showAddDealershipModal && (
-          <div className="fixed z-20 inset-0 overflow-y-auto">
-            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-              </div>
-              <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-              <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
-                      <i className="fas fa-store text-indigo-600"></i>
-                    </div>
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                        {isEditing ? 'Edit Dealership' : 'Add New Dealership'}
-                      </h3>
-                      <div className="mt-4">
-                        <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                          <div className="sm:col-span-6">
-                            <label htmlFor="dealership-name" className="block text-sm font-medium text-gray-700">
-                              Dealership Name *
-                            </label>
-                            <div className="mt-1">
-                              <input
-                                type="text"
-                                id="dealership-name"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                value={dealershipForm.name}
-                                onChange={(e) => setDealershipForm({ ...dealershipForm, name: e.target.value })}
-                              />
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3">
-                            <label htmlFor="dealership-code" className="block text-sm font-medium text-gray-700">
-                              Dealership Code
-                            </label>
-                            <div className="mt-1">
-                              <input
-                                type="text"
-                                id="dealership-code"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md bg-gray-50"
-                                value={dealershipForm.code}
-                                disabled
-                              />
-                            </div>
-                            <p className="mt-1 text-xs text-gray-500">Auto-generated code</p>
-                          </div>
-                          <div className="sm:col-span-3">
-                            <label htmlFor="dealership-status" className="block text-sm font-medium text-gray-700">
-                              Status
-                            </label>
-                            <div className="mt-1 flex items-center">
-                              <button
-                                type="button"
-                                className={`${dealershipForm.status ? 'bg-green-500' : 'bg-gray-300'} relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none !rounded-button whitespace-nowrap`}
-                                onClick={() => setDealershipForm({ ...dealershipForm, status: !dealershipForm.status })}
-                              >
-                                <span
-                                  className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${dealershipForm.status ? 'translate-x-5' : 'translate-x-0'}`}
-                                ></span>
-                              </button>
-                              <span className="ml-2 text-sm text-gray-700">
-                                {dealershipForm.status ? 'Active' : 'Inactive'}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="sm:col-span-6">
-                            <h4 className="text-sm font-medium text-gray-700 border-b pb-2">Location Details</h4>
-                          </div>
-                          <div className="sm:col-span-6">
-                            <label htmlFor="dealership-address" className="block text-sm font-medium text-gray-700">
-                              Address
-                            </label>
-                            <div className="mt-1">
-                              <input
-                                type="text"
-                                id="dealership-address"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                value={dealershipForm.address}
-                                onChange={(e) => setDealershipForm({ ...dealershipForm, address: e.target.value })}
-                              />
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3">
-                            <label htmlFor="dealership-city" className="block text-sm font-medium text-gray-700">
-                              City
-                            </label>
-                            <div className="mt-1">
-                              <input
-                                type="text"
-                                id="dealership-city"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                value={dealershipForm.city}
-                                onChange={(e) => setDealershipForm({ ...dealershipForm, city: e.target.value })}
-                              />
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3">
-                            <label htmlFor="dealership-state" className="block text-sm font-medium text-gray-700">
-                              State/Region
-                            </label>
-                            <div className="mt-1">
-                              <input
-                                type="text"
-                                id="dealership-state"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                value={dealershipForm.state}
-                                onChange={(e) => setDealershipForm({ ...dealershipForm, state: e.target.value })}
-                              />
-                            </div>
-                          </div>
-                          <div className="sm:col-span-6">
-                            <h4 className="text-sm font-medium text-gray-700 border-b pb-2">Contact Information</h4>
-                          </div>
-                          <div className="sm:col-span-6">
-                            <label htmlFor="contact-person" className="block text-sm font-medium text-gray-700">
-                              Contact Person
-                            </label>
-                            <div className="mt-1">
-                              <input
-                                type="text"
-                                id="contact-person"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                value={dealershipForm.contactPerson}
-                                onChange={(e) => setDealershipForm({ ...dealershipForm, contactPerson: e.target.value })}
-                              />
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3">
-                            <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700">
-                              Email
-                            </label>
-                            <div className="mt-1">
-                              <input
-                                type="email"
-                                id="contact-email"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                value={dealershipForm.email}
-                                onChange={(e) => setDealershipForm({ ...dealershipForm, email: e.target.value })}
-                              />
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3">
-                            <label htmlFor="contact-phone" className="block text-sm font-medium text-gray-700">
-                              Phone
-                            </label>
-                            <div className="mt-1">
-                              <input
-                                type="text"
-                                id="contact-phone"
-                                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                value={dealershipForm.phone}
-                                onChange={(e) => setDealershipForm({ ...dealershipForm, phone: e.target.value })}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="button"
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                    onClick={handleSaveDealership}
-                  >
-                    {isEditing ? 'Update Dealership' : 'Save Dealership'}
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                    onClick={() => setShowAddDealershipModal(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
+         <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+  <div className="modal-dialog modal-lg modal-dialog-centered">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title">
+          <i className="fas fa-store me-2 text-primary"></i>
+          {isEditing ? 'Edit Dealership' : 'Add New Dealership'}
+        </h5>
+        <button type="button" className="btn-close" onClick={() => setShowAddDealershipModal(false)}></button>
+      </div>
+
+      <div className="modal-body">
+        <form>
+          <div className="row g-3">
+
+            {/* Dealership Name */}
+            <div className="col-12">
+              <label className="form-label">Dealership Name *</label>
+              <input
+                type="text"
+                className="form-control"
+                value={dealershipForm.name}
+                onChange={(e) => setDealershipForm({ ...dealershipForm, name: e.target.value })}
+              />
+            </div>
+
+            {/* Dealership Code */}
+            <div className="col-md-6">
+              <label className="form-label">Dealership Code</label>
+              <input
+                type="text"
+                className="form-control bg-light"
+                value={dealershipForm.code}
+                disabled
+              />
+              <small className="text-muted">Auto-generated code</small>
+            </div>
+
+            {/* Status Toggle */}
+            <div className="col-md-6">
+              <label className="form-label d-block">Status</label>
+              <div className="form-check form-switch">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  id="dealershipStatus"
+                  checked={dealershipForm.status}
+                  onChange={() =>
+                    setDealershipForm({ ...dealershipForm, status: !dealershipForm.status })
+                  }
+                />
+                <label className="form-check-label" htmlFor="dealershipStatus">
+                  {dealershipForm.status ? 'Active' : 'Inactive'}
+                </label>
               </div>
             </div>
+
+            {/* Section Heading */}
+            <div className="col-12 mt-3">
+              <h6 className="border-bottom pb-1 text-secondary">Location Details</h6>
+            </div>
+
+            {/* Address */}
+            <div className="col-12">
+              <label className="form-label">Address</label>
+              <input
+                type="text"
+                className="form-control"
+                value={dealershipForm.address}
+                onChange={(e) => setDealershipForm({ ...dealershipForm, address: e.target.value })}
+              />
+            </div>
+
+            {/* City */}
+            <div className="col-md-6">
+              <label className="form-label">City</label>
+              <input
+                type="text"
+                className="form-control"
+                value={dealershipForm.city}
+                onChange={(e) => setDealershipForm({ ...dealershipForm, city: e.target.value })}
+              />
+            </div>
+
+            {/* State */}
+            <div className="col-md-6">
+              <label className="form-label">State/Region</label>
+              <input
+                type="text"
+                className="form-control"
+                value={dealershipForm.state}
+                onChange={(e) => setDealershipForm({ ...dealershipForm, state: e.target.value })}
+              />
+            </div>
+
+            {/* Contact Info Section */}
+            <div className="col-12 mt-3">
+              <h6 className="border-bottom pb-1 text-secondary">Contact Information</h6>
+            </div>
+
+            {/* Contact Person */}
+            <div className="col-12">
+              <label className="form-label">Contact Person</label>
+              <input
+                type="text"
+                className="form-control"
+                value={dealershipForm.contactPerson}
+                onChange={(e) => setDealershipForm({ ...dealershipForm, contactPerson: e.target.value })}
+              />
+            </div>
+
+            {/* Email */}
+            <div className="col-md-6">
+              <label className="form-label">Email</label>
+              <input
+                type="email"
+                className="form-control"
+                value={dealershipForm.email}
+                onChange={(e) => setDealershipForm({ ...dealershipForm, email: e.target.value })}
+              />
+            </div>
+
+            {/* Phone */}
+            <div className="col-md-6">
+              <label className="form-label">Phone</label>
+              <input
+                type="text"
+                className="form-control"
+                value={dealershipForm.phone}
+                onChange={(e) => setDealershipForm({ ...dealershipForm, phone: e.target.value })}
+              />
+            </div>
           </div>
+        </form>
+      </div>
+
+      <div className="modal-footer">
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={handleSaveDealership}
+        >
+          {isEditing ? 'Update Dealership' : 'Save Dealership'}
+        </button>
+        <button
+          type="button"
+          className="btn btn-outline-secondary"
+          onClick={() => setShowAddDealershipModal(false)}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
         )}
         {/* Delete Confirmation Modal */}
         {showDeleteConfirmation && (
