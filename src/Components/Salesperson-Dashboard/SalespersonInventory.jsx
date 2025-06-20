@@ -1,16 +1,4 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-
-// interface InventoryItem {
-//     id: number;
-//     name: string;
-//     sku: string;
-//     quantity: number;
-//     status: 'In Stock' | 'Low' | 'Out of Stock';
-//     category: string;
-//     lastUpdated: string;
-// }
 
 const SalespersonInventory = () => {
     const [inventoryItems, setInventoryItems] = useState([
@@ -87,13 +75,14 @@ const SalespersonInventory = () => {
             lastUpdated: '2025-06-17T14:45:00'
         }
     ]);
+
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState<string>('All');
-    const [categoryFilter, setCategoryFilter] = useState<string>('All');
+    const [statusFilter, setStatusFilter] = useState('All');
+    const [categoryFilter, setCategoryFilter] = useState('All');
     const [currentPage, setCurrentPage] = useState(1);
-    const [sortConfig, setSortConfig] = useState<{ key,  direction}>({ 
-        key: null, 
-        direction: 'ascending' 
+    const [sortConfig, setSortConfig] = useState({
+        key: '', 
+        direction: 'ascending'
     });
     
     const itemsPerPage = 5;
@@ -115,7 +104,10 @@ const SalespersonInventory = () => {
     const sortedItems = React.useMemo(() => {
         let sortableItems = [...filteredItems];
         if (sortConfig.key) {
-            sortableItems.sort((a, b) => {         
+            sortableItems.sort((a, b) => {
+                const aValue = a[sortConfig.key];
+                const bValue = b[sortConfig.key];
+                
                 if (aValue < bValue) {
                     return sortConfig.direction === 'ascending' ? -1 : 1;
                 }
@@ -136,7 +128,7 @@ const SalespersonInventory = () => {
     
     // Handle sorting
     const requestSort = (key) => {
-        let direction;
+        let direction = 'ascending';
         if (sortConfig.key === key && sortConfig.direction === 'ascending') {
             direction = 'descending';
         }
@@ -144,7 +136,7 @@ const SalespersonInventory = () => {
     };
     
     // Format date
-    const formatDate = (dateStrin) => {
+    const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
             year: 'numeric',
@@ -176,7 +168,7 @@ const SalespersonInventory = () => {
                 {/* Inventory Stats */}
                 <div className="row mb-4">
                     <div className="col-md-4 mb-3 mb-md-0">
-                        <div className="card border-start border-primary border-4">
+                        <div className="card   shadow-sm">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
                                     <div className="p-3 rounded-circle bg-primary bg-opacity-10 me-3">
@@ -191,7 +183,7 @@ const SalespersonInventory = () => {
                         </div>
                     </div>
                     <div className="col-md-4 mb-3 mb-md-0">
-                        <div className="card border-start border-success border-4">
+                        <div className="card shadow-sm">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
                                     <div className="p-3 rounded-circle bg-success bg-opacity-10 me-3">
@@ -208,7 +200,7 @@ const SalespersonInventory = () => {
                         </div>
                     </div>
                     <div className="col-md-4">
-                        <div className="card border-start border-danger border-4">
+                        <div className="card shadow-sm">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
                                     <div className="p-3 rounded-circle bg-danger bg-opacity-10 me-3">
@@ -332,7 +324,7 @@ const SalespersonInventory = () => {
                                 </thead>
                                 <tbody>
                                     {currentItems.length > 0 ? (
-                                        currentItems.map((item, index) => (
+                                        currentItems.map((item) => (
                                             <tr key={item.id}>
                                                 <td>
                                                     <div className="d-flex align-items-center">
