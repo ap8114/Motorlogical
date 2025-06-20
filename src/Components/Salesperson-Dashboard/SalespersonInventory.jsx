@@ -1,16 +1,4 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-
-// interface InventoryItem {
-//     id: number;
-//     name: string;
-//     sku: string;
-//     quantity: number;
-//     status: 'In Stock' | 'Low' | 'Out of Stock';
-//     category: string;
-//     lastUpdated: string;
-// }
+import React, { useState, useEffect } from 'react';
 
 const SalespersonInventory = () => {
     const [inventoryItems, setInventoryItems] = useState([
@@ -87,11 +75,12 @@ const SalespersonInventory = () => {
             lastUpdated: '2025-06-17T14:45:00'
         }
     ]);
+
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState<string>('All');
-    const [categoryFilter, setCategoryFilter] = useState<string>('All');
+    const [statusFilter, setStatusFilter] = useState('All');
+    const [categoryFilter, setCategoryFilter] = useState('All');
     const [currentPage, setCurrentPage] = useState(1);
-    const [sortConfig, setSortConfig] = useState<{ key,  direction}>({ 
+    const [sortConfig, setSortConfig] = useState({ 
         key: null, 
         direction: 'ascending' 
     });
@@ -101,7 +90,7 @@ const SalespersonInventory = () => {
     // Get unique categories for filter dropdown
     const categories = ['All', ...new Set(inventoryItems.map(item => item.category))];
     
-    // Filter inventory items based on search term, status, and category
+    // Filter inventory items
     const filteredItems = inventoryItems.filter(item => {
         const matchesSearch =
             item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -111,11 +100,14 @@ const SalespersonInventory = () => {
         return matchesSearch && matchesStatus && matchesCategory;
     });
     
-    // Sort items if sort config is set
+    // Sort items
     const sortedItems = React.useMemo(() => {
         let sortableItems = [...filteredItems];
         if (sortConfig.key) {
-            sortableItems.sort((a, b) => {         
+            sortableItems.sort((a, b) => {
+                const aValue = a[sortConfig.key];
+                const bValue = b[sortConfig.key];
+                
                 if (aValue < bValue) {
                     return sortConfig.direction === 'ascending' ? -1 : 1;
                 }
@@ -128,7 +120,7 @@ const SalespersonInventory = () => {
         return sortableItems;
     }, [filteredItems, sortConfig]);
     
-    // Paginate items
+    // Pagination
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = sortedItems.slice(indexOfFirstItem, indexOfLastItem);
@@ -136,7 +128,7 @@ const SalespersonInventory = () => {
     
     // Handle sorting
     const requestSort = (key) => {
-        let direction;
+        let direction = 'ascending';
         if (sortConfig.key === key && sortConfig.direction === 'ascending') {
             direction = 'descending';
         }
@@ -144,7 +136,7 @@ const SalespersonInventory = () => {
     };
     
     // Format date
-    const formatDate = (dateStrin) => {
+    const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
             year: 'numeric',
@@ -165,69 +157,73 @@ const SalespersonInventory = () => {
     
     return (
         <div className="min-vh-100 bg-light py-4">
-            <div className="container-fluid">
+            <div className="container">
                 {/* Inventory Header */}
                 <div className="mb-4">
-                    <h1 className="display-5 fw-bold">Inventory Management</h1>
-                    <p className="lead">
+                    <h1 className="h2">Inventory Management</h1>
+                    <p className="lead text-muted">
                         View and manage your product inventory
                     </p>
                 </div>
+                
                 {/* Inventory Stats */}
                 <div className="row mb-4">
                     <div className="col-md-4 mb-3 mb-md-0">
-                        <div className="card border-start border-primary border-4">
+                        <div className="card border-left-primary h-100">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
-                                    <div className="p-3 rounded-circle bg-primary bg-opacity-10 me-3">
-                                        <i className="bi bi-box text-primary fs-4"></i>
+                                    <div className="mr-3 bg-primary text-white rounded-circle p-3">
+                                        <i className="fas fa-box"></i>
                                     </div>
                                     <div>
-                                        <p className="text-muted mb-0">Total Items</p>
-                                        <h2 className="mb-0">{inventoryItems.length}</h2>
+                                        <div className="text-sm text-muted">Total Items</div>
+                                        <div className="h4 font-weight-bold">{inventoryItems.length}</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
                     <div className="col-md-4 mb-3 mb-md-0">
-                        <div className="card border-start border-success border-4">
+                        <div className="card border-left-success h-100">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
-                                    <div className="p-3 rounded-circle bg-success bg-opacity-10 me-3">
-                                        <i className="bi bi-check-circle text-success fs-4"></i>
+                                    <div className="mr-3 bg-success text-white rounded-circle p-3">
+                                        <i className="fas fa-check-circle"></i>
                                     </div>
                                     <div>
-                                        <p className="text-muted mb-0">In Stock</p>
-                                        <h2 className="mb-0">
+                                        <div className="text-sm text-muted">In Stock</div>
+                                        <div className="h4 font-weight-bold">
                                             {inventoryItems.filter(item => item.status === 'In Stock').length}
-                                        </h2>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
                     <div className="col-md-4">
-                        <div className="card border-start border-danger border-4">
+                        <div className="card border-left-danger h-100">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
-                                    <div className="p-3 rounded-circle bg-danger bg-opacity-10 me-3">
-                                        <i className="bi bi-exclamation-circle text-danger fs-4"></i>
+                                    <div className="mr-3 bg-danger text-white rounded-circle p-3">
+                                        <i className="fas fa-exclamation-circle"></i>
                                     </div>
                                     <div>
-                                        <p className="text-muted mb-0">Low/Out of Stock</p>
-                                        <h2 className="mb-0">
+                                        <div className="text-sm text-muted">Low/Out of Stock</div>
+                                        <div className="h4 font-weight-bold">
                                             {inventoryItems.filter(item => item.status === 'Low' || item.status === 'Out of Stock').length}
-                                        </h2>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
                 {/* Inventory List */}
                 <div className="card shadow-sm">
-                    <div className="card-header bg-white">
+                    <div className="card-header bg-white py-3">
                         <div className="d-flex justify-content-between align-items-center">
                             <h2 className="h5 mb-0">Inventory List</h2>
                             <span className="badge bg-light text-dark">
@@ -235,12 +231,13 @@ const SalespersonInventory = () => {
                             </span>
                         </div>
                     </div>
+                    
                     <div className="card-body">
                         <div className="row mb-3">
-                            <div className="col-md-6 mb-2 mb-md-0">
+                            <div className="col-md-6 mb-3 mb-md-0">
                                 <div className="input-group">
                                     <span className="input-group-text">
-                                        <i className="bi bi-search"></i>
+                                        <i className="fas fa-search"></i>
                                     </span>
                                     <input
                                         type="text"
@@ -251,7 +248,8 @@ const SalespersonInventory = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="col-md-3 mb-2 mb-md-0">
+                            
+                            <div className="col-md-3 mb-3 mb-md-0">
                                 <select
                                     value={statusFilter}
                                     onChange={(e) => setStatusFilter(e.target.value)}
@@ -263,6 +261,7 @@ const SalespersonInventory = () => {
                                     <option value="Out of Stock">Out of Stock</option>
                                 </select>
                             </div>
+                            
                             <div className="col-md-3">
                                 <select
                                     value={categoryFilter}
@@ -280,51 +279,51 @@ const SalespersonInventory = () => {
                             <table className="table table-hover">
                                 <thead className="table-light">
                                     <tr>
-                                        <th scope="col" onClick={() => requestSort('name')} className="cursor-pointer">
+                                        <th onClick={() => requestSort('name')} className="cursor-pointer">
                                             <div className="d-flex align-items-center">
                                                 Item Name
                                                 {sortConfig.key === 'name' && (
-                                                    <i className={`bi bi-caret-${sortConfig.direction === 'ascending' ? 'up' : 'down'}-fill ms-1`}></i>
+                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
                                                 )}
                                             </div>
                                         </th>
-                                        <th scope="col" onClick={() => requestSort('sku')} className="cursor-pointer">
+                                        <th onClick={() => requestSort('sku')} className="cursor-pointer">
                                             <div className="d-flex align-items-center">
                                                 SKU
                                                 {sortConfig.key === 'sku' && (
-                                                    <i className={`bi bi-caret-${sortConfig.direction === 'ascending' ? 'up' : 'down'}-fill ms-1`}></i>
+                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
                                                 )}
                                             </div>
                                         </th>
-                                        <th scope="col" onClick={() => requestSort('category')} className="cursor-pointer">
+                                        <th onClick={() => requestSort('category')} className="cursor-pointer">
                                             <div className="d-flex align-items-center">
                                                 Category
                                                 {sortConfig.key === 'category' && (
-                                                    <i className={`bi bi-caret-${sortConfig.direction === 'ascending' ? 'up' : 'down'}-fill ms-1`}></i>
+                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
                                                 )}
                                             </div>
                                         </th>
-                                        <th scope="col" onClick={() => requestSort('quantity')} className="cursor-pointer">
+                                        <th onClick={() => requestSort('quantity')} className="cursor-pointer">
                                             <div className="d-flex align-items-center">
                                                 Quantity
                                                 {sortConfig.key === 'quantity' && (
-                                                    <i className={`bi bi-caret-${sortConfig.direction === 'ascending' ? 'up' : 'down'}-fill ms-1`}></i>
+                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
                                                 )}
                                             </div>
                                         </th>
-                                        <th scope="col" onClick={() => requestSort('status')} className="cursor-pointer">
+                                        <th onClick={() => requestSort('status')} className="cursor-pointer">
                                             <div className="d-flex align-items-center">
                                                 Status
                                                 {sortConfig.key === 'status' && (
-                                                    <i className={`bi bi-caret-${sortConfig.direction === 'ascending' ? 'up' : 'down'}-fill ms-1`}></i>
+                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
                                                 )}
                                             </div>
                                         </th>
-                                        <th scope="col" onClick={() => requestSort('lastUpdated')} className="cursor-pointer">
+                                        <th onClick={() => requestSort('lastUpdated')} className="cursor-pointer">
                                             <div className="d-flex align-items-center">
                                                 Last Updated
                                                 {sortConfig.key === 'lastUpdated' && (
-                                                    <i className={`bi bi-caret-${sortConfig.direction === 'ascending' ? 'up' : 'down'}-fill ms-1`}></i>
+                                                    <i className={`fas fa-sort-${sortConfig.direction === 'ascending' ? 'up' : 'down'} ms-1`}></i>
                                                 )}
                                             </div>
                                         </th>
@@ -332,18 +331,14 @@ const SalespersonInventory = () => {
                                 </thead>
                                 <tbody>
                                     {currentItems.length > 0 ? (
-                                        currentItems.map((item, index) => (
+                                        currentItems.map((item) => (
                                             <tr key={item.id}>
                                                 <td>
                                                     <div className="d-flex align-items-center">
-                                                        <div className="flex-shrink-0 me-3">
-                                                            <div className="bg-light rounded-circle d-flex align-items-center justify-content-center" style={{width: '40px', height: '40px'}}>
-                                                                <i className="bi bi-box text-muted"></i>
-                                                            </div>
+                                                        <div className="bg-light rounded-circle p-2 me-3">
+                                                            <i className="fas fa-box text-muted"></i>
                                                         </div>
-                                                        <div className="flex-grow-1">
-                                                            <div className="fw-medium">{item.name}</div>
-                                                        </div>
+                                                        <div className="fw-medium">{item.name}</div>
                                                     </div>
                                                 </td>
                                                 <td>{item.sku}</td>
@@ -359,8 +354,9 @@ const SalespersonInventory = () => {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan={6} className="text-center py-4 text-muted">
-                                                No inventory items found
+                                            <td colSpan={6} className="text-center py-4">
+                                                <i className="fas fa-inbox fa-2x text-muted mb-3"></i>
+                                                <p className="text-muted">No inventory items found</p>
                                             </td>
                                         </tr>
                                     )}
@@ -370,31 +366,29 @@ const SalespersonInventory = () => {
                         
                         {/* Pagination */}
                         {filteredItems.length > 0 && (
-                            <div className="d-flex justify-content-between align-items-center mt-3">
-                                <div>
-                                    <p className="small text-muted mb-0">
-                                        Showing <span className="fw-bold">{indexOfFirstItem + 1}</span> to{' '}
-                                        <span className="fw-bold">
-                                            {Math.min(indexOfLastItem, filteredItems.length)}
-                                        </span>{' '}
-                                        of <span className="fw-bold">{filteredItems.length}</span> results
-                                    </p>
+                            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+                                <div className="mb-3 mb-md-0">
+                                    Showing {indexOfFirstItem + 1} to{' '}
+                                    {Math.min(indexOfLastItem, filteredItems.length)} of{' '}
+                                    {filteredItems.length} items
                                 </div>
-                                <nav aria-label="Page navigation">
+                                <nav>
                                     <ul className="pagination mb-0">
                                         <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                            <button 
-                                                className="page-link" 
+                                            <button
+                                                className="page-link"
                                                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                                disabled={currentPage === 1}
                                             >
-                                                <i className="bi bi-chevron-left"></i>
+                                                <i className="fas fa-chevron-left"></i>
                                             </button>
                                         </li>
                                         {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                                            <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+                                            <li 
+                                                key={page} 
+                                                className={`page-item ${currentPage === page ? 'active' : ''}`}
+                                            >
                                                 <button 
-                                                    className="page-link" 
+                                                    className="page-link"
                                                     onClick={() => setCurrentPage(page)}
                                                 >
                                                     {page}
@@ -402,12 +396,11 @@ const SalespersonInventory = () => {
                                             </li>
                                         ))}
                                         <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                            <button 
-                                                className="page-link" 
+                                            <button
+                                                className="page-link"
                                                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                                disabled={currentPage === totalPages}
                                             >
-                                                <i className="bi bi-chevron-right"></i>
+                                                <i className="fas fa-chevron-right"></i>
                                             </button>
                                         </li>
                                     </ul>
