@@ -343,31 +343,34 @@ const InventoryManagement = () => {
     <div>
       {/* Main Content */}
       <main className="p-6">
-        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800 flex items-center">
-              {" "}
-              Inventory Management
-            </h1>
-            <p className="text-gray-600 mt-1">
-              Manage all vehicle inventory in one place
-            </p>
-          </div>
-          <div className="flex mt-4 md:mt-0 space-x-3">
-            <button
-              onClick={handleDownloadCSV}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition whitespace-nowrap"
-            >
-              <i className="fas fa-download mr-2"></i> Download CSV
-            </button>
-            <button
-              onClick={handleCreateNewItem}
-              className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer !rounded-button whitespace-nowrap"
-            >
-              <i className="fas fa-plus mr-2"></i> Add New Item
-            </button>
-          </div>
-        </div>
+       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+  {/* Left Section: Heading and Subheading */}
+  <div>
+    <h1 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center">
+      Inventory Management
+    </h1>
+    <p className="text-sm sm:text-base text-gray-600 mt-1">
+      Manage all vehicle inventory in one place
+    </p>
+  </div>
+
+  {/* Right Section: Buttons */}
+  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full md:w-auto">
+    <button
+      onClick={handleDownloadCSV}
+      className="flex justify-center items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition w-full sm:w-auto"
+    >
+      <i className="fas fa-download mr-2"></i> Download CSV
+    </button>
+    <button
+      onClick={handleCreateNewItem}
+      className="flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition w-full sm:w-auto"
+    >
+      <i className="fas fa-plus mr-2"></i> Add New Item
+    </button>
+  </div>
+</div>
+
 
         {/* Tab Navigation */}
         <div className="mb-6 border-b border-gray-200">
@@ -401,20 +404,28 @@ const InventoryManagement = () => {
 
             {/* Inventory Table */}
             <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-                <h3 className="text-lg font-medium text-gray-800">
-                  Inventory List
-                </h3>
-                <div className="flex items-center space-x-2">
-                  <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    <i className="fas fa-filter mr-1"></i> Filter
-                  </button>
+             <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-200 bg-gray-50">
+  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+    
+    {/* Heading */}
+    <h3 className="text-base sm:text-lg font-medium text-gray-800">
+      Inventory List
+    </h3>
 
-                  <button className="flex items-center px-3 py-1 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    <i className="fas fa-file-export mr-1"></i> Export
-                  </button>
-                </div>
-              </div>
+    {/* Action Buttons */}
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+      <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
+        <i className="fas fa-filter mr-2"></i> Filter
+      </button>
+
+      <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
+        <i className="fas fa-file-export mr-2"></i> Export
+      </button>
+    </div>
+
+  </div>
+</div>
+
 
               {viewMode === "list" ? (
                 <div className="overflow-x-auto">
@@ -734,22 +745,32 @@ const InventoryManagement = () => {
             </div>
 
             <div className="bg-white rounded-lg shadow p-6 mb-8">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-medium text-gray-800">
-                  Inventory Summary Report
-                </h2>
-                <div className="flex space-x-2">
-                  <button className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none cursor-pointer !rounded-button whitespace-nowrap">
-                    <i className="fas fa-print mr-1"></i> Print
-                  </button>
-                  <button className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none cursor-pointer !rounded-button whitespace-nowrap">
-                    <i className="fas fa-file-pdf mr-1"></i> PDF
-                  </button>
-                  <button className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none cursor-pointer !rounded-button whitespace-nowrap">
-                    <i className="fas fa-file-excel mr-1"></i> Excel
-                  </button>
-                </div>
-              </div>
+           <div className="mb-6 px-4 sm:px-0">
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+
+    {/* Title */}
+    <h2 className="text-base sm:text-lg font-semibold text-gray-800">
+      Inventory Summary Report
+    </h2>
+
+    {/* Action Buttons */}
+    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+      <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
+        <i className="fas fa-print mr-2"></i> Print
+      </button>
+
+      <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
+        <i className="fas fa-file-pdf mr-2"></i> PDF
+      </button>
+
+      <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
+        <i className="fas fa-file-excel mr-2"></i> Excel
+      </button>
+    </div>
+
+  </div>
+</div>
+
 
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">

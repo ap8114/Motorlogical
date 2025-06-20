@@ -227,9 +227,7 @@ const ManagerStaff = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <i className="fas fa-search text-gray-400"></i>
-                </div>
+               
               </div>
               
               <div className="relative">
@@ -242,9 +240,7 @@ const ManagerStaff = () => {
                   <option value="active">Active Only</option>
                   <option value="inactive">Inactive Only</option>
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <i className="fas fa-chevron-down text-xs"></i>
-                </div>
+             
               </div>
               
               <button
@@ -347,22 +343,23 @@ const ManagerStaff = () => {
           </div>
           
           {filteredStaff.length > 0 && (
-            <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-4">
-              <div>
-                <p className="text-sm text-gray-700">
-                  Showing <span className="font-medium">{filteredStaff.length}</span> of{' '}
-                  <span className="font-medium">{staffMembers.length}</span> staff members
-                </p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <button className="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-50 !rounded-button whitespace-nowrap cursor-pointer">
-                  <i className="fas fa-file-export mr-1"></i> Export
-                </button>
-                <button className="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-50 !rounded-button whitespace-nowrap cursor-pointer">
-                  <i className="fas fa-print mr-1"></i> Print
-                </button>
-              </div>
-            </div>
+           <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between border-t border-gray-200 pt-4 gap-4">
+  <div className="text-center md:text-left">
+    <p className="text-sm text-gray-700">
+      Showing <span className="font-medium">{filteredStaff.length}</span> of{' '}
+      <span className="font-medium">{staffMembers.length}</span> staff members
+    </p>
+  </div>
+  <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 space-y-2 sm:space-y-0 w-full md:w-auto justify-center md:justify-end">
+    <button className="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-50 !rounded-button whitespace-nowrap w-full sm:w-auto">
+      <i className="fas fa-file-export mr-1"></i> Export
+    </button>
+    <button className="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-50 !rounded-button whitespace-nowrap w-full sm:w-auto">
+      <i className="fas fa-print mr-1"></i> Print
+    </button>
+  </div>
+</div>
+
           )}
         </div>
         

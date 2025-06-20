@@ -112,36 +112,41 @@ const Setting = () => {
                 {/* Settings Tabs */}
                 <div className="bg-white rounded shadow mb-8">
                     <div className="border-bottom">
-                        <nav className="nav nav-tabs">
-                            <button
-                                onClick={() => setActiveTab('general')}
-                                className={`nav-link text-nowrap py-0 px-6 font-medium text-sm cursor-pointer rounded-pill ${activeTab === 'general'
-                                    ? 'active '
-                                    : 'border-transparent text-muted hover-text-gray-700 hover-border-gray-300'
-                                    }`}
-                            >
-                                <i className="fas fa-sliders-h mr-2"></i> General Settings
-                            </button>
+                     <nav className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4 mb-4">
+  <button
+    onClick={() => setActiveTab('general')}
+    className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${
+      activeTab === 'general'
+        ? 'bg-blue-600 text-white'
+        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+    }`}
+  >
+    <i className="fas fa-sliders-h mr-2"></i> General Settings
+  </button>
 
-                            <button
-                                onClick={() => setActiveTab('notifications')}
-                                className={`nav-link text-nowrap py-0 px-6 font-medium text-sm cursor-pointer rounded-pill ${activeTab === 'notifications'
-                                    ? 'active'
-                                    : 'border-transparent text-muted hover-text-gray-700 hover-border-gray-300'
-                                    }`}
-                            >
-                                <i className="fas fa-bell mr-2"></i> Notification Preferences
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('inventory')}
-                                className={`nav-link text-nowrap py-3 px-6 font-medium text-sm cursor-pointer rounded-pill  ${activeTab === 'inventory'
-                                    ? 'active '
-                                    : 'border-transparent text-muted hover-text-gray-700 hover-border-gray-300'
-                                    }`}
-                            >
-                                <i className="fas fa-warehouse mr-2"></i> Inventory Settings
-                            </button>
-                        </nav>
+  <button
+    onClick={() => setActiveTab('notifications')}
+    className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${
+      activeTab === 'notifications'
+        ? 'bg-blue-600 text-white'
+        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+    }`}
+  >
+    <i className="fas fa-bell mr-2"></i> Notification Preferences
+  </button>
+
+  <button
+    onClick={() => setActiveTab('inventory')}
+    className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${
+      activeTab === 'inventory'
+        ? 'bg-blue-600 text-white'
+        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+    }`}
+  >
+    <i className="fas fa-warehouse mr-2"></i> Inventory Settings
+  </button>
+</nav>
+
                     </div>
                     {/* Tab Content */}
                     <div className="p-6">

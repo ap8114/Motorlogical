@@ -96,23 +96,27 @@ const OrderManagement = () => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h2 className="text-2xl font-bold">Order Management</h2>
-          <p className="text-gray-500">Manage all vehicle orders in one place</p>
-        </div>
-        <div className="space-x-2">
-          <button className="bg-green-600 text-white px-4 py-2 rounded inline-flex items-center">
-            <FaDownload className="mr-2" /> Download CSV
-          </button>
-          <button
-            onClick={() => handleOpenModal("add")}
-            className="bg-blue-600 text-white px-4 py-2 rounded inline-flex items-center"
-          >
-            <FaPlus className="mr-2" /> Create New Order
-          </button>
-        </div>
-      </div>
+     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+  {/* Title & Subtitle */}
+  <div>
+    <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Order Management</h2>
+    <p className="text-sm sm:text-base text-gray-500">Manage all vehicle orders in one place</p>
+  </div>
+
+  {/* Buttons Section */}
+  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+    <button className="w-full sm:w-auto bg-green-600 text-white px-4 py-2 rounded inline-flex items-center justify-center">
+      <FaDownload className="mr-2" /> Download CSV
+    </button>
+    <button
+      onClick={() => handleOpenModal("add")}
+      className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded inline-flex items-center justify-center"
+    >
+      <FaPlus className="mr-2" /> Create New Order
+    </button>
+  </div>
+</div>
+
 
       <div className="flex flex-wrap items-center mb-4 gap-4">
         <input
