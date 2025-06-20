@@ -1,6 +1,8 @@
 // The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
 import React, { useState } from 'react';
 import * as echarts from 'echarts';
+import { Link } from 'react-router-dom';
+
 const Dashboard = () => {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
     const [activeMenu, setActiveMenu] = useState('dashboard');
@@ -248,18 +250,21 @@ left: 100%;
                 <div className="bg-white rounded-lg shadow p-6 mb-8">
                     <h2 className="text-lg font-medium text-gray-800 mb-4">Quick Actions</h2>
                     <div className="flex flex-wrap gap-4">
-                        <button
-                            id="add-dealership-btn"
-                            onClick={() => {
-                                const modal = document.getElementById('dealership-modal');
-                                if (modal) modal.style.display = 'block';
-                            }}
-                            className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer !rounded-button whitespace-nowrap"
-                        >
-                            <i className="fas fa-plus mr-2"></i> Add Dealership
-                        </button>
+
+
+                        <Link to="/dealershipmanagement">
+                            <button
+                                id="add-dealership-btn"
+                                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer whitespace-nowrap"
+                            >
+                                <i className="fas fa-store"></i> {/* 🏪 Dealership Icon */}
+                                Dealership
+                            </button>
+                        </Link>
+
+
                         {/* Modal Dialog */}
-                        <div id="dealership-modal" className="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                        {/* <div id="dealership-modal" className="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
                             <div className="relative top-20 mx-auto p-5 border w-[600px] shadow-lg rounded-lg bg-white">
                                 <div className="flex justify-between items-center mb-4">
                                     <h3 className="text-xl font-semibold text-gray-900">Add New Dealership</h3>
@@ -394,19 +399,20 @@ left: 100%;
                                     </div>
                                 </form>
                             </div>
-                        </div>
-                        <button
-                            id="add-user-btn"
-                            onClick={() => {
-                                const modal = document.getElementById('user-modal');
-                                if (modal) modal.style.display = 'block';
-                            }}
-                            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer !rounded-button whitespace-nowrap"
-                        >
-                            <i className="fas fa-user-plus mr-2"></i> Add User
-                        </button>
+                        </div> */}
+
+
+                        <Link to="/usermanagement">
+                            <button
+                                id="add-user-btn"
+                                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer !rounded-button whitespace-nowrap"
+                            >
+                                <i className="fas fa-user mr-2"></i> User
+                            </button>
+                        </Link>
+
                         {/* User Modal Dialog */}
-                        <div id="user-modal" className="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                        {/* <div id="user-modal" className="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
                             <div className="relative top-20 mx-auto p-5 border w-[600px] shadow-lg rounded-lg bg-white">
                                 <div className="flex justify-between items-center mb-4">
                                     <h3 className="text-xl font-semibold text-gray-900">Add New User</h3>
@@ -617,7 +623,7 @@ left: 100%;
                                     </div>
                                 </form>
                             </div>
-                        </div>
+                        </div> */}
 
 
                     </div>

@@ -422,9 +422,9 @@ const DealershipManagement = () => {
                         >
                           <i className="fas fa-trash"></i>
                         </button>
-                        <button className="text-gray-600 hover:text-gray-900 cursor-pointer !rounded-button whitespace-nowrap">
+                        {/* <button className="text-gray-600 hover:text-gray-900 cursor-pointer !rounded-button whitespace-nowrap">
                           <i className="fas fa-ellipsis-v"></i>
-                        </button>
+                        </button> */}
                       </div>
                     </td>
                   </tr>

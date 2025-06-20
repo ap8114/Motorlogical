@@ -115,7 +115,7 @@ const UserManagement = () => {
         { id: '5', name: 'Valley Vehicles' },
         { id: '6', name: 'Metro Motors' }
     ];
- 
+
     // Toggle sidebar
     const toggleSidebar = () => {
         setSidebarCollapsed(!sidebarCollapsed);
@@ -210,6 +210,8 @@ const UserManagement = () => {
     const totalUsers = users.length;
     const activeUsers = users.filter(u => u.status).length;
     const managerUsers = users.filter(u => u.role === 'Manager').length;
+
+
     return (
         <div>
             {/* Main Content */}
@@ -217,7 +219,7 @@ const UserManagement = () => {
                 <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-800 flex items-center">
-                        User Management
+                            User Management
                         </h1>
                         <p className="text-gray-600 mt-1">Manage all your system users in one place</p>
                     </div>
@@ -237,7 +239,7 @@ const UserManagement = () => {
                         </button>
                     </div>
                 </div>
-               
+
                 {/* Tabs */}
                 <div className="bg-white rounded-lg shadow mb-8">
                     <div className="border-b border-gray-200">
@@ -283,7 +285,7 @@ const UserManagement = () => {
                     {/* Users List Tab */}
                     {activeTab === 'usersList' && (
                         <div>
-                         
+
                             {/* User Table */}
                             <div className="overflow-x-auto">
                                 <table className="min-w-full divide-y divide-gray-200">
@@ -383,9 +385,7 @@ const UserManagement = () => {
                                                         >
                                                             <i className="fas fa-trash"></i>
                                                         </button>
-                                                        <button className="text-gray-600 hover:text-gray-900 cursor-pointer !rounded-button whitespace-nowrap">
-                                                            <i className="fas fa-ellipsis-v"></i>
-                                                        </button>
+
                                                     </div>
                                                 </td>
                                             </tr>
@@ -434,138 +434,112 @@ const UserManagement = () => {
                     )}
                     {/* Add/Edit User Tab */}
                     {activeTab === 'addEditUser' && (
-                        <div className="p-6">
-                            <div className="max-w-3xl mx-auto">
-                                <div className="bg-white rounded-lg border border-gray-200 p-6">
-                                    <h2 className="text-lg font-medium text-gray-800 mb-6 flex items-center">
-                                        <i className={`fas ${isEditing ? 'fa-user-edit' : 'fa-user-plus'} text-indigo-600 mr-2`}></i>
+
+                        <div className="container py-4">
+                            <div className="card shadow-sm">
+                                <div className="card-body">
+                                    <h5 className="card-title d-flex align-items-center mb-4">
+                                        <i className={`fas ${isEditing ? 'fa-user-edit' : 'fa-user-plus'} text-primary me-2`}></i>
                                         {isEditing ? 'Edit User' : 'Add New User'}
-                                    </h2>
-                                    <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                                        <div className="sm:col-span-6">
-                                            <h4 className="text-sm font-medium text-gray-700 border-b pb-2">Personal Information</h4>
+                                    </h5>
+
+                                    <form>
+                                        <h6 className="mb-3 border-bottom pb-2 text-muted">Personal Information</h6>
+
+                                        <div className="mb-3">
+                                            <label htmlFor="full-name" className="form-label">Full Name *</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="full-name"
+                                                value={userForm.fullName}
+                                                onChange={(e) => setUserForm({ ...userForm, fullName: e.target.value })}
+                                            />
                                         </div>
-                                        <div className="sm:col-span-6">
-                                            <label htmlFor="full-name" className="block text-sm font-medium text-gray-700">
-                                                Full Name *
-                                            </label>
-                                            <div className="mt-1">
-                                                <input
-                                                    type="text"
-                                                    id="full-name"
-                                                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                                    value={userForm.fullName}
-                                                    onChange={(e) => setUserForm({ ...userForm, fullName: e.target.value })}
-                                                />
-                                            </div>
+
+                                        <div className="mb-3">
+                                            <label htmlFor="email" className="form-label">Email Address *</label>
+                                            <input
+                                                type="email"
+                                                className="form-control"
+                                                id="email"
+                                                value={userForm.email}
+                                                onChange={(e) => setUserForm({ ...userForm, email: e.target.value })}
+                                            />
                                         </div>
-                                        <div className="sm:col-span-6">
-                                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                                                Email Address *
-                                            </label>
-                                            <div className="mt-1">
-                                                <input
-                                                    type="email"
-                                                    id="email"
-                                                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                                    value={userForm.email}
-                                                    onChange={(e) => setUserForm({ ...userForm, email: e.target.value })}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="sm:col-span-6">
-                                            <h4 className="text-sm font-medium text-gray-700 border-b pb-2 mt-4">Role Settings</h4>
-                                        </div>
-                                        <div className="sm:col-span-3">
-                                            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                                                Role *
-                                            </label>
-                                            <div className="mt-1 relative">
+
+                                        <h6 className="mt-4 mb-3 border-bottom pb-2 text-muted">Role Settings</h6>
+
+                                        <div className="row g-3">
+                                            <div className="col-md-6">
+                                                <label htmlFor="role" className="form-label">Role *</label>
                                                 <select
+                                                    className="form-select"
                                                     id="role"
-                                                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                                     value={userForm.role}
                                                     onChange={(e) => setUserForm({ ...userForm, role: e.target.value })}
                                                 >
                                                     <option value="Manager">Manager</option>
                                                     <option value="Salesperson">Salesperson</option>
                                                 </select>
-                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                    <i className="fas fa-chevron-down text-xs"></i>
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <label className="form-label d-block">Status</label>
+                                                <div className="d-flex align-items-center">
+                                                    <input
+                                                        className="form-check-input mt-3 custom-switch-size"
+                                                        type="checkbox"
+                                                        id="user-status"
+                                                        checked={userForm.status}
+                                                        onChange={() => setUserForm({ ...userForm, status: !userForm.status })}
+                                                    />
+                                                    <label className="ms-2 mt-1 fw-semibold text-success" htmlFor="user-status">
+                                                        {userForm.status ? 'Active' : 'Inactive'}
+                                                    </label>
                                                 </div>
+
                                             </div>
                                         </div>
-                                        <div className="sm:col-span-3">
-                                            <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-                                                Status
-                                            </label>
-                                            <div className="mt-1 flex items-center">
-                                                <button
-                                                    type="button"
-                                                    className={`${userForm.status ? 'bg-green-500' : 'bg-gray-300'} relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none !rounded-button whitespace-nowrap`}
-                                                    onClick={() => setUserForm({ ...userForm, status: !userForm.status })}
-                                                >
-                                                    <span
-                                                        className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${userForm.status ? 'translate-x-5' : 'translate-x-0'}`}
-                                                    ></span>
-                                                </button>
-                                                <span className="ml-2 text-sm text-gray-700">
-                                                    {userForm.status ? 'Active' : 'Inactive'}
-                                                </span>
-                                            </div>
+
+                                        <h6 className="mt-4 mb-3 border-bottom pb-2 text-muted">Dealership Assignment</h6>
+
+                                        <div className="mb-3">
+                                            <label htmlFor="assigned-dealership" className="form-label">Assigned Dealership</label>
+                                            <select
+                                                className="form-select"
+                                                id="assigned-dealership"
+                                                value={userForm.assignedDealership}
+                                                onChange={(e) => setUserForm({ ...userForm, assignedDealership: e.target.value })}
+                                            >
+                                                <option value="">-- Select Dealership --</option>
+                                                {dealerships.map(dealer => (
+                                                    <option key={dealer.id} value={dealer.name}>{dealer.name}</option>
+                                                ))}
+                                            </select>
                                         </div>
-                                        <div className="sm:col-span-6">
-                                            <h4 className="text-sm font-medium text-gray-700 border-b pb-2 mt-4">Dealership Assignment</h4>
-                                        </div>
-                                        <div className="sm:col-span-6">
-                                            <label htmlFor="assigned-dealership" className="block text-sm font-medium text-gray-700">
-                                                Assigned Dealership
-                                            </label>
-                                            <div className="mt-1 relative">
-                                                <select
-                                                    id="assigned-dealership"
-                                                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                                    value={userForm.assignedDealership}
-                                                    onChange={(e) => setUserForm({ ...userForm, assignedDealership: e.target.value })}
-                                                >
-                                                    <option value="">-- Select Dealership --</option>
-                                                    {dealerships.map(dealership => (
-                                                        <option key={dealership.id} value={dealership.name}>{dealership.name}</option>
-                                                    ))}
-                                                </select>
-                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                    <i className="fas fa-chevron-down text-xs"></i>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                         {isEditing && (
                                             <>
-                                                <div className="sm:col-span-6">
-                                                    <h4 className="text-sm font-medium text-gray-700 border-b pb-2 mt-4">System Fields</h4>
-                                                </div>
-                                                <div className="sm:col-span-3">
-                                                    <label htmlFor="last-login" className="block text-sm font-medium text-gray-700">
-                                                        Last Login
-                                                    </label>
-                                                    <div className="mt-1">
+                                                <h6 className="mt-4 mb-3 border-bottom pb-2 text-muted">System Fields</h6>
+                                                <div className="row g-3">
+                                                    <div className="col-md-6">
+                                                        <label htmlFor="last-login" className="form-label">Last Login</label>
                                                         <input
                                                             type="text"
+                                                            className="form-control bg-light"
                                                             id="last-login"
-                                                            className="shadow-sm bg-gray-50 block w-full sm:text-sm border-gray-300 rounded-md"
                                                             value={userForm.lastLogin}
                                                             disabled
                                                         />
                                                     </div>
-                                                </div>
-                                                <div className="sm:col-span-3">
-                                                    <label htmlFor="created-date" className="block text-sm font-medium text-gray-700">
-                                                        Created Date
-                                                    </label>
-                                                    <div className="mt-1">
+
+                                                    <div className="col-md-6">
+                                                        <label htmlFor="created-date" className="form-label">Created Date</label>
                                                         <input
                                                             type="text"
+                                                            className="form-control bg-light"
                                                             id="created-date"
-                                                            className="shadow-sm bg-gray-50 block w-full sm:text-sm border-gray-300 rounded-md"
                                                             value={new Date(userForm.createdDate).toLocaleDateString('en-US', {
                                                                 year: 'numeric',
                                                                 month: 'short',
@@ -577,31 +551,35 @@ const UserManagement = () => {
                                                 </div>
                                             </>
                                         )}
-                                    </div>
-                                    <div className="mt-8 flex justify-end space-x-3">
-                                        <button
-                                            type="button"
-                                            onClick={() => setActiveTab('usersList')}
-                                            className="px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer !rounded-button whitespace-nowrap"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={handleSaveUser}
-                                            className="inline-flex justify-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer !rounded-button whitespace-nowrap"
-                                        >
-                                            {isEditing ? 'Update User' : 'Create User'}
-                                        </button>
-                                    </div>
+
+                                        <div className="d-flex justify-end gap-2 mt-4">
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-secondary"
+                                                onClick={() => setActiveTab('usersList')}
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-primary"
+                                                onClick={handleSaveUser}
+                                            >
+                                                {isEditing ? 'Update User' : 'Create User'}
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+
+
                     )}
+
                     {/* Dealership Assignment Tab */}
                     {activeTab === 'dealershipAssignment' && (
                         <div className="p-6">
-                            <div className="max-w-4xl mx-auto">
+                            <div className="mx-auto">
                                 <div className="bg-white rounded-lg border border-gray-200 p-6">
                                     <h2 className="text-lg font-medium text-gray-800 mb-6 flex items-center">
                                         <i className="fas fa-building text-indigo-600 mr-2"></i>
@@ -618,7 +596,7 @@ const UserManagement = () => {
                                                     ))}
                                                 </select>
                                                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                    <i className="fas fa-chevron-down text-xs"></i>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -632,7 +610,7 @@ const UserManagement = () => {
                                                     ))}
                                                 </select>
                                                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                    <i className="fas fa-chevron-down text-xs"></i>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -755,7 +733,7 @@ const UserManagement = () => {
                                                 ))}
                                             </select>
                                             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                <i className="fas fa-chevron-down text-xs"></i>
+
                                             </div>
                                         </div>
                                         <div className="relative">
@@ -769,7 +747,7 @@ const UserManagement = () => {
                                                 <option>Password Reset</option>
                                             </select>
                                             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                <i className="fas fa-chevron-down text-xs"></i>
+
                                             </div>
                                         </div>
                                     </div>
@@ -922,7 +900,7 @@ const UserManagement = () => {
                                                         ))}
                                                     </select>
                                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                        <i className="fas fa-chevron-down text-xs"></i>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -936,7 +914,7 @@ const UserManagement = () => {
                                                         ))}
                                                     </select>
                                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                        <i className="fas fa-chevron-down text-xs"></i>
+
                                                     </div>
                                                 </div>
                                             </div>
