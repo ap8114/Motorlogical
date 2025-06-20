@@ -138,7 +138,7 @@ const ManagerInventory= () => {
         {/* Header Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Inventory Management</h1>
-          <div className="h-1 w-24 bg-indigo-600 mt-4"></div>
+
         </div>
 
         {/* Filters and Actions */}
@@ -334,138 +334,130 @@ const ManagerInventory= () => {
         </div>
 
         {/* Add/Edit Modal */}
-        {showModal && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-xl p-8 max-w-2xl w-full mx-4">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {editingItem ? 'Edit Inventory Item' : 'Add New Inventory Item'}
-                </h2>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="text-gray-500 hover:text-gray-700 cursor-pointer"
-                >
-                  <i className="fas fa-times"></i>
-                </button>
+      {showModal && (
+  <div className="modal d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+    <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">
+            {editingItem ? 'Edit Inventory Item' : 'Add New Inventory Item'}
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setShowModal(false)}
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="modal-body">
+            <div className="row g-3">
+              <div className="col-12">
+                <label className="form-label">Item Name</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="form-control"
+                  placeholder="Enter item name"
+                />
               </div>
-              
-              <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Item Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                      placeholder="Enter item name"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Quantity
-                    </label>
-                    <input
-                      type="number"
-                      min="0"
-                      required
-                      value={formData.quantity}
-                      onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Category
-                    </label>
-                    <div className="relative">
-                      <select
-                        required
-                        value={formData.category}
-                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 appearance-none cursor-pointer"
-                      >
-                        {categories.map(category => (
-                          <option key={category} value={category}>{category}</option>
-                        ))}
-                      </select>
-                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <i className="fas fa-chevron-down text-gray-400 text-xs"></i>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Notes
-                    </label>
-                    <textarea
-                      value={formData.notes}
-                      onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 h-24"
-                      placeholder="Enter any additional notes about this item"
-                    ></textarea>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Status
-                    </label>
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center">
-                        <input
-                          id="status-active"
-                          type="radio"
-                          name="status"
-                          checked={formData.status === 'Active'}
-                          onChange={() => setFormData({ ...formData, status: 'Active' })}
-                          className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 cursor-pointer"
-                        />
-                        <label htmlFor="status-active" className="ml-2 block text-sm text-gray-700 cursor-pointer">
-                          Active
-                        </label>
-                      </div>
-                      <div className="flex items-center">
-                        <input
-                          id="status-inactive"
-                          type="radio"
-                          name="status"
-                          checked={formData.status === 'Inactive'}
-                          onChange={() => setFormData({ ...formData, status: 'Inactive' })}
-                          className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 cursor-pointer"
-                        />
-                        <label htmlFor="status-inactive" className="ml-2 block text-sm text-gray-700 cursor-pointer">
-                          Inactive
-                        </label>
-                      </div>
-                    </div>
-                  </div>
+
+              <div className="col-md-6">
+                <label className="form-label">Quantity</label>
+                <input
+                  type="number"
+                  min="0"
+                  required
+                  value={formData.quantity}
+                  onChange={(e) =>
+                    setFormData({ ...formData, quantity: parseInt(e.target.value) })
+                  }
+                  className="form-control"
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label className="form-label">Category</label>
+                <select
+                  required
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  className="form-select"
+                >
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="col-12">
+                <label className="form-label">Notes</label>
+                <textarea
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  className="form-control"
+                  rows="3"
+                  placeholder="Enter any additional notes about this item"
+                ></textarea>
+              </div>
+
+              <div className="col-12">
+                <label className="form-label d-block">Status</label>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="status"
+                    id="status-active"
+                    value="Active"
+                    checked={formData.status === 'Active'}
+                    onChange={() => setFormData({ ...formData, status: 'Active' })}
+                  />
+                  <label className="form-check-label" htmlFor="status-active">
+                    Active
+                  </label>
                 </div>
-                
-                <div className="mt-8 flex justify-end space-x-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-md !rounded-button whitespace-nowrap text-gray-700 hover:bg-gray-50 cursor-pointer"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-md !rounded-button whitespace-nowrap hover:bg-indigo-700 cursor-pointer"
-                  >
-                    {editingItem ? 'Update Item' : 'Add Item'}
-                  </button>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="status"
+                    id="status-inactive"
+                    value="Inactive"
+                    checked={formData.status === 'Inactive'}
+                    onChange={() => setFormData({ ...formData, status: 'Inactive' })}
+                  />
+                  <label className="form-check-label" htmlFor="status-inactive">
+                    Inactive
+                  </label>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
-        )}
+
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={() => setShowModal(false)}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-primary">
+              {editingItem ? 'Update Item' : 'Add Item'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );

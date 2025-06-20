@@ -455,14 +455,7 @@ const handleDownloadCSV = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div className="flex justify-end space-x-2">
-                              <button
-                                id={`view-details-${item.id}`}
-                                className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap"
-                                title="View Details"
-                                onClick={() => handleViewItemDetails(item)}
-                              >
-                                <i className="fas fa-eye"></i>
-                              </button>
+                            
                               <button
                                 onClick={() => handleEditItem(item)}
                                 className="text-blue-600 hover:text-blue-900 cursor-pointer !rounded-button whitespace-nowrap"
@@ -478,9 +471,7 @@ const handleDownloadCSV = () => {
                                 <i className="fas fa-trash"></i>
                               </button>
                               <div className="relative inline-block text-left">
-                                <button className="text-gray-600 hover:text-gray-900 cursor-pointer !rounded-button whitespace-nowrap">
-                                  <i className="fas fa-ellipsis-v"></i>
-                                </button>
+                               
                               </div>
                             </div>
                           </td>
@@ -607,9 +598,7 @@ const handleDownloadCSV = () => {
                       <option>Value Distribution</option>
                       <option>Inventory Movement</option>
                     </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                      <i className="fas fa-chevron-down text-xs"></i>
-                    </div>
+                    
                   </div>
                 </div>
                 <div>
@@ -622,9 +611,7 @@ const handleDownloadCSV = () => {
                       <option>Year to Date</option>
                       <option>Custom Range</option>
                     </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                      <i className="fas fa-chevron-down text-xs"></i>
-                    </div>
+                
                   </div>
                 </div>
                 <div>
@@ -638,9 +625,7 @@ const handleDownloadCSV = () => {
                       <option>Downtown Autos</option>
                       <option>Valley Vehicles</option>
                     </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                      <i className="fas fa-chevron-down text-xs"></i>
-                    </div>
+                   
                   </div>
                 </div>
               </div>
@@ -817,220 +802,239 @@ const handleDownloadCSV = () => {
       </main>
 
       {/* Add/Edit Item Modal */}
-      {showAddItemModal && (
-        <div className="fixed z-20 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+    {showAddItemModal && (
+  <div className="modal show d-block" tabIndex="-1" role="dialog">
+    <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">
+            {itemForm.id ? `Edit Item - ${itemForm.id}` : 'Add New Item'}
+          </h5>
+          <button type="button" className="btn-close" onClick={() => setShowAddItemModal(false)} aria-label="Close"></button>
+        </div>
+        <div className="modal-body">
+          <form>
+            <div className="mb-3">
+              <label htmlFor="item-name" className="form-label">
+                Item Name *
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="item-name"
+                value={itemForm.name}
+                onChange={(e) => setItemForm({ ...itemForm, name: e.target.value })}
+              />
             </div>
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <i className="fas fa-car text-indigo-600"></i>
-                  </div>
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                      {itemForm.id ? `Edit Item - ${itemForm.id}` : 'Add New Item'}
-                    </h3>
-                    <div className="mt-4 space-y-4">
-                      <div>
-                        <label htmlFor="item-name" className="block text-sm font-medium text-gray-700">
-                          Item Name *
-                        </label>
-                        <input
-                          type="text"
-                          id="item-name"
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          value={itemForm.name}
-                          onChange={(e) => setItemForm({ ...itemForm, name: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-                          Category *
-                        </label>
-                        <div className="relative mt-1">
-                          <select
-                            id="category"
-                            className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                            value={itemForm.category}
-                            onChange={(e) => setItemForm({ ...itemForm, category: e.target.value })}
-                          >
-                            <option value="">-- Select Category --</option>
-                            {categories.map(category => (
-                              <option key={category.id} value={category.name}>{category.name}</option>
-                            ))}
-                          </select>
-                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <i className="fas fa-chevron-down text-xs"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
-                          Quantity *
-                        </label>
-                        <div className="mt-1 flex rounded-md shadow-sm">
-                          <button
-                            type="button"
-                            className="inline-flex items-center px-3 py-2 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm rounded-l-md cursor-pointer !rounded-button whitespace-nowrap"
-                            onClick={() => setItemForm({ ...itemForm, quantity: Math.max(0, itemForm.quantity - 1) })}
-                          >
-                            <i className="fas fa-minus"></i>
-                          </button>
-                          <input
-                            type="number"
-                            id="quantity"
-                            min="0"
-                            className="flex-1 min-w-0 block w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-none"
-                            value={itemForm.quantity}
-                            onChange={(e) => setItemForm({ ...itemForm, quantity: parseInt(e.target.value) || 0 })}
-                          />
-                          <button
-                            type="button"
-                            className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm rounded-r-md cursor-pointer !rounded-button whitespace-nowrap"
-                            onClick={() => setItemForm({ ...itemForm, quantity: itemForm.quantity + 1 })}
-                          >
-                            <i className="fas fa-plus"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <div>
-                        <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                          Price ($) *
-                        </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
-                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span className="text-gray-500 sm:text-sm">$</span>
-                          </div>
-                          <input
-                            type="number"
-                            id="price"
-                            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
-                            placeholder="0.00"
-                            value={itemForm.price}
-                            onChange={(e) => setItemForm({ ...itemForm, price: parseFloat(e.target.value) || 0 })}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-                          Status *
-                        </label>
-                        <div className="mt-1 flex items-center">
-                          <div className="flex items-center">
-                            <input
-                              id="status-active"
-                              name="status"
-                              type="radio"
-                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                              checked={itemForm.status === 'Active'}
-                              onChange={() => setItemForm({ ...itemForm, status: 'Active' })}
-                            />
-                            <label htmlFor="status-active" className="ml-3 block text-sm font-medium text-gray-700">
-                              Active
-                            </label>
-                          </div>
-                          <div className="flex items-center ml-6">
-                            <input
-                              id="status-inactive"
-                              name="status"
-                              type="radio"
-                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                              checked={itemForm.status === 'Inactive'}
-                              onChange={() => setItemForm({ ...itemForm, status: 'Inactive' })}
-                            />
-                            <label htmlFor="status-inactive" className="ml-3 block text-sm font-medium text-gray-700">
-                              Inactive
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
-                          Notes
-                        </label>
-                        <textarea
-                          id="notes"
-                          rows={3}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          value={itemForm.notes}
-                          onChange={(e) => setItemForm({ ...itemForm, notes: e.target.value })}
-                        ></textarea>
-                      </div>
-                    </div>
-                  </div>
+
+            <div className="mb-3">
+              <label htmlFor="category" className="form-label">
+                Category *
+              </label>
+              <select
+                id="category"
+                className="form-select"
+                value={itemForm.category}
+                onChange={(e) => setItemForm({ ...itemForm, category: e.target.value })}
+              >
+                <option value="">-- Select Category --</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="quantity" className="form-label">
+                Quantity *
+              </label>
+              <div className="input-group">
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={() =>
+                    setItemForm({ ...itemForm, quantity: Math.max(0, itemForm.quantity - 1) })
+                  }
+                >
+                  <i className="fas fa-minus"></i>
+                </button>
+                <input
+                  type="number"
+                  className="form-control text-center"
+                  min="0"
+                  id="quantity"
+                  value={itemForm.quantity}
+                  onChange={(e) =>
+                    setItemForm({ ...itemForm, quantity: parseInt(e.target.value) || 0 })
+                  }
+                />
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={() =>
+                    setItemForm({ ...itemForm, quantity: itemForm.quantity + 1 })
+                  }
+                >
+                  <i className="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="price" className="form-label">
+                Price ($) *
+              </label>
+              <div className="input-group">
+                <span className="input-group-text">$</span>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="price"
+                  placeholder="0.00"
+                  value={itemForm.price}
+                  onChange={(e) =>
+                    setItemForm({ ...itemForm, price: parseFloat(e.target.value) || 0 })
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Status *</label>
+              <div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="status-active"
+                    name="status"
+                    checked={itemForm.status === 'Active'}
+                    onChange={() => setItemForm({ ...itemForm, status: 'Active' })}
+                  />
+                  <label className="form-check-label" htmlFor="status-active">
+                    Active
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="status-inactive"
+                    name="status"
+                    checked={itemForm.status === 'Inactive'}
+                    onChange={() => setItemForm({ ...itemForm, status: 'Inactive' })}
+                  />
+                  <label className="form-check-label" htmlFor="status-inactive">
+                    Inactive
+                  </label>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={handleSaveItem}
-                >
-                  {itemForm.id ? 'Update Item' : 'Add Item'}
-                </button>
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={() => setShowAddItemModal(false)}
-                >
-                  Cancel
-                </button>
-              </div>
             </div>
-          </div>
+
+            <div className="mb-3">
+              <label htmlFor="notes" className="form-label">
+                Notes
+              </label>
+              <textarea
+                className="form-control"
+                id="notes"
+                rows="3"
+                value={itemForm.notes}
+                onChange={(e) => setItemForm({ ...itemForm, notes: e.target.value })}
+              ></textarea>
+            </div>
+          </form>
         </div>
-      )}
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={handleSaveItem}
+          >
+            {itemForm.id ? 'Update Item' : 'Add Item'}
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowAddItemModal(false)}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+    <div className="modal-backdrop fade show"></div>
+  </div>
+)}
+
 
       {/* Delete Confirmation Modal */}
-      {showDeleteConfirmation && (
-        <div className="fixed z-20 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <i className="fas fa-exclamation-triangle text-red-600"></i>
-                  </div>
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                      Delete Item
-                    </h3>
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        Are you sure you want to delete this item? This action cannot be undone.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={handleDeleteItem}
-                >
-                  Delete
-                </button>
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={() => setShowDeleteConfirmation(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+   <>
+  {/* Trigger Button (for example purposes) */}
+  <button
+    type="button"
+    className="btn btn-danger"
+    data-bs-toggle="modal"
+    data-bs-target="#deleteConfirmationModal"
+  >
+    Delete Item
+  </button>
+
+  {/* Delete Confirmation Modal */}
+  <div
+    className="modal fade"
+    id="deleteConfirmationModal"
+    tabIndex="-1"
+    aria-labelledby="deleteConfirmationModalLabel"
+    aria-hidden="true"
+  >
+    <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title" id="deleteConfirmationModalLabel">
+            Delete Item
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div className="modal-body d-flex">
+          <div className="me-3 d-flex align-items-center justify-content-center bg-danger bg-opacity-10 rounded-circle" style={{ width: '40px', height: '40px' }}>
+            <i className="fas fa-exclamation-triangle text-danger"></i>
+          </div>
+          <div>
+            <p className="mb-0">
+              Are you sure you want to delete this item? This action cannot be undone.
+            </p>
           </div>
         </div>
-      )}
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={handleDeleteItem}
+            data-bs-dismiss="modal"
+          >
+            Delete
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</>
+
 
       {/* Item Details Modal */}
       {showItemDetailsModal && selectedItem && (
@@ -1220,46 +1224,47 @@ const handleDownloadCSV = () => {
                         </div>
                         <div className="overflow-x-auto">
                           <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                              <tr>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Date
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Action
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Quantity Change
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  User
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                              {inventoryHistory.map((record, index) => (
-                                <tr key={index} className="hover:bg-gray-50">
-                                  <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
-                                    {new Date(record.date).toLocaleDateString('en-US', {
-                                      year: 'numeric',
-                                      month: 'short',
-                                      day: 'numeric'
-                                    })}
-                                  </td>
-                                  <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-900">
-                                    {record.action}
-                                  </td>
-                                  <td className="px-6 py-3 whitespace-nowrap text-sm">
-                                    <span className={`font-medium ${record.quantity.startsWith('+') ? 'text-green-600' : record.quantity.startsWith('-') ? 'text-red-600' : 'text-gray-600'}`}>
-                                      {record.quantity}
-                                    </span>
-                                  </td>
-                                  <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
-                                    {record.user}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
+                        <thead className="bg-gray-50">
+  <tr>
+    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Date
+    </th>
+    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Action
+    </th>
+    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Quantity
+    </th>
+    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Notes
+    </th>
+  </tr>
+</thead>
+<tbody className="bg-white divide-y divide-gray-200">
+  {selectedItem.history && selectedItem.history.length > 0 ? (
+    selectedItem.history.map((entry, index) => (
+      <tr key={index}>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+          {new Date(entry.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          })}
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{entry.action}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{entry.quantity}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{entry.notes || '—'}</td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
+        No inventory history available.
+      </td>
+    </tr>
+  )}
+</tbody>
+
                           </table>
                         </div>
                       </div>

@@ -497,304 +497,275 @@ const handleDownloadCSV = () => {
         </main>
 
  {/* Order Detail Modal */}
-      {showOrderDetailModal && selectedOrder && (
-        <div className="fixed z-20 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                    <div className="flex justify-between items-center border-b pb-4">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900 flex items-center" id="modal-title">
-                        <i className="fas fa-shopping-cart text-indigo-600 mr-2"></i>
-                        Order Details - {selectedOrder.id}
-                      </h3>
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeColor(selectedOrder.status)}`}>
-                        {selectedOrder.status}
-                      </span>
-                    </div>
-                    
-                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-700 border-b pb-2">Customer Information</h4>
-                        <div className="mt-3 space-y-2">
-                          <div>
-                            <span className="text-sm text-gray-500">Customer Name:</span>
-                            <p className="text-sm font-medium text-gray-900">{selectedOrder.customerName}</p>
-                          </div>
-                          <div>
-                            <span className="text-sm text-gray-500">Dealership:</span>
-                            <p className="text-sm font-medium text-gray-900">{selectedOrder.dealership}</p>
-                          </div>
-                        </div>
-                        
-                        <h4 className="text-sm font-medium text-gray-700 border-b pb-2 mt-6">Order Dates</h4>
-                        <div className="mt-3 space-y-2">
-                          <div>
-                            <span className="text-sm text-gray-500">Order Date:</span>
-                            <p className="text-sm font-medium text-gray-900">
-                              {new Date(selectedOrder.orderDate).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                              })}
-                            </p>
-                          </div>
-                          <div>
-                            <span className="text-sm text-gray-500">Estimated Delivery:</span>
-                            <p className="text-sm font-medium text-gray-900">
-                              {new Date(selectedOrder.estimatedDelivery).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                              })}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-700 border-b pb-2">Product Information</h4>
-                        <div className="mt-3">
-                          <span className="text-sm text-gray-500">Products:</span>
-                          <ul className="mt-1 space-y-1">
-                            {selectedOrder.products.map(() => (
-                              <li key={index} className="text-sm font-medium text-gray-900 flex items-center">
-                                <i className="fas fa-check text-green-500 mr-2 text-xs"></i>
-                                {product}
-                              </li>
-                            ))}
-                          </ul>
-                          
-                          <div className="mt-4">
-                            <span className="text-sm text-gray-500">Quantity:</span>
-                            <p className="text-sm font-medium text-gray-900">{selectedOrder.quantity}</p>
-                          </div>
-                          
-                          <div className="mt-4">
-                            <span className="text-sm text-gray-500">Total Amount:</span>
-                            <p className="text-lg font-bold text-gray-900">${selectedOrder.totalAmount.toLocaleString()}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-6">
-                      <h4 className="text-sm font-medium text-gray-700 border-b pb-2">Notes</h4>
-                      <p className="mt-2 text-sm text-gray-600 bg-gray-50 p-3 rounded">
-                        {selectedOrder.notes || 'No notes available for this order.'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+   {showOrderDetailModal && selectedOrder && (
+  <div className="modal fade show d-block" tabIndex="-1" role="dialog">
+    <div className="modal-dialog modal-xl modal-dialog-centered" role="document">
+      <div className="modal-content shadow">
+        <div className="modal-header">
+          <h5 className="modal-title d-flex align-items-center">
+            <i className="fas fa-shopping-cart text-primary me-2"></i>
+            Order Details - {selectedOrder.id}
+          </h5>
+          <span className={`badge rounded-pill ${getStatusBadgeColor(selectedOrder.status)}`}>
+            {selectedOrder.status}
+          </span>
+        </div>
+
+        <div className="modal-body">
+          <div className="row">
+            {/* Customer and Date Info */}
+            <div className="col-md-6">
+              <h6 className="border-bottom pb-2 text-secondary">Customer Information</h6>
+              <div className="mt-3">
+                <p className="mb-1 text-muted small">Customer Name:</p>
+                <p className="fw-semibold">{selectedOrder.customerName}</p>
+                <p className="mb-1 text-muted small">Dealership:</p>
+                <p className="fw-semibold">{selectedOrder.dealership}</p>
               </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={() => handleEditOrder(selectedOrder)}
-                >
-                  <i className="fas fa-edit mr-2"></i> Edit Order
-                </button>
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={() => setShowOrderDetailModal(false)}
-                >
-                  Close
-                </button>
+
+              <h6 className="border-bottom pb-2 text-secondary mt-4">Order Dates</h6>
+              <div className="mt-3">
+                <p className="mb-1 text-muted small">Order Date:</p>
+                <p className="fw-semibold">
+                  {new Date(selectedOrder.orderDate).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </p>
+                <p className="mb-1 text-muted small">Estimated Delivery:</p>
+                <p className="fw-semibold">
+                  {new Date(selectedOrder.estimatedDelivery).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </p>
+              </div>
+            </div>
+
+            {/* Product Info */}
+            <div className="col-md-6">
+              <h6 className="border-bottom pb-2 text-secondary">Product Information</h6>
+              <div className="mt-3">
+                <p className="mb-1 text-muted small">Products:</p>
+                <ul className="list-unstyled">
+                  {selectedOrder.products.map((product, index) => (
+                    <li key={index} className="d-flex align-items-center mb-1">
+                      <i className="fas fa-check text-success me-2 small"></i>
+                      <span className="fw-semibold">{product}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-3">
+                  <p className="mb-1 text-muted small">Quantity:</p>
+                  <p className="fw-semibold">{selectedOrder.quantity}</p>
+                </div>
+
+                <div className="mt-3">
+                  <p className="mb-1 text-muted small">Total Amount:</p>
+                  <p className="fw-bold h5">${selectedOrder.totalAmount.toLocaleString()}</p>
+                </div>
               </div>
             </div>
           </div>
+
+          {/* Notes */}
+          <div className="mt-4">
+            <h6 className="border-bottom pb-2 text-secondary">Notes</h6>
+            <div className="mt-2 p-3 bg-light rounded">
+              <p className="text-muted mb-0">
+                {selectedOrder.notes || 'No notes available for this order.'}
+              </p>
+            </div>
+          </div>
         </div>
-      )}
+
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-primary d-flex align-items-center"
+            onClick={() => handleEditOrder(selectedOrder)}
+          >
+            <i className="fas fa-edit me-2"></i> Edit Order
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowOrderDetailModal(false)}
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+    {/* Backdrop */}
+    <div className="modal-backdrop fade show"></div>
+  </div>
+)}
+
 
       {/* Edit Order Modal */}
-      {showEditOrderModal && (
-        <div className="fixed z-20 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <i className="fas fa-edit text-indigo-600"></i>
-                  </div>
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                      {orderForm.id ? `Edit Order - ${orderForm.id}` : 'Create New Order'}
-                    </h3>
-                    <div className="mt-4 space-y-4">
-                      <div>
-                        <label htmlFor="customer-name" className="block text-sm font-medium text-gray-700">
-                          Customer Name *
-                        </label>
-                        <input
-                          type="text"
-                          id="customer-name"
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          value={orderForm.customerName}
-                          onChange={(e) => setOrderForm({...orderForm, customerName: e.target.value})}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="dealership" className="block text-sm font-medium text-gray-700">
-                          Dealership *
-                        </label>
-                        <div className="relative mt-1">
-                          <select
-                            id="dealership"
-                            className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                            value={orderForm.dealership}
-                            onChange={(e) => setOrderForm({...orderForm, dealership: e.target.value})}
-                          >
-                            <option value="">-- Select Dealership --</option>
-                            {dealerships.map(dealership => (
-                              <option key={dealership.id} value={dealership.name}>{dealership.name}</option>
-                            ))}
-                          </select>
-                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <i className="fas fa-chevron-down text-xs"></i>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="products" className="block text-sm font-medium text-gray-700">
-                          Products *
-                        </label>
-                        <div className="relative mt-1">
-                          <select
-                            id="products"
-                            multiple
-                            className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                            value={orderForm.products}
-                            onChange={(e) => {
-                              const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-                              setOrderForm({...orderForm, products: selectedOptions});
-                            }}
-                          >
-                            {products.map(product => (
-                              <option key={product.id} value={product.name}>{product.name}</option>
-                            ))}
-                          </select>
-                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <i className="fas fa-chevron-down text-xs"></i>
-                          </div>
-                        </div>
-                        <p className="mt-1 text-xs text-gray-500">Hold Ctrl/Cmd to select multiple products</p>
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
-                          Quantity *
-                        </label>
-                        <div className="mt-1 flex rounded-md shadow-sm">
-                          <button
-                            type="button"
-                            className="inline-flex items-center px-3 py-2 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm rounded-l-md cursor-pointer !rounded-button whitespace-nowrap"
-                            onClick={() => setOrderForm({...orderForm, quantity: Math.max(1, orderForm.quantity - 1)})}
-                          >
-                            <i className="fas fa-minus"></i>
-                          </button>
-                          <input
-                            type="number"
-                            id="quantity"
-                            min="1"
-                            className="flex-1 min-w-0 block w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-none"
-                            value={orderForm.quantity}
-                            onChange={(e) => setOrderForm({...orderForm, quantity: parseInt(e.target.value) || 1})}
-                          />
-                          <button
-                            type="button"
-                            className="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm rounded-r-md cursor-pointer !rounded-button whitespace-nowrap"
-                            onClick={() => setOrderForm({...orderForm, quantity: orderForm.quantity + 1})}
-                          >
-                            <i className="fas fa-plus"></i>
-                          </button>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-                          Status *
-                        </label>
-                        <div className="relative mt-1">
-                          <select
-                            id="status"
-                            className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                            value={orderForm.status}
-                            onChange={(e) => setOrderForm({...orderForm, status: e.target.value})}
-                          >
-                            <option value="Pending">Pending</option>
-                            <option value="Processing">Processing</option>
-                            <option value="Shipped">Shipped</option>
-                            <option value="Delivered">Delivered</option>
-                            <option value="Cancelled">Cancelled</option>
-                          </select>
-                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <i className="fas fa-chevron-down text-xs"></i>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="estimated-delivery" className="block text-sm font-medium text-gray-700">
-                          Estimated Delivery Date
-                        </label>
-                        <input
-                          type="date"
-                          id="estimated-delivery"
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          value={orderForm.estimatedDelivery}
-                          onChange={(e) => setOrderForm({...orderForm, estimatedDelivery: e.target.value})}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
-                          Notes
-                        </label>
-                        <textarea
-                          id="notes"
-                          rows={3}
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          value={orderForm.notes}
-                          onChange={(e) => setOrderForm({...orderForm, notes: e.target.value})}
-                        ></textarea>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={handleSaveOrder}
-                >
-                  {orderForm.id ? 'Update Order' : 'Create Order'}
-                </button>
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={() => setShowEditOrderModal(false)}
-                >
-                  Cancel
-                </button>
-              </div>
+   {showEditOrderModal && (
+  <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+    <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">
+            {orderForm.id ? `Edit Order - ${orderForm.id}` : 'Create New Order'}
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            aria-label="Close"
+            onClick={() => setShowEditOrderModal(false)}
+          ></button>
+        </div>
+
+        <div className="modal-body">
+          {/* Customer Name */}
+          <div className="mb-3">
+            <label htmlFor="customer-name" className="form-label">Customer Name *</label>
+            <input
+              type="text"
+              className="form-control"
+              id="customer-name"
+              value={orderForm.customerName}
+              onChange={(e) => setOrderForm({ ...orderForm, customerName: e.target.value })}
+            />
+          </div>
+
+          {/* Dealership */}
+          <div className="mb-3">
+            <label htmlFor="dealership" className="form-label">Dealership *</label>
+            <select
+              id="dealership"
+              className="form-select"
+              value={orderForm.dealership}
+              onChange={(e) => setOrderForm({ ...orderForm, dealership: e.target.value })}
+            >
+              <option value="">-- Select Dealership --</option>
+              {dealerships.map(dealership => (
+                <option key={dealership.id} value={dealership.name}>{dealership.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Products (multi-select) */}
+          <div className="mb-3">
+            <label htmlFor="products" className="form-label">Products *</label>
+            <select
+              id="products"
+              className="form-select"
+              multiple
+              value={orderForm.products}
+              onChange={(e) => {
+                const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+                setOrderForm({ ...orderForm, products: selectedOptions });
+              }}
+            >
+              {products.map(product => (
+                <option key={product.id} value={product.name}>{product.name}</option>
+              ))}
+            </select>
+            <div className="form-text">Hold Ctrl/Cmd to select multiple products</div>
+          </div>
+
+          {/* Quantity with buttons */}
+          <div className="mb-3">
+            <label htmlFor="quantity" className="form-label">Quantity *</label>
+            <div className="input-group">
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={() => setOrderForm({ ...orderForm, quantity: Math.max(1, orderForm.quantity - 1) })}
+              >
+                <i className="fas fa-minus"></i>
+              </button>
+              <input
+                type="number"
+                className="form-control text-center"
+                min="1"
+                id="quantity"
+                value={orderForm.quantity}
+                onChange={(e) =>
+                  setOrderForm({ ...orderForm, quantity: parseInt(e.target.value) || 1 })
+                }
+              />
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={() => setOrderForm({ ...orderForm, quantity: orderForm.quantity + 1 })}
+              >
+                <i className="fas fa-plus"></i>
+              </button>
             </div>
           </div>
+
+          {/* Status */}
+          <div className="mb-3">
+            <label htmlFor="status" className="form-label">Status *</label>
+            <select
+              id="status"
+              className="form-select"
+              value={orderForm.status}
+              onChange={(e) => setOrderForm({ ...orderForm, status: e.target.value })}
+            >
+              <option value="Pending">Pending</option>
+              <option value="Processing">Processing</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+
+          {/* Estimated Delivery Date */}
+          <div className="mb-3">
+            <label htmlFor="estimated-delivery" className="form-label">Estimated Delivery Date</label>
+            <input
+              type="date"
+              id="estimated-delivery"
+              className="form-control"
+              value={orderForm.estimatedDelivery}
+              onChange={(e) => setOrderForm({ ...orderForm, estimatedDelivery: e.target.value })}
+            />
+          </div>
+
+          {/* Notes */}
+          <div className="mb-3">
+            <label htmlFor="notes" className="form-label">Notes</label>
+            <textarea
+              id="notes"
+              rows={3}
+              className="form-control"
+              value={orderForm.notes}
+              onChange={(e) => setOrderForm({ ...orderForm, notes: e.target.value })}
+            ></textarea>
+          </div>
         </div>
-      )}
+
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowEditOrderModal(false)}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={handleSaveOrder}
+          >
+            {orderForm.id ? 'Update Order' : 'Create Order'}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirmation && (

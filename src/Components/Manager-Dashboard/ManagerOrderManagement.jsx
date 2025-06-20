@@ -64,7 +64,7 @@ const OrderManagement = () => {
 
   return (
     <div className="p-4">
-      <h3 className="fw-bold mb-2 fs-4 py-2">Order Management</h3>
+      <h3 className="fw-bold mb-2 fs-3 py-2">Order Management</h3>
      
 
       <Button variant="primary" className="mb-3" onClick={() => setShowAddModal(true)}>
