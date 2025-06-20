@@ -187,7 +187,7 @@ const ManagerReports= () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Dealership Reports</h1>
           <p className="text-gray-600 mt-2">Comprehensive analytics and insights for your dealership</p>
-          <div className="h-1 w-24 bg-indigo-600 mt-4"></div>
+     
         </div>
         
         {/* Report Filters Section */}

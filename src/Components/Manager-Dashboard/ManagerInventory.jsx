@@ -138,7 +138,7 @@ const ManagerInventory= () => {
         {/* Header Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Inventory Management</h1>
-          <div className="h-1 w-24 bg-indigo-600 mt-4"></div>
+
         </div>
 
         {/* Filters and Actions */}

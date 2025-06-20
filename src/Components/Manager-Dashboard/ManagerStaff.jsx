@@ -210,7 +210,7 @@ const ManagerStaff = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Staff Management</h1>
           <p className="text-gray-600 mt-2">Manage your dealership's sales team</p>
-          <div className="h-1 w-24 bg-indigo-600 mt-4"></div>
+     
         </div>
         
         {/* Staff List Section */}
