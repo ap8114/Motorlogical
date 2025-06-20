@@ -298,192 +298,172 @@ const DealershipManagement = () => {
 
 
         {/* Dealership Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-            <div>
+     <div className="bg-white rounded-lg shadow overflow-hidden">
+  {/* Header Section */}
+  <div className="px-4 sm:px-6 py-4 border-b border-gray-200 flex flex-wrap gap-4 items-center justify-between">
+    <h2 className="text-base sm:text-lg font-semibold text-gray-800">Dealership List</h2>
+    <input
+      type="file"
+      accept=".csv, .xlsx"
+      onChange={handleSheetUpload}
+      className="w-full sm:w-auto px-4 py-2 border rounded-lg text-sm cursor-pointer text-gray-700 bg-white hover:bg-gray-100"
+      title="Upload Dealership Sheet"
+    />
+  </div>
 
-              <h2 className="text-lg font-medium text-gray-800">Dealership List</h2>
-            </div>
-            <div>
-              <input
-                type="file"
-                accept=".csv, .xlsx"
-                onChange={handleSheetUpload}
-                className="px-4 py-2 border rounded-lg text-sm cursor-pointer text-gray-700 bg-white hover:bg-gray-100 whitespace-nowrap"
-                title="Upload Dealership Sheet"
-              />
-            </div>
-
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Dealership Name & Code
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Location
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Contact Details
-                  </th>
-
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date Created
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredDealerships.map((dealership) => (
-                  <tr key={dealership.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">
-                          <i className="fas fa-store"></i>
-                        </div>
-                        <div className="ml-4">
-                          <a
-                            href="https://readdy.ai/home/c8a6bcde-470a-4a15-8148-ac3671c15e32/f1a0a25b-4eff-44bb-8633-94b68d66f227"
-                            data-readdy="true"
-                            className="text-sm font-medium text-indigo-600 hover:text-indigo-900"
-                          >
-                            {dealership.name}
-                          </a>
-                          <div className="text-sm text-gray-500">{dealership.code}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{dealership.location}</div>
-                      <div className="text-sm text-gray-500">{dealership.address}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{dealership.contactPerson}</div>
-                      <div className="text-sm text-gray-500">{dealership.email}</div>
-                      <div className="text-sm text-gray-500">{dealership.phone}</div>
-                    </td>
-
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <button
-                          className={`relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none ${dealership.status ? 'bg-green-500' : 'bg-gray-300'} !rounded-button whitespace-nowrap`}
-                        >
-                          <span
-                            className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${dealership.status ? 'translate-x-5' : 'translate-x-0'}`}
-                          ></span>
-                        </button>
-                        <span className={`ml-2 text-sm ${dealership.status ? 'text-green-600' : 'text-gray-500'}`}>
-                          {dealership.status ? 'Active' : 'Inactive'}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(dealership.dateCreated).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                      })}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end space-x-2">
-                        <button
-                          onClick={() => {
-                            setIsEditing(true);
-                            setDealershipForm({
-                              id: dealership.id,
-                              name: dealership.name,
-                              code: dealership.code,
-                              location: dealership.location,
-                              address: dealership.address,
-                              city: dealership.city,
-                              state: dealership.state,
-                              contactPerson: dealership.contactPerson,
-                              email: dealership.email,
-                              phone: dealership.phone,
-                              status: dealership.status
-                            });
-                            setShowAddDealershipModal(true);
-                          }}
-                          className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap"
-                        >
-                          <i className="fas fa-edit"></i>
-                        </button>
-                        <button
-                          onClick={() => handleDeleteConfirmation(dealership.id)}
-                          className="text-red-600 hover:text-red-900 cursor-pointer !rounded-button whitespace-nowrap"
-                        >
-                          <i className="fas fa-trash"></i>
-                        </button>
-                        {/* <button className="text-gray-600 hover:text-gray-900 cursor-pointer !rounded-button whitespace-nowrap">
-                          <i className="fas fa-ellipsis-v"></i>
-                        </button> */}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-            <div className="flex-1 flex justify-between sm:hidden">
-              <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                Previous
-              </button>
-              <button className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                Next
-              </button>
-            </div>
-            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm text-gray-700">
-                  Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredDealerships.length}</span> of{' '}
-                  <span className="font-medium">{filteredDealerships.length}</span> results
-                </p>
+  {/* Table */}
+  <div className="w-full overflow-x-auto">
+    <table className="min-w-[900px] w-full divide-y divide-gray-200">
+      <thead className="bg-gray-50">
+        <tr>
+          {[
+            'Dealership Name & Code',
+            'Location',
+            'Contact Details',
+            'Status',
+            'Date Created',
+            'Actions'
+          ].map((title) => (
+            <th
+              key={title}
+              scope="col"
+              className={`px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${title === 'Actions' ? 'text-right' : ''}`}
+            >
+              {title}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody className="bg-white divide-y divide-gray-200">
+        {filteredDealerships.map((dealership) => (
+          <tr key={dealership.id} className="hover:bg-gray-50">
+            {/* Name & Code */}
+            <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+              <div className="flex items-center">
+                <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">
+                  <i className="fas fa-store"></i>
+                </div>
+                <div className="ml-4">
+                  <a
+                    href="#"
+                    data-readdy="true"
+                    className="text-sm font-medium text-indigo-600 hover:text-indigo-900"
+                  >
+                    {dealership.name}
+                  </a>
+                  <div className="text-sm text-gray-500">{dealership.code}</div>
+                </div>
               </div>
-              <div>
-                <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                  <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    <span className="sr-only">Previous</span>
-                    <i className="fas fa-chevron-left"></i>
-                  </button>
-                  <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    1
-                  </button>
-                  <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-indigo-50 text-sm font-medium text-indigo-600 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    2
-                  </button>
-                  <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    3
-                  </button>
-                  <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                    ...
-                  </span>
-                  <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    8
-                  </button>
-                  <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    9
-                  </button>
-                  <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    10
-                  </button>
-                  <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    <span className="sr-only">Next</span>
-                    <i className="fas fa-chevron-right"></i>
-                  </button>
-                </nav>
+            </td>
+
+            {/* Location */}
+            <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+              <div className="text-sm text-gray-900">{dealership.location}</div>
+              <div className="text-sm text-gray-500">{dealership.address}</div>
+            </td>
+
+            {/* Contact */}
+            <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+              <div className="text-sm text-gray-900">{dealership.contactPerson}</div>
+              <div className="text-sm text-gray-500">{dealership.email}</div>
+              <div className="text-sm text-gray-500">{dealership.phone}</div>
+            </td>
+
+            {/* Status */}
+            <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+              <div className="flex items-center">
+                <button
+                  className={`relative inline-flex h-6 w-11 border-2 border-transparent rounded-full transition-colors duration-200 focus:outline-none ${dealership.status ? 'bg-green-500' : 'bg-gray-300'}`}
+                >
+                  <span
+                    className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200 ${dealership.status ? 'translate-x-5' : 'translate-x-0'}`}
+                  />
+                </button>
+                <span className={`ml-2 text-sm ${dealership.status ? 'text-green-600' : 'text-gray-500'}`}>
+                  {dealership.status ? 'Active' : 'Inactive'}
+                </span>
               </div>
-            </div>
-          </div>
-        </div>
+            </td>
+
+            {/* Date */}
+            <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {new Date(dealership.dateCreated).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              })}
+            </td>
+
+            {/* Actions */}
+            <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <div className="flex justify-end space-x-2">
+                <button
+                  onClick={() => {
+                    setIsEditing(true);
+                    setDealershipForm({ ...dealership });
+                    setShowAddDealershipModal(true);
+                  }}
+                  className="text-indigo-600 hover:text-indigo-900"
+                >
+                  <i className="fas fa-edit"></i>
+                </button>
+                <button
+                  onClick={() => handleDeleteConfirmation(dealership.id)}
+                  className="text-red-600 hover:text-red-900"
+                >
+                  <i className="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  {/* Pagination */}
+  <div className="px-4 py-3 sm:px-6 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+    {/* Mobile Pagination */}
+    <div className="flex justify-between w-full sm:hidden">
+      <button className="px-4 py-2 border border-gray-300 text-sm rounded-md text-gray-700 bg-white hover:bg-gray-50">
+        Previous
+      </button>
+      <button className="px-4 py-2 border border-gray-300 text-sm rounded-md text-gray-700 bg-white hover:bg-gray-50">
+        Next
+      </button>
+    </div>
+
+    {/* Desktop Pagination */}
+    <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between w-full">
+      <p className="text-sm text-gray-700">
+        Showing <span className="font-medium">1</span> to{' '}
+        <span className="font-medium">{filteredDealerships.length}</span> of{' '}
+        <span className="font-medium">{filteredDealerships.length}</span> results
+      </p>
+      <nav className="inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+        <button className="px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50">
+          <i className="fas fa-chevron-left" />
+        </button>
+        {[1, 2, 3, '...', 8, 9, 10].map((num, index) => (
+          <button
+            key={index}
+            className={`px-4 py-2 border text-sm ${
+              num === 2
+                ? 'bg-indigo-50 text-indigo-600'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            {num}
+          </button>
+        ))}
+        <button className="px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50">
+          <i className="fas fa-chevron-right" />
+        </button>
+      </nav>
+    </div>
+  </div>
+</div>
+
       </main>
       {/* Add Dealership Modal */}
       <div>

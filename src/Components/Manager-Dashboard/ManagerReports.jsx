@@ -212,9 +212,7 @@ const ManagerReports= () => {
                     </option>
                   ))}
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <i className="fas fa-chevron-down text-xs"></i>
-                </div>
+               
               </div>
             </div>
             
@@ -235,9 +233,7 @@ const ManagerReports= () => {
                     </option>
                   ))}
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <i className="fas fa-chevron-down text-xs"></i>
-                </div>
+               
               </div>
             </div>
             
@@ -258,9 +254,7 @@ const ManagerReports= () => {
                     </option>
                   ))}
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <i className="fas fa-chevron-down text-xs"></i>
-                </div>
+               
               </div>
             </div>
           </div>
@@ -376,245 +370,39 @@ const ManagerReports= () => {
         </div>
         
         {/* Detailed Report Table */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-semibold text-gray-800">Detailed Report</h3>
-            <div className="relative inline-block text-left">
-              <div>
-                <button 
-                  type="button" 
-                  className="inline-flex justify-center w-full rounded-md !rounded-button whitespace-nowrap border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none cursor-pointer"
-                  onClick={() => setIsExporting(!isExporting)}
-                >
-                  <i className="fas fa-download mr-2 mt-0.5"></i>
-                  Export Report
-                  <i className="fas fa-chevron-down ml-2 mt-1 text-xs"></i>
-                </button>
-              </div>
-              
-              {isExporting && (
-                <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-                  <div className="py-1" role="menu" aria-orientation="vertical">
-                    <button 
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => handleExport('pdf')}
-                    >
-                      <i className="far fa-file-pdf mr-2 text-red-500"></i>
-                      Export as PDF
-                    </button>
-                    <button 
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => handleExport('excel')}
-                    >
-                      <i className="far fa-file-excel mr-2 text-green-600"></i>
-                      Export as Excel
-                    </button>
-                    <button 
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => handleExport('csv')}
-                    >
-                      <i className="far fa-file-alt mr-2 text-gray-600"></i>
-                      Export as CSV
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-          
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Model
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Sales Rep
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Customer
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Sale Price
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Profit
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    June 19, 2025
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <i className="fas fa-car text-indigo-600"></i>
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">2025 Luxury Sedan</div>
-                        <div className="text-xs text-gray-500">Silver</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">Michael Johnson</div>
-                    <div className="text-xs text-gray-500">ID: 45892</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">Emma Wilson</div>
-                    <div className="text-xs text-gray-500">New Customer</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    $42,500
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">
-                    $4,250
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    June 18, 2025
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <i className="fas fa-truck-monster text-blue-600"></i>
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">2025 Model X SUV</div>
-                        <div className="text-xs text-gray-500">Black</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">Sarah Parker</div>
-                    <div className="text-xs text-gray-500">ID: 32145</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">John Smith</div>
-                    <div className="text-xs text-gray-500">Returning Customer</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    $56,800
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">
-                    $5,680
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    June 17, 2025
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 bg-red-100 rounded-full flex items-center justify-center">
-                        <i className="fas fa-truck-pickup text-red-600"></i>
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">2025 Electric Sport</div>
-                        <div className="text-xs text-gray-500">Red</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">David Lee</div>
-                    <div className="text-xs text-gray-500">ID: 78932</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">Robert Brown</div>
-                    <div className="text-xs text-gray-500">New Customer</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    $38,900
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">
-                    $3,890
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    June 16, 2025
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 bg-purple-100 rounded-full flex items-center justify-center">
-                        <i className="fas fa-car text-purple-600"></i>
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">2025 Premium Hybrid</div>
-                        <div className="text-xs text-gray-500">Blue</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">Jennifer Adams</div>
-                    <div className="text-xs text-gray-500">ID: 65478</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">Lisa Johnson</div>
-                    <div className="text-xs text-gray-500">Returning Customer</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    $45,200
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">
-                    $4,520
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          
-          {/* Pagination */}
-          <div className="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6 mt-4">
-            <div className="flex flex-1 justify-between sm:hidden">
-              <button className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                Previous
-              </button>
-              <button className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                Next
-              </button>
-            </div>
-            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm text-gray-700">
-                  Showing <span className="font-medium">1</span> to <span className="font-medium">4</span> of <span className="font-medium">56</span> results
-                </p>
-              </div>
-              <div>
-                <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-                  <button className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 cursor-pointer">
-                    <i className="fas fa-chevron-left text-xs"></i>
-                  </button>
-                  <button className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-indigo-600 focus:z-20 cursor-pointer">
-                    1
-                  </button>
-                  <button className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 cursor-pointer">
-                    2
-                  </button>
-                  <button className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex cursor-pointer">
-                    3
-                  </button>
-                  <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
-                    ...
-                  </span>
-                  <button className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex cursor-pointer">
-                    14
-                  </button>
-                  <button className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 cursor-pointer">
-                    <i className="fas fa-chevron-right text-xs"></i>
-                  </button>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div>
+       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+  <div>
+    <p className="text-sm text-gray-700">
+      Showing <span className="font-medium">1</span> to <span className="font-medium">4</span> of <span className="font-medium">50</span> results
+    </p>
+  </div>
+  <div>
+    <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+      <button className="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm text-gray-500 hover:bg-gray-50">
+        <span className="sr-only">Previous</span>
+        <i className="fas fa-chevron-left"></i>
+      </button>
+      <button className="relative z-10 inline-flex items-center border border-indigo-500 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600">
+        1
+      </button>
+      <button className="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm text-gray-500 hover:bg-gray-50">
+        2
+      </button>
+      <button className="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm text-gray-500 hover:bg-gray-50">
+        3
+      </button>
+      <span className="relative inline-flex items-center px-4 py-2 text-sm text-gray-700">...</span>
+      <button className="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm text-gray-500 hover:bg-gray-50">
+        10
+      </button>
+      <button className="relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm text-gray-500 hover:bg-gray-50">
+        <span className="sr-only">Next</span>
+        <i className="fas fa-chevron-right"></i>
+      </button>
+    </nav>
+  </div>
+</div>
+
         
         {/* Report Notes */}
         <div className="bg-white rounded-lg shadow-md p-6">

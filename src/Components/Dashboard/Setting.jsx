@@ -108,26 +108,41 @@ const Setting = () => {
                 {/* Settings Tabs */}
                 <div className="bg-white rounded shadow mb-4 mb-md-5 mb-lg-6">
                     <div className="border-bottom">
-                        <nav className="nav nav-tabs flex-nowrap overflow-auto pb-1" style={{scrollbarWidth: 'none'}}>
-                            <button
-                                onClick={() => setActiveTab('general')}
-                                className={`nav-link text-nowrap px-3 px-md-4 py-2 font-medium text-sm cursor-pointer ${activeTab === 'general' ? 'active' : 'text-muted'}`}
-                            >
-                                <i className="fas fa-sliders-h me-1 me-md-2"></i> General
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('notifications')}
-                                className={`nav-link text-nowrap px-3 px-md-4 py-2 font-medium text-sm cursor-pointer ${activeTab === 'notifications' ? 'active' : 'text-muted'}`}
-                            >
-                                <i className="fas fa-bell me-1 me-md-2"></i> Notifications
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('inventory')}
-                                className={`nav-link text-nowrap px-3 px-md-4 py-2 font-medium text-sm cursor-pointer ${activeTab === 'inventory' ? 'active' : 'text-muted'}`}
-                            >
-                                <i className="fas fa-warehouse me-1 me-md-2"></i> Inventory
-                            </button>
-                        </nav>
+                     <nav className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4 mb-4">
+  <button
+    onClick={() => setActiveTab('general')}
+    className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${
+      activeTab === 'general'
+        ? 'bg-blue-600 text-white'
+        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+    }`}
+  >
+    <i className="fas fa-sliders-h mr-2"></i> General Settings
+  </button>
+
+  <button
+    onClick={() => setActiveTab('notifications')}
+    className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${
+      activeTab === 'notifications'
+        ? 'bg-blue-600 text-white'
+        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+    }`}
+  >
+    <i className="fas fa-bell mr-2"></i> Notification Preferences
+  </button>
+
+  <button
+    onClick={() => setActiveTab('inventory')}
+    className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${
+      activeTab === 'inventory'
+        ? 'bg-blue-600 text-white'
+        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+    }`}
+  >
+    <i className="fas fa-warehouse mr-2"></i> Inventory Settings
+  </button>
+</nav>
+
                     </div>
                     
                     {/* Tab Content */}
