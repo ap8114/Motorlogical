@@ -394,8 +394,8 @@ const InventoryManagement = () => {
             <button
               onClick={() => setActiveTab("inventory")}
               className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === "inventory"
-                ? "border-indigo-500 text-indigo-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-indigo-500 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
             >
               <i className="fas fa-warehouse mr-2"></i> Inventory List
@@ -403,19 +403,18 @@ const InventoryManagement = () => {
             <button
               onClick={() => setActiveTab("reports")}
               className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === "reports"
-                ? "border-indigo-500 text-indigo-600"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-indigo-500 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
             >
               <i className="fas fa-chart-bar mr-2"></i> Reports
             </button>
             <button
               onClick={() => setActiveTab("ordersystem")}
-              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${
-                activeTab === "ordersystem"
+              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === "order"
                   ? "border-indigo-500 text-indigo-600"
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+                }`}
             >
               <i className="fas fa-chart-bar mr-2"></i> Order System
             </button>
@@ -438,30 +437,17 @@ const InventoryManagement = () => {
 
                   {/* Action Buttons */}
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-                    {/* Search Bar */}
-                    <div className="position-relative w-100 mt-2" style={{ maxWidth: '16rem' }}>
-                      <input
-                        type="text"
-                        placeholder="Search..."
-                        className="form-control ps-5 py-2 text-sm border border-secondary-subtle"
-                        style={{ fontSize: '0.875rem' }}
-                      />
-                      <i
-                        className="fas fa-search position-absolute text-muted"
-                        style={{
-                          top: '45%',
-                          left: '1rem',
-                          transform: 'translateY(-50%)',
-                          fontSize: '0.875rem',
-                          pointerEvents: 'none'
-                        }}
-                      ></i>
-                    </div>
-
-                    {/* Filter Button */}
                     <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
                       <i className="fas fa-filter mr-2"></i> Filter
                     </button>
+
+                    <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
+                      <i className="fas fa-file-export mr-2"></i> Export
+                    </button>
+                  </div>
+
+                </div>
+              </div>
 
                     {/* Export Button */}
                     <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
@@ -634,8 +620,8 @@ const InventoryManagement = () => {
                             <p className="text-sm text-gray-500">Quantity</p>
                             <p
                               className={`text-lg font-semibold ${item.quantity === 0
-                                ? "text-red-600"
-                                : "text-gray-900"
+                                  ? "text-red-600"
+                                  : "text-gray-900"
                                 }`}
                             >
                               {item.quantity}
@@ -799,6 +785,7 @@ const InventoryManagement = () => {
             <div className="bg-white rounded-lg shadow p-6 mb-8">
               <div className="mb-6 px-4 sm:px-0">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+
                   {/* Title */}
                   <h2 className="text-base sm:text-lg font-semibold text-gray-800">
                     Inventory Summary Report
@@ -813,6 +800,14 @@ const InventoryManagement = () => {
                     <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
                       <i className="fas fa-file-pdf mr-2"></i> PDF
                     </button>
+
+                    <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
+                      <i className="fas fa-file-excel mr-2"></i> Excel
+                    </button>
+                  </div>
+
+                </div>
+              </div>
 
                     <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
                       <i className="fas fa-file-excel mr-2"></i> Excel
@@ -1118,7 +1113,10 @@ const InventoryManagement = () => {
           </div>
         )}
 
-        {activeTab === "ordersystem" && <div>order system</div>}
+        {activeTab === "ordersystem" && (
+          <div>order system</div>
+        )}
+
       </main>
 
       {/* Add/Edit Item Modal */}
@@ -1196,7 +1194,9 @@ const InventoryManagement = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="price" className="form-label">Price ($) *</label>
+                    <label htmlFor="price" className="form-label">
+                      Price ($) *
+                    </label>
                     <div className="">
                       <span className="input-group-text">$</span>
                       <input
@@ -1223,7 +1223,10 @@ const InventoryManagement = () => {
                           checked={itemForm.status === "Active"}
                           onChange={() => setItemForm({ ...itemForm, status: "Active" })}
                         />
-                        <label className="form-check-label ms-1" htmlFor="status-active">
+                        <label
+                          className="form-check-label ms-2"
+                          htmlFor="status-active"
+                        >
                           Active
                         </label>
                       </div>
@@ -1236,7 +1239,10 @@ const InventoryManagement = () => {
                           checked={itemForm.status === "Inactive"}
                           onChange={() => setItemForm({ ...itemForm, status: "Inactive" })}
                         />
-                        <label className="form-check-label ms-1" htmlFor="status-inactive">
+                        <label
+                          className="form-check-label ms-2"
+                          htmlFor="status-inactive"
+                        >
                           Inactive
                         </label>
                       </div>
