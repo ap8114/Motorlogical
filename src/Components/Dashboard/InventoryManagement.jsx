@@ -14,11 +14,94 @@ const InventoryManagement = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [activeTab, setActiveTab] = useState("inventory");
-  const [showAddItemModal, setShowAddItemModal] = useState(false); ``
+  const [showAddItemModal, setShowAddItemModal] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [viewMode, setViewMode] = useState("list");
   const [showItemDetailsModal, setShowItemDetailsModal] = useState(false);
   const [demo, selectedItem] = useState();
+  const [selectedBrand, setSelectedBrand] = useState("");
+
+const allInventory = [
+  // ✅ BAIC
+  {
+    SHIP_DATE: "2026-08-10",
+    BRAND: "BAIC",
+    OCN_SPEC: "BJ2032F7VA1K-PE",
+    MODEL: "BJ40 PLUS",
+    COUNTRY: "TAG",
+    YEAR: "2026",
+    EXT_COLOR: "FLAME RED",
+    INT_COLOR: "BLACK",
+    TBD3: "Yes",
+    ORDER_NO: "BAIC-001",
+  },
+  {
+    SHIP_DATE: "2026-08-12",
+    BRAND: "BAIC",
+    OCN_SPEC: "BJ6470X52MHEV",
+    MODEL: "BJ30",
+    COUNTRY: "TOP",
+    YEAR: "2026",
+    EXT_COLOR: "PLATINUM GREY",
+    INT_COLOR: "BLACK",
+    TBD3: "Yes",
+    ORDER_NO: "BAIC-002",
+  },
+
+  // ✅ Chang’an
+  {
+    SHIP_DATE: "2026-07-05",
+    BRAND: "Chang’an",
+    OCN_SPEC: "CA1041H8L",
+    MODEL: "E-STAR",
+    COUNTRY: "TAG",
+    YEAR: "2026",
+    EXT_COLOR: "WHITE",
+    INT_COLOR: "BEIGE",
+    TBD3: "No",
+    ORDER_NO: "CHAN-001",
+  },
+  {
+    SHIP_DATE: "2026-07-08",
+    BRAND: "Chang’an",
+    OCN_SPEC: "CA1022",
+    MODEL: "UNI-T",
+    COUNTRY: "TOP",
+    YEAR: "2026",
+    EXT_COLOR: "BLACK",
+    INT_COLOR: "GREY",
+    TBD3: "Yes",
+    ORDER_NO: "CHAN-002",
+  },
+
+  // ✅ Geely
+  {
+    SHIP_DATE: "2026-06-15",
+    BRAND: "Geely",
+    OCN_SPEC: "GX71B",
+    MODEL: "Coolray",
+    COUNTRY: "TAG",
+    YEAR: "2026",
+    EXT_COLOR: "SILVER",
+    INT_COLOR: "BLACK",
+    TBD3: "No",
+    ORDER_NO: "GEELY-001",
+  },
+  {
+    SHIP_DATE: "2026-06-18",
+    BRAND: "Geely",
+    OCN_SPEC: "FY11",
+    MODEL: "Tugella",
+    COUNTRY: "TOP",
+    YEAR: "2026",
+    EXT_COLOR: "BLUE",
+    INT_COLOR: "BLACK/RED",
+    TBD3: "Yes",
+    ORDER_NO: "GEELY-002",
+  },
+];
+
+
   // Sample inventory data
   const [inventory, setInventory] = useState([
     {
@@ -347,7 +430,7 @@ const InventoryManagement = () => {
           {/* Left Section: Heading and Subheading */}
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center">
-              Inventory Management
+              Logistics Management
             </h1>
             <p className="text-sm sm:text-base text-gray-600 mt-1">
               Manage all vehicle inventory in one place
@@ -371,22 +454,6 @@ const InventoryManagement = () => {
           </div>
         </div>
 
-          {/* Right Section: Buttons */}
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full md:w-auto">
-            <button
-              onClick={handleDownloadCSV}
-              className="flex justify-center items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition w-full sm:w-auto"
-            >
-              <i className="fas fa-download mr-2"></i> Download CSV
-            </button>
-            <button
-              onClick={handleCreateNewItem}
-              className="flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition w-full sm:w-auto"
-            >
-              <i className="fas fa-plus mr-2"></i> Add New Item
-            </button>
-          </div>
-        </div>
 
         {/* Tab Navigation */}
         <div className="mb-6 border-b border-gray-200">
@@ -449,22 +516,6 @@ const InventoryManagement = () => {
                 </div>
               </div>
 
-                    {/* Export Button */}
-                    <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
-                      <i className="fas fa-file-export mr-2"></i> Export
-                    </button>
-                  </div>
-
-
-                </div>
-              </div>
-
-                    <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
-                      <i className="fas fa-file-export mr-2"></i> Export
-                    </button>
-                  </div>
-                </div>
-              </div>
 
               {viewMode === "list" ? (
                 <div className="overflow-x-auto">
@@ -809,12 +860,6 @@ const InventoryManagement = () => {
                 </div>
               </div>
 
-                    <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
-                      <i className="fas fa-file-excel mr-2"></i> Excel
-                    </button>
-                  </div>
-                </div>
-              </div>
 
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -1113,16 +1158,80 @@ const InventoryManagement = () => {
           </div>
         )}
 
-        {activeTab === "ordersystem" && (
-          <div>order system</div>
-        )}
+{activeTab === "ordersystem" && (
+  <div className="container mt-4">
+    <h3 className="mb-4">Order System - Brand-wise Inventory</h3>
+
+    {/* Brand Selector */}
+    <div className="mb-3">
+      <label htmlFor="brandSelect" className="form-label">Select Brand</label>
+      <select
+        id="brandSelect"
+        className="form-select"
+        value={selectedBrand}
+        onChange={(e) => setSelectedBrand(e.target.value)}
+      >
+        <option value="">-- Choose Brand --</option>
+        {[...new Set(allInventory.map(item => item.BRAND))].map(brand => (
+          <option key={brand} value={brand}>{brand}</option>
+        ))}
+      </select>
+    </div>
+
+    {/* Table */}
+    {selectedBrand && (
+      <div className="table-responsive">
+        <table className="table table-bordered table-striped">
+          <thead className="table-light">
+            <tr>
+              <th>SHIP DATE</th>
+              <th>BRAND</th>
+              <th>OCN SPEC</th>
+              <th>MODEL</th>
+              <th>COUNTRY</th>
+              <th>YEAR</th>
+              <th>EXT. COLOR</th>
+              <th>INT. COLOR</th>
+              <th>TBD3</th>
+              <th>ORDER NO</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allInventory
+              .filter(item => item.BRAND === selectedBrand)
+              .map((item, index) => (
+                <tr key={index}>
+                  <td>{item.SHIP_DATE}</td>
+                  <td>{item.BRAND}</td>
+                  <td>{item.OCN_SPEC}</td>
+                  <td>{item.MODEL}</td>
+                  <td>{item.COUNTRY}</td>
+                  <td>{item.YEAR}</td>
+                  <td>{item.EXT_COLOR}</td>
+                  <td>{item.INT_COLOR}</td>
+                  <td>{item.TBD3}</td>
+                  <td>{item.ORDER_NO}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </div>
+)}
+
+
+
 
       </main>
 
       {/* Add/Edit Item Modal */}
       {showAddItemModal && (
         <div className="modal show d-block" tabIndex="-1" role="dialog">
-          <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
+          <div
+            className="modal-dialog modal-dialog-centered modal-lg"
+            role="document"
+          >
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">
@@ -1138,23 +1247,31 @@ const InventoryManagement = () => {
               <div className="modal-body">
                 <form>
                   <div className="mb-3">
-                    <label htmlFor="item-name" className="form-label">Item Name *</label>
+                    <label htmlFor="item-name" className="form-label">
+                      Item Name *
+                    </label>
                     <input
                       type="text"
                       className="form-control"
                       id="item-name"
                       value={itemForm.name}
-                      onChange={(e) => setItemForm({ ...itemForm, name: e.target.value })}
+                      onChange={(e) =>
+                        setItemForm({ ...itemForm, name: e.target.value })
+                      }
                     />
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="category" className="form-label">Category *</label>
+                    <label htmlFor="category" className="form-label">
+                      Category *
+                    </label>
                     <select
                       id="category"
                       className="form-select"
                       value={itemForm.category}
-                      onChange={(e) => setItemForm({ ...itemForm, category: e.target.value })}
+                      onChange={(e) =>
+                        setItemForm({ ...itemForm, category: e.target.value })
+                      }
                     >
                       <option value="">-- Select Category --</option>
                       {categories.map((category) => (
@@ -1166,12 +1283,19 @@ const InventoryManagement = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="quantity" className="form-label">Quantity *</label>
+                    <label htmlFor="quantity" className="form-label">
+                      Quantity *
+                    </label>
                     <div className="input-group">
                       <button
                         className="btn"
                         type="button"
-                        onClick={() => setItemForm({ ...itemForm, quantity: Math.max(0, itemForm.quantity - 1) })}
+                        onClick={() =>
+                          setItemForm({
+                            ...itemForm,
+                            quantity: Math.max(0, itemForm.quantity - 1),
+                          })
+                        }
                       >
                         <i className="fas fa-minus"></i>
                       </button>
@@ -1181,12 +1305,22 @@ const InventoryManagement = () => {
                         min="0"
                         id="quantity"
                         value={itemForm.quantity}
-                        onChange={(e) => setItemForm({ ...itemForm, quantity: parseInt(e.target.value) || 0 })}
+                        onChange={(e) =>
+                          setItemForm({
+                            ...itemForm,
+                            quantity: parseInt(e.target.value) || 0,
+                          })
+                        }
                       />
                       <button
                         className="btn"
                         type="button"
-                        onClick={() => setItemForm({ ...itemForm, quantity: itemForm.quantity + 1 })}
+                        onClick={() =>
+                          setItemForm({
+                            ...itemForm,
+                            quantity: itemForm.quantity + 1,
+                          })
+                        }
                       >
                         <i className="fas fa-plus"></i>
                       </button>
@@ -1201,27 +1335,33 @@ const InventoryManagement = () => {
                       <span className="input-group-text">$</span>
                       <input
                         type="number"
-                        className=""
+                        className="form-control"
                         id="price"
                         placeholder="0.00"
                         value={itemForm.price}
-                        onChange={(e) => setItemForm({ ...itemForm, price: parseFloat(e.target.value) || 0 })}
+                        onChange={(e) =>
+                          setItemForm({
+                            ...itemForm,
+                            price: parseFloat(e.target.value) || 0,
+                          })
+                        }
                       />
                     </div>
                   </div>
 
                   <div className="mb-3">
                     <label className="form-label">Status *</label>
-                    <div className="mb-3">
-                      <label className="form-label d-block">Status *</label>
-                      <div className="form-check form-check-inline me-4">
+                    <div>
+                      <div className="form-check form-check-inline">
                         <input
                           className="form-check-input mt-0"
                           type="radio"
                           id="status-active"
                           name="status"
                           checked={itemForm.status === "Active"}
-                          onChange={() => setItemForm({ ...itemForm, status: "Active" })}
+                          onChange={() =>
+                            setItemForm({ ...itemForm, status: "Active" })
+                          }
                         />
                         <label
                           className="form-check-label ms-2"
@@ -1237,7 +1377,9 @@ const InventoryManagement = () => {
                           id="status-inactive"
                           name="status"
                           checked={itemForm.status === "Inactive"}
-                          onChange={() => setItemForm({ ...itemForm, status: "Inactive" })}
+                          onChange={() =>
+                            setItemForm({ ...itemForm, status: "Inactive" })
+                          }
                         />
                         <label
                           className="form-check-label ms-2"
@@ -1247,17 +1389,20 @@ const InventoryManagement = () => {
                         </label>
                       </div>
                     </div>
-
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="notes" className="form-label">Notes</label>
+                    <label htmlFor="notes" className="form-label">
+                      Notes
+                    </label>
                     <textarea
                       className="form-control"
                       id="notes"
                       rows="3"
                       value={itemForm.notes}
-                      onChange={(e) => setItemForm({ ...itemForm, notes: e.target.value })}
+                      onChange={(e) =>
+                        setItemForm({ ...itemForm, notes: e.target.value })
+                      }
                     ></textarea>
                   </div>
                 </form>
@@ -1282,7 +1427,6 @@ const InventoryManagement = () => {
           </div>
           <div className="modal-backdrop fade show"></div>
         </div>
-
       )}
 
       {/* Delete Confirmation Modal */}
