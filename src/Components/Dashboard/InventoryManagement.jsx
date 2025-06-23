@@ -14,7 +14,7 @@ const InventoryManagement = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [activeTab, setActiveTab] = useState("inventory");
-  const [showAddItemModal, setShowAddItemModal] = useState(false);
+  const [showAddItemModal, setShowAddItemModal] = useState(false); ``
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [viewMode, setViewMode] = useState("list");
   const [showItemDetailsModal, setShowItemDetailsModal] = useState(false);
@@ -234,15 +234,15 @@ const InventoryManagement = () => {
         inventory.map((item) =>
           item.id === itemForm.id
             ? {
-                ...item,
-                name: itemForm.name,
-                category: itemForm.category,
-                quantity: itemForm.quantity,
-                status: itemForm.status,
-                lastUpdated: new Date().toISOString().split("T")[0],
-                notes: itemForm.notes,
-                price: itemForm.price,
-              }
+              ...item,
+              name: itemForm.name,
+              category: itemForm.category,
+              quantity: itemForm.quantity,
+              status: itemForm.status,
+              lastUpdated: new Date().toISOString().split("T")[0],
+              notes: itemForm.notes,
+              price: itemForm.price,
+            }
             : item
         )
       );
@@ -343,33 +343,33 @@ const InventoryManagement = () => {
     <div>
       {/* Main Content */}
       <main className="p-6">
-       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-  {/* Left Section: Heading and Subheading */}
-  <div>
-    <h1 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center">
-      Inventory Management
-    </h1>
-    <p className="text-sm sm:text-base text-gray-600 mt-1">
-      Manage all vehicle inventory in one place
-    </p>
-  </div>
+        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          {/* Left Section: Heading and Subheading */}
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center">
+              Inventory Management
+            </h1>
+            <p className="text-sm sm:text-base text-gray-600 mt-1">
+              Manage all vehicle inventory in one place
+            </p>
+          </div>
 
-  {/* Right Section: Buttons */}
-  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full md:w-auto">
-    <button
-      onClick={handleDownloadCSV}
-      className="flex justify-center items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition w-full sm:w-auto"
-    >
-      <i className="fas fa-download mr-2"></i> Download CSV
-    </button>
-    <button
-      onClick={handleCreateNewItem}
-      className="flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition w-full sm:w-auto"
-    >
-      <i className="fas fa-plus mr-2"></i> Add New Item
-    </button>
-  </div>
-</div>
+          {/* Right Section: Buttons */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full md:w-auto">
+            <button
+              onClick={handleDownloadCSV}
+              className="flex justify-center items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition w-full sm:w-auto"
+            >
+              <i className="fas fa-download mr-2"></i> Download CSV
+            </button>
+            <button
+              onClick={handleCreateNewItem}
+              className="flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition w-full sm:w-auto"
+            >
+              <i className="fas fa-plus mr-2"></i> Add New Item
+            </button>
+          </div>
+        </div>
 
 
         {/* Tab Navigation */}
@@ -377,21 +377,19 @@ const InventoryManagement = () => {
           <nav className="-mb-px flex space-x-8">
             <button
               onClick={() => setActiveTab("inventory")}
-              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${
-                activeTab === "inventory"
-                  ? "border-indigo-500 text-indigo-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === "inventory"
+                ? "border-indigo-500 text-indigo-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
             >
               <i className="fas fa-warehouse mr-2"></i> Inventory List
             </button>
             <button
               onClick={() => setActiveTab("reports")}
-              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${
-                activeTab === "reports"
-                  ? "border-indigo-500 text-indigo-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === "reports"
+                ? "border-indigo-500 text-indigo-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
             >
               <i className="fas fa-chart-bar mr-2"></i> Reports
             </button>
@@ -404,27 +402,50 @@ const InventoryManagement = () => {
 
             {/* Inventory Table */}
             <div className="bg-white rounded-lg shadow overflow-hidden">
-             <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-200 bg-gray-50">
-  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-    
-    {/* Heading */}
-    <h3 className="text-base sm:text-lg font-medium text-gray-800">
-      Inventory List
-    </h3>
+              <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-200 bg-gray-50">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
 
-    {/* Action Buttons */}
-    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-      <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
-        <i className="fas fa-filter mr-2"></i> Filter
-      </button>
+                  {/* Heading */}
+                  <h3 className="text-base sm:text-lg font-medium text-gray-800">
+                    Inventory List
+                  </h3>
 
-      <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
-        <i className="fas fa-file-export mr-2"></i> Export
-      </button>
-    </div>
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                    {/* Search Bar */}
+                    <div className="position-relative w-100 mt-2" style={{ maxWidth: '16rem' }}>
+                      <input
+                        type="text"
+                        placeholder="Search..."
+                        className="form-control ps-5 py-2 text-sm border border-secondary-subtle"
+                        style={{ fontSize: '0.875rem' }}
+                      />
+                      <i
+                        className="fas fa-search position-absolute text-muted"
+                        style={{
+                          top: '45%',
+                          left: '1rem',
+                          transform: 'translateY(-50%)',
+                          fontSize: '0.875rem',
+                          pointerEvents: 'none'
+                        }}
+                      ></i>
+                    </div>
 
-  </div>
-</div>
+                    {/* Filter Button */}
+                    <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
+                      <i className="fas fa-filter mr-2"></i> Filter
+                    </button>
+
+                    {/* Export Button */}
+                    <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
+                      <i className="fas fa-file-export mr-2"></i> Export
+                    </button>
+                  </div>
+
+
+                </div>
+              </div>
 
 
               {viewMode === "list" ? (
@@ -580,11 +601,10 @@ const InventoryManagement = () => {
                           <div>
                             <p className="text-sm text-gray-500">Quantity</p>
                             <p
-                              className={`text-lg font-semibold ${
-                                item.quantity === 0
-                                  ? "text-red-600"
-                                  : "text-gray-900"
-                              }`}
+                              className={`text-lg font-semibold ${item.quantity === 0
+                                ? "text-red-600"
+                                : "text-gray-900"
+                                }`}
                             >
                               {item.quantity}
                             </p>
@@ -745,31 +765,31 @@ const InventoryManagement = () => {
             </div>
 
             <div className="bg-white rounded-lg shadow p-6 mb-8">
-           <div className="mb-6 px-4 sm:px-0">
-  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="mb-6 px-4 sm:px-0">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 
-    {/* Title */}
-    <h2 className="text-base sm:text-lg font-semibold text-gray-800">
-      Inventory Summary Report
-    </h2>
+                  {/* Title */}
+                  <h2 className="text-base sm:text-lg font-semibold text-gray-800">
+                    Inventory Summary Report
+                  </h2>
 
-    {/* Action Buttons */}
-    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-      <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
-        <i className="fas fa-print mr-2"></i> Print
-      </button>
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
+                      <i className="fas fa-print mr-2"></i> Print
+                    </button>
 
-      <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
-        <i className="fas fa-file-pdf mr-2"></i> PDF
-      </button>
+                    <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
+                      <i className="fas fa-file-pdf mr-2"></i> PDF
+                    </button>
 
-      <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
-        <i className="fas fa-file-excel mr-2"></i> Excel
-      </button>
-    </div>
+                    <button className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100 transition w-full sm:w-auto">
+                      <i className="fas fa-file-excel mr-2"></i> Excel
+                    </button>
+                  </div>
 
-  </div>
-</div>
+                </div>
+              </div>
 
 
               <div className="overflow-x-auto">
@@ -1073,10 +1093,7 @@ const InventoryManagement = () => {
       {/* Add/Edit Item Modal */}
       {showAddItemModal && (
         <div className="modal show d-block" tabIndex="-1" role="dialog">
-          <div
-            className="modal-dialog modal-dialog-centered modal-lg"
-            role="document"
-          >
+          <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">
@@ -1092,31 +1109,23 @@ const InventoryManagement = () => {
               <div className="modal-body">
                 <form>
                   <div className="mb-3">
-                    <label htmlFor="item-name" className="form-label">
-                      Item Name *
-                    </label>
+                    <label htmlFor="item-name" className="form-label">Item Name *</label>
                     <input
                       type="text"
                       className="form-control"
                       id="item-name"
                       value={itemForm.name}
-                      onChange={(e) =>
-                        setItemForm({ ...itemForm, name: e.target.value })
-                      }
+                      onChange={(e) => setItemForm({ ...itemForm, name: e.target.value })}
                     />
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="category" className="form-label">
-                      Category *
-                    </label>
+                    <label htmlFor="category" className="form-label">Category *</label>
                     <select
                       id="category"
                       className="form-select"
                       value={itemForm.category}
-                      onChange={(e) =>
-                        setItemForm({ ...itemForm, category: e.target.value })
-                      }
+                      onChange={(e) => setItemForm({ ...itemForm, category: e.target.value })}
                     >
                       <option value="">-- Select Category --</option>
                       {categories.map((category) => (
@@ -1128,19 +1137,12 @@ const InventoryManagement = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="quantity" className="form-label">
-                      Quantity *
-                    </label>
+                    <label htmlFor="quantity" className="form-label">Quantity *</label>
                     <div className="input-group">
                       <button
-                        className="btn btn-outline-secondary"
+                        className="btn"
                         type="button"
-                        onClick={() =>
-                          setItemForm({
-                            ...itemForm,
-                            quantity: Math.max(0, itemForm.quantity - 1),
-                          })
-                        }
+                        onClick={() => setItemForm({ ...itemForm, quantity: Math.max(0, itemForm.quantity - 1) })}
                       >
                         <i className="fas fa-minus"></i>
                       </button>
@@ -1150,22 +1152,12 @@ const InventoryManagement = () => {
                         min="0"
                         id="quantity"
                         value={itemForm.quantity}
-                        onChange={(e) =>
-                          setItemForm({
-                            ...itemForm,
-                            quantity: parseInt(e.target.value) || 0,
-                          })
-                        }
+                        onChange={(e) => setItemForm({ ...itemForm, quantity: parseInt(e.target.value) || 0 })}
                       />
                       <button
-                        className="btn btn-outline-secondary"
+                        className="btn"
                         type="button"
-                        onClick={() =>
-                          setItemForm({
-                            ...itemForm,
-                            quantity: itemForm.quantity + 1,
-                          })
-                        }
+                        onClick={() => setItemForm({ ...itemForm, quantity: itemForm.quantity + 1 })}
                       >
                         <i className="fas fa-plus"></i>
                       </button>
@@ -1173,81 +1165,62 @@ const InventoryManagement = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="price" className="form-label">
-                      Price ($) *
-                    </label>
-                    <div className="input-group">
+                    <label htmlFor="price" className="form-label">Price ($) *</label>
+                    <div className="">
                       <span className="input-group-text">$</span>
                       <input
                         type="number"
-                        className="form-control"
+                        className=""
                         id="price"
                         placeholder="0.00"
                         value={itemForm.price}
-                        onChange={(e) =>
-                          setItemForm({
-                            ...itemForm,
-                            price: parseFloat(e.target.value) || 0,
-                          })
-                        }
+                        onChange={(e) => setItemForm({ ...itemForm, price: parseFloat(e.target.value) || 0 })}
                       />
                     </div>
                   </div>
 
                   <div className="mb-3">
                     <label className="form-label">Status *</label>
-                    <div>
-                      <div className="form-check form-check-inline">
+                    <div className="mb-3">
+                      <label className="form-label d-block">Status *</label>
+                      <div className="form-check form-check-inline me-4">
                         <input
-                          className="form-check-input"
+                          className="form-check-input mt-0"
                           type="radio"
                           id="status-active"
                           name="status"
                           checked={itemForm.status === "Active"}
-                          onChange={() =>
-                            setItemForm({ ...itemForm, status: "Active" })
-                          }
+                          onChange={() => setItemForm({ ...itemForm, status: "Active" })}
                         />
-                        <label
-                          className="form-check-label"
-                          htmlFor="status-active"
-                        >
+                        <label className="form-check-label ms-1" htmlFor="status-active">
                           Active
                         </label>
                       </div>
                       <div className="form-check form-check-inline">
                         <input
-                          className="form-check-input"
+                          className="form-check-input mt-0"
                           type="radio"
                           id="status-inactive"
                           name="status"
                           checked={itemForm.status === "Inactive"}
-                          onChange={() =>
-                            setItemForm({ ...itemForm, status: "Inactive" })
-                          }
+                          onChange={() => setItemForm({ ...itemForm, status: "Inactive" })}
                         />
-                        <label
-                          className="form-check-label"
-                          htmlFor="status-inactive"
-                        >
+                        <label className="form-check-label ms-1" htmlFor="status-inactive">
                           Inactive
                         </label>
                       </div>
                     </div>
+
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="notes" className="form-label">
-                      Notes
-                    </label>
+                    <label htmlFor="notes" className="form-label">Notes</label>
                     <textarea
                       className="form-control"
                       id="notes"
                       rows="3"
                       value={itemForm.notes}
-                      onChange={(e) =>
-                        setItemForm({ ...itemForm, notes: e.target.value })
-                      }
+                      onChange={(e) => setItemForm({ ...itemForm, notes: e.target.value })}
                     ></textarea>
                   </div>
                 </form>
@@ -1272,6 +1245,7 @@ const InventoryManagement = () => {
           </div>
           <div className="modal-backdrop fade show"></div>
         </div>
+
       )}
 
       {/* Delete Confirmation Modal */}
@@ -1565,8 +1539,8 @@ const InventoryManagement = () => {
                                   {selectedItem.category === "Electric"
                                     ? "Electric Motor"
                                     : selectedItem.category === "Hybrid"
-                                    ? "Hybrid Engine"
-                                    : "2.0L Turbo"}
+                                      ? "Hybrid Engine"
+                                      : "2.0L Turbo"}
                                 </p>
                               </div>
                               <div>
@@ -1637,7 +1611,7 @@ const InventoryManagement = () => {
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                               {selectedItem.history &&
-                              selectedItem.history.length > 0 ? (
+                                selectedItem.history.length > 0 ? (
                                 selectedItem.history.map((entry, index) => (
                                   <tr key={index}>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
