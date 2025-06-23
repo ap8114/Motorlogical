@@ -19,6 +19,89 @@ const InventoryManagement = () => {
   const [viewMode, setViewMode] = useState("list");
   const [showItemDetailsModal, setShowItemDetailsModal] = useState(false);
   const [demo, selectedItem] = useState();
+  const [selectedBrand, setSelectedBrand] = useState("");
+
+const allInventory = [
+  // ✅ BAIC
+  {
+    SHIP_DATE: "2026-08-10",
+    BRAND: "BAIC",
+    OCN_SPEC: "BJ2032F7VA1K-PE",
+    MODEL: "BJ40 PLUS",
+    COUNTRY: "TAG",
+    YEAR: "2026",
+    EXT_COLOR: "FLAME RED",
+    INT_COLOR: "BLACK",
+    TBD3: "Yes",
+    ORDER_NO: "BAIC-001",
+  },
+  {
+    SHIP_DATE: "2026-08-12",
+    BRAND: "BAIC",
+    OCN_SPEC: "BJ6470X52MHEV",
+    MODEL: "BJ30",
+    COUNTRY: "TOP",
+    YEAR: "2026",
+    EXT_COLOR: "PLATINUM GREY",
+    INT_COLOR: "BLACK",
+    TBD3: "Yes",
+    ORDER_NO: "BAIC-002",
+  },
+
+  // ✅ Chang’an
+  {
+    SHIP_DATE: "2026-07-05",
+    BRAND: "Chang’an",
+    OCN_SPEC: "CA1041H8L",
+    MODEL: "E-STAR",
+    COUNTRY: "TAG",
+    YEAR: "2026",
+    EXT_COLOR: "WHITE",
+    INT_COLOR: "BEIGE",
+    TBD3: "No",
+    ORDER_NO: "CHAN-001",
+  },
+  {
+    SHIP_DATE: "2026-07-08",
+    BRAND: "Chang’an",
+    OCN_SPEC: "CA1022",
+    MODEL: "UNI-T",
+    COUNTRY: "TOP",
+    YEAR: "2026",
+    EXT_COLOR: "BLACK",
+    INT_COLOR: "GREY",
+    TBD3: "Yes",
+    ORDER_NO: "CHAN-002",
+  },
+
+  // ✅ Geely
+  {
+    SHIP_DATE: "2026-06-15",
+    BRAND: "Geely",
+    OCN_SPEC: "GX71B",
+    MODEL: "Coolray",
+    COUNTRY: "TAG",
+    YEAR: "2026",
+    EXT_COLOR: "SILVER",
+    INT_COLOR: "BLACK",
+    TBD3: "No",
+    ORDER_NO: "GEELY-001",
+  },
+  {
+    SHIP_DATE: "2026-06-18",
+    BRAND: "Geely",
+    OCN_SPEC: "FY11",
+    MODEL: "Tugella",
+    COUNTRY: "TOP",
+    YEAR: "2026",
+    EXT_COLOR: "BLUE",
+    INT_COLOR: "BLACK/RED",
+    TBD3: "Yes",
+    ORDER_NO: "GEELY-002",
+  },
+];
+
+
   // Sample inventory data
   const [inventory, setInventory] = useState([
     {
@@ -347,7 +430,7 @@ const InventoryManagement = () => {
           {/* Left Section: Heading and Subheading */}
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center">
-              Inventory Management
+              Logistics Management
             </h1>
             <p className="text-sm sm:text-base text-gray-600 mt-1">
               Manage all vehicle inventory in one place
@@ -1075,9 +1158,70 @@ const InventoryManagement = () => {
           </div>
         )}
 
-        {activeTab === "ordersystem" && (
-          <div>order system</div>
-        )}
+{activeTab === "ordersystem" && (
+  <div className="container mt-4">
+    <h3 className="mb-4">Order System - Brand-wise Inventory</h3>
+
+    {/* Brand Selector */}
+    <div className="mb-3">
+      <label htmlFor="brandSelect" className="form-label">Select Brand</label>
+      <select
+        id="brandSelect"
+        className="form-select"
+        value={selectedBrand}
+        onChange={(e) => setSelectedBrand(e.target.value)}
+      >
+        <option value="">-- Choose Brand --</option>
+        {[...new Set(allInventory.map(item => item.BRAND))].map(brand => (
+          <option key={brand} value={brand}>{brand}</option>
+        ))}
+      </select>
+    </div>
+
+    {/* Table */}
+    {selectedBrand && (
+      <div className="table-responsive">
+        <table className="table table-bordered table-striped">
+          <thead className="table-light">
+            <tr>
+              <th>SHIP DATE</th>
+              <th>BRAND</th>
+              <th>OCN SPEC</th>
+              <th>MODEL</th>
+              <th>COUNTRY</th>
+              <th>YEAR</th>
+              <th>EXT. COLOR</th>
+              <th>INT. COLOR</th>
+              <th>TBD3</th>
+              <th>ORDER NO</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allInventory
+              .filter(item => item.BRAND === selectedBrand)
+              .map((item, index) => (
+                <tr key={index}>
+                  <td>{item.SHIP_DATE}</td>
+                  <td>{item.BRAND}</td>
+                  <td>{item.OCN_SPEC}</td>
+                  <td>{item.MODEL}</td>
+                  <td>{item.COUNTRY}</td>
+                  <td>{item.YEAR}</td>
+                  <td>{item.EXT_COLOR}</td>
+                  <td>{item.INT_COLOR}</td>
+                  <td>{item.TBD3}</td>
+                  <td>{item.ORDER_NO}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </div>
+)}
+
+
+
 
       </main>
 
