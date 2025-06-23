@@ -21,8 +21,182 @@ const InventoryManagement = () => {
   const [viewMode, setViewMode] = useState("list");
   const [showItemDetailsModal, setShowItemDetailsModal] = useState(false);
   const [demo, selectedItem] = useState();
-  
 
+
+  const [inventoryData, setInventoryData] = useState([
+    {
+      stock: 'GA0561',
+      vin: 'LMGBB1L87T3144264',
+      engine: 'K500535',
+      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
+      ocnSpec: 'BB2A-CW7-00',
+      model: 'EMPOW',
+      country: 'INF',
+      vinYear: '2026',
+      extColor: 'ELEGANT BLACK',
+      intColor: 'BLACK',
+      orderMonth: '12/12/2024',
+      productionEstimate: '1/21/2025',
+      shippingDate: '3/3/2025',
+      arrivalDate: '4/19/2025',
+      shippingIndication: 'DELIVERED'
+    },
+    {
+      stock: 'GA0562',
+      vin: 'LMGBB1L85T3144263',
+      engine: 'K500537',
+      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
+      ocnSpec: 'BB2A-CW7-00',
+      model: 'EMPOW',
+      country: 'INF',
+      vinYear: '2026',
+      extColor: 'ELEGANT BLACK',
+      intColor: 'BLACK',
+      orderMonth: '12/12/2024',
+      productionEstimate: '1/21/2025',
+      shippingDate: '3/3/2025',
+      arrivalDate: '4/19/2025',
+      shippingIndication: 'SHIPPED'
+    },
+    {
+      stock: 'GA0563',
+      vin: 'LMGBB1L82T3144267',
+      engine: 'K500610',
+      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
+      ocnSpec: 'BB2A-CW7-00',
+      model: 'EMPOW',
+      country: 'INF',
+      vinYear: '2026',
+      extColor: 'IVORY WHITE',
+      intColor: 'BLACK',
+      orderMonth: '12/12/2024',
+      productionEstimate: '1/21/2025',
+      shippingDate: '3/3/2025',
+      arrivalDate: '4/19/2025',
+      shippingIndication: 'DELIVERED'
+    },
+    {
+      stock: 'GA0564',
+      vin: 'LMGBB1L86T3144272',
+      engine: 'K500617',
+      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
+      ocnSpec: 'BB2A-CW7-00',
+      model: 'EMPOW',
+      country: 'INF',
+      vinYear: '2026',
+      extColor: 'MOONLIGHT GRAY',
+      intColor: 'BLACK',
+      orderMonth: '12/12/2024',
+      productionEstimate: '1/21/2025',
+      shippingDate: '3/3/2025',
+      arrivalDate: '4/19/2025',
+      shippingIndication: 'SHIPPED'
+    },
+    {
+      stock: 'GA0565',
+      vin: 'LMGBB1L84T3144271',
+      engine: '500616',
+      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
+      ocnSpec: 'BB2A-CW7-00',
+      model: 'EMPOW',
+      country: 'INF',
+      vinYear: '2026',
+      extColor: 'MOONLIGHT GRAY',
+      intColor: 'BLACK',
+      orderMonth: '12/12/2024',
+      productionEstimate: '1/21/2025',
+      shippingDate: '3/3/2025',
+      arrivalDate: '4/19/2025',
+      shippingIndication: 'DELIVERED'
+    },
+    {
+      stock: 'GA0566',
+      vin: 'LMGBB1L82T3144270',
+      engine: 'K500615',
+      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
+      ocnSpec: 'BB2A-CW7-00',
+      model: 'EMPOW',
+      country: 'INF',
+      vinYear: '2026',
+      extColor: 'MOONLIGHT GRAY',
+      intColor: 'BLACK',
+      orderMonth: '12/12/2024',
+      productionEstimate: '1/21/2025',
+      shippingDate: '3/3/2025',
+      arrivalDate: '4/19/2025',
+      shippingIndication: 'SHIPPED'
+    },
+    {
+      stock: 'GA0567',
+      vin: 'LMGBB1L86T3144269',
+      engine: '500614',
+      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
+      ocnSpec: 'BB2A-CW7-00',
+      model: 'EMPOW',
+      country: 'INF',
+      vinYear: '2026',
+      extColor: 'SUPERSTAR SILVEI',
+      intColor: 'BLACK',
+      orderMonth: '12/12/2024',
+      productionEstimate: '1/21/2025',
+      shippingDate: '3/3/2025',
+      arrivalDate: '4/19/2025',
+      shippingIndication: 'SHIPPED'
+    },
+    // Additional entries
+    {
+      stock: 'GA0568',
+      vin: 'LMGBB1L89T3144275',
+      engine: 'K500618',
+      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
+      ocnSpec: 'BB2A-CW7-00',
+      model: 'EMPOW',
+      country: 'INF',
+      vinYear: '2026',
+      extColor: 'METALLIC BLUE',
+      intColor: 'BEIGE',
+      orderMonth: '12/15/2024',
+      productionEstimate: '1/25/2025',
+      shippingDate: '3/5/2025',
+      arrivalDate: '4/22/2025',
+      shippingIndication: 'SHIPPED'
+    },
+    {
+      stock: 'GA0569',
+      vin: 'LMGBB1L81T3144276',
+      engine: 'K500619',
+      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
+      ocnSpec: 'BB2A-CW7-00',
+      model: 'EMPOW',
+      country: 'INF',
+      vinYear: '2026',
+      extColor: 'PEARL WHITE',
+      intColor: 'BLACK',
+      orderMonth: '12/18/2024',
+      productionEstimate: '1/28/2025',
+      shippingDate: '3/8/2025',
+      arrivalDate: '4/25/2025',
+      shippingIndication: 'DELIVERED'
+    },
+    {
+      stock: 'GA0570',
+      vin: 'LMGBB1L83T3144277',
+      engine: 'K500620',
+      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
+      ocnSpec: 'BB2A-CW7-00',
+      model: 'EMPOW',
+      country: 'INF',
+      vinYear: '2026',
+      extColor: 'RACING RED',
+      intColor: 'BLACK/RED',
+      orderMonth: '12/20/2024',
+      productionEstimate: '1/30/2025',
+      shippingDate: '3/10/2025',
+      arrivalDate: '4/28/2025',
+      shippingIndication: 'SHIPPED'
+    }
+    // Add other items in the same format
+  ]);
   // Sample inventory data
   const [inventory, setInventory] = useState([
     {
@@ -127,14 +301,21 @@ const InventoryManagement = () => {
 
   // Form state for add/edit item
   const [itemForm, setItemForm] = useState({
-    id: "",
-    name: "",
-    category: "",
-    quantity: 0,
-    status: "Active",
-    lastUpdated: "",
-    notes: "",
-    price: 0,
+    stockNumber: "",
+    vin: "",
+    engine: "",
+    bl: "",
+    ocnSpec: "",
+    model: "",
+    country: "",
+    vinYear: "",
+    extColor: "",
+    intColor: "",
+    orderMonth: "",
+    productionEstimate: "",
+    shippingDate: "",
+    arrivalDate: "",
+    shippingIndication: "Delivered"
   });
 
   // Initialize item details chart
@@ -202,6 +383,7 @@ const InventoryManagement = () => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
 
+
   console.log(selectedItem.name); // for example
 
   // Toggle user dropdown
@@ -209,25 +391,34 @@ const InventoryManagement = () => {
     setShowUserDropdown(!showUserDropdown);
   };
 
+  const [data, setData] = useState(inventoryData);
+
+  const handleEditItem = (item) => {
+    setItemForm({
+      stockNumber: item.stock,
+      vin: item.vin,
+      engine: item.engine,
+      bl: item.bl,
+      ocnSpec: item.ocnSpec,
+      model: item.model,
+      country: item.country,
+      vinYear: item.vinYear,
+      extColor: item.extColor,
+      intColor: item.intColor,
+      orderMonth: item.orderMonth,
+      productionEstimate: item.productionEstimate,
+      shippingDate: item.shippingDate,
+      arrivalDate: item.arrivalDate,
+      shippingIndication: item.shippingIndication
+    });
+    setShowAddItemModal(true);
+  };
+
+
   // Handle view item details
   const handleViewItemDetails = (item) => {
     setSelectedItem(item);
     setShowItemDetailsModal(true);
-  };
-
-  // Handle edit item
-  const handleEditItem = (item) => {
-    setItemForm({
-      id: item.id,
-      name: item.name,
-      category: item.category,
-      quantity: item.quantity,
-      status: item.status,
-      lastUpdated: item.lastUpdated,
-      notes: item.notes,
-      price: item.price,
-    });
-    setShowAddItemModal(true);
   };
 
   // Handle save item
@@ -337,13 +528,35 @@ const InventoryManagement = () => {
       return "bg-green-100 text-green-800";
     }
   };
-  const handleDownloadCSV = () => {
-    const ws = utils.json_to_sheet(inventory);
-    const wb = utils.book_new();
-    utils.book_append_sheet(wb, ws, "inventory");
-    writeFile(wb, "inventory_Export.csv");
-  };
+  
+const handleDownloadCSV = () => {
+  // Transform your inventory data to match the expected format
+  const exportData = inventoryData.map(item => ({
+    "Stock Number": item.stock,
+    "VIN": item.vin,
+    "Engine": item.engine,
+    "BL": item.bl,
+    "OCN SPEC": item.ocnSpec,
+    "Model": item.model,
+    "Country": item.country,
+    "VIN Year": item.vinYear,
+    "Ext. Color": item.extColor,
+    "Int. Color": item.intColor,
+    "Order Month": item.orderMonth,
+    "Production Estimate": item.productionEstimate,
+    "Shipping Date": item.shippingDate,
+    "Arrival Date": item.arrivalDate,
+    "Shipping Indication": item.shippingIndication
+  }));
 
+  // Create worksheet and workbook
+  const ws = XLSX.utils.json_to_sheet(exportData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Inventory");
+
+  // Export the file
+  XLSX.writeFile(wb, "Inventory_Export.xlsx");
+};
 
   useEffect(() => {
     // Initialize chart only if the ref is available
@@ -416,7 +629,7 @@ const InventoryManagement = () => {
           axisPointer: {
             type: 'shadow'
           },
-          formatter: function(params) {
+          formatter: function (params) {
             const data = params[0].data;
             return `
               <div class="p-2">
@@ -465,7 +678,7 @@ const InventoryManagement = () => {
           },
           axisLabel: {
             color: '#6B7280',
-            formatter: function(value) {
+            formatter: function (value) {
               // Convert numeric month to month names
               const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
               return months[value - 1] || '';
@@ -493,7 +706,7 @@ const InventoryManagement = () => {
             stack: 'timeline',
             barWidth: 15,
             itemStyle: {
-              color: function(params) {
+              color: function (params) {
                 return shippingData[params.dataIndex].color;
               },
               borderRadius: [4, 4, 0, 0]
@@ -561,8 +774,7 @@ const InventoryManagement = () => {
             </p>
           </div>
 
-          {/* Right Section: Buttons */}
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full md:w-auto">
+          {/* <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full md:w-auto">
             <button
               onClick={handleDownloadCSV}
               className="flex justify-center items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition w-full sm:w-auto"
@@ -575,7 +787,8 @@ const InventoryManagement = () => {
             >
               <i className="fas fa-plus mr-2"></i> Add New Item
             </button>
-          </div>
+          </div> */}
+
         </div>
 
         {/* Tab Navigation */}
@@ -612,18 +825,18 @@ const InventoryManagement = () => {
         </div>
 
         {activeTab === "inventory" && (
-          <>
+          <div>
             {/* Filters and Charts */}
             {/* Shipping Timeline Chart */}
             <div className="bg-white rounded-lg shadow p-6 mt-6">
-      <h3 className="text-lg font-medium text-gray-800 mb-4">Shipping & Delivery Timeline</h3>
-      <div className="h-80">
-        <div ref={timelineChartRef} className="w-full h-full"></div>
-      </div>
-    </div>
+              <h3 className="text-lg font-medium text-gray-800 mb-4">Shipping & Delivery Timeline</h3>
+              <div className="h-80">
+                <div ref={timelineChartRef} className="w-full h-full"></div>
+              </div>
+            </div>
 
             {/* Inventory Table */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="bg-white rounded-lg shadow mt-3 overflow-hidden">
               <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-200 bg-gray-50">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                   {/* Heading */}
@@ -634,9 +847,21 @@ const InventoryManagement = () => {
 
                   {/* Action Buttons */}
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                    {/* 🔍 Search Input */}
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      className="px-4 py-2  mt-3 border border-gray-300 rounded text-sm text-gray-700 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+
+                    {/* 🧰 Filter Button */}
                     <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
                       <i className="fas fa-filter mr-2"></i> Filter
                     </button>
+
+                    {/* 📤 Export Button */}
                     <button
                       className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto"
                       onClick={handleDownloadCSV}
@@ -644,10 +869,12 @@ const InventoryManagement = () => {
                       <i className="fas fa-file-export mr-2"></i> Export
                     </button>
                   </div>
+
                 </div>
               </div>
 
               <div className="overflow-x-auto">
+
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
@@ -670,263 +897,46 @@ const InventoryManagement = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {/* GA0561 */}
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0561</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L87T3144264</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">K500535</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ELEGANT BLACK</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          DELIVERED
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-blue-600 hover:text-blue-900 mr-3">
-                          <i className="fas fa-eye"></i>
-                        </button>
-                        <button className="text-indigo-600 hover:text-indigo-900">
-                          <i className="fas fa-edit"></i>
-                        </button>
-                      </td>
-                    </tr>
-
-                    {/* GA0562 */}
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0562</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L85T3144263</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">K500537</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ELEGANT BLACK</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                          SHIPPED
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-blue-600 hover:text-blue-900 mr-3">
-                          <i className="fas fa-eye"></i>
-                        </button>
-                        <button className="text-indigo-600 hover:text-indigo-900">
-                          <i className="fas fa-edit"></i>
-                        </button>
-                      </td>
-                    </tr>
-
-                    {/* Add remaining rows in similar fashion */}
-                    {/* GA0563 */}
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0563</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L82T3144267</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">K500610</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">IVORY WHITE</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          DELIVERED
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-blue-600 hover:text-blue-900 mr-3">
-                          <i className="fas fa-eye"></i>
-                        </button>
-                        <button className="text-indigo-600 hover:text-indigo-900">
-                          <i className="fas fa-edit"></i>
-                        </button>
-                      </td>
-                    </tr>
-
-                    {/* GA0564 */}
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0564</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L86T3144272</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">K500617</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">MOONLIGHT GRAY</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                          SHIPPED
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-blue-600 hover:text-blue-900 mr-3">
-                          <i className="fas fa-eye"></i>
-                        </button>
-                        <button className="text-indigo-600 hover:text-indigo-900">
-                          <i className="fas fa-edit"></i>
-                        </button>
-                      </td>
-                    </tr>
-
-                    {/* GA0565 */}
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0565</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L84T3144271</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">500616</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">MOONLIGHT GRAY</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          DELIVERED
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-blue-600 hover:text-blue-900 mr-3">
-                          <i className="fas fa-eye"></i>
-                        </button>
-                        <button className="text-indigo-600 hover:text-indigo-900">
-                          <i className="fas fa-edit"></i>
-                        </button>
-                      </td>
-                    </tr>
-
-                    {/* GA0566 */}
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0566</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L82T3144270</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">K500615</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">MOONLIGHT GRAY</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                          SHIPPED
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-blue-600 hover:text-blue-900 mr-3">
-                          <i className="fas fa-eye"></i>
-                        </button>
-                        <button className="text-indigo-600 hover:text-indigo-900">
-                          <i className="fas fa-edit"></i>
-                        </button>
-                      </td>
-                    </tr>
-
-                    {/* GA0567 */}
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0567</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L86T3144269</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">500614</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">SUPERSTAR SILVEI</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                          SHIPPED
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-blue-600 hover:text-blue-900 mr-3">
-                          <i className="fas fa-eye"></i>
-                        </button>
-                        <button className="text-indigo-600 hover:text-indigo-900">
-                          <i className="fas fa-edit"></i>
-                        </button>
-                      </td>
-                    </tr>
+                    {data.map((item) => (
+                      <tr key={item.stock} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.stock}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.vin}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.engine}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.bl}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.ocnSpec}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.model}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.country}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.vinYear}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.extColor}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.intColor}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.orderMonth}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.productionEstimate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.shippingDate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.arrivalDate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${item.shippingIndication === 'DELIVERED'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-blue-100 text-blue-800'
+                            }`}>
+                            {item.shippingIndication}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                          <button
+                            className="text-indigo-600 hover:text-indigo-900"
+                            onClick={() => handleEditItem(item)}
+                          >
+                            <i className="fas fa-edit"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
-              </div>
 
-              {/* Pagination */}
-              <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                <div className="flex-1 flex justify-between sm:hidden">
-                  <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    Previous
-                  </button>
-                  <button className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                    Next
-                  </button>
-                </div>
-                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-sm text-gray-700">
-                      Showing <span className="font-medium">1</span> to <span className="font-medium">7</span> of <span className="font-medium">7</span> results
-                    </p>
-                  </div>
-                  <div>
-                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                      <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                        <span className="sr-only">Previous</span>
-                        <i className="fas fa-chevron-left"></i>
-                      </button>
-                      <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-indigo-50 text-sm font-medium text-indigo-600 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                        1
-                      </button>
-                      <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                        <span className="sr-only">Next</span>
-                        <i className="fas fa-chevron-right"></i>
-                      </button>
-                    </nav>
-                  </div>
-                </div>
               </div>
             </div>
-
-          </>
+          </div>
         )}
 
         {activeTab === "reports" && (
@@ -1312,131 +1322,119 @@ const InventoryManagement = () => {
           </div>
         )}
 
-     {activeTab === "ordersystem" && (
-  <div className="container mt-4">
-    <h3 className="mb-4">Place New Order</h3>
+        {activeTab === "ordersystem" && (
+          <div className="container mt-4">
+            <h3 className="mb-4">Place New Order</h3>
 
-    <form >
-      <div className="row">
-        <div className="col-md-4 mb-3">
-          <label className="form-label">Stock</label>
-          <input type="text" className="form-control" name="stock" required />
-        </div>
+            <form >
+              <div className="row">
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">Stock</label>
+                  <input type="text" className="form-control" name="stock" required />
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">VIN</label>
-          <input type="text" className="form-control" name="vin" required />
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">VIN</label>
+                  <input type="text" className="form-control" name="vin" required />
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">Engine</label>
-          <input type="text" className="form-control" name="engine" />
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">Engine</label>
+                  <input type="text" className="form-control" name="engine" />
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">BL</label>
-          <input type="text" className="form-control" name="bl" />
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">BL</label>
+                  <input type="text" className="form-control" name="bl" />
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">OCN Spec</label>
-          <input type="text" className="form-control" name="ocn_spec" />
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">OCN Spec</label>
+                  <input type="text" className="form-control" name="ocn_spec" />
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">Model</label>
-          <select className="form-select" name="model" required>
-            <option value="">-- Select Model --</option>
-            <option value="EMPOW">EMPOW</option>
-          </select>
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">Model</label>
+                  <select className="form-select" name="model" required>
+                    <option value="">-- Select Model --</option>
+                    <option value="EMPOW">EMPOW</option>
+                  </select>
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">Country</label>
-          <select className="form-select" name="country">
-            <option value="">-- Select Country --</option>
-            <option value="INF">INF</option>
-          </select>
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">Country</label>
+                  <select className="form-select" name="country">
+                    <option value="">-- Select Country --</option>
+                    <option value="INF">INF</option>
+                  </select>
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">VIN Year</label>
-          <input type="text" className="form-control" name="vin_year" />
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">VIN Year</label>
+                  <input type="text" className="form-control" name="vin_year" />
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">Ext. Color</label>
-          <select className="form-select" name="ext_color">
-            <option value="">-- Select Ext. Color --</option>
-            <option value="ELEGANT BLACK">ELEGANT BLACK</option>
-            <option value="IVORY WHITE">IVORY WHITE</option>
-            <option value="MOONLIGHT GRAY">MOONLIGHT GRAY</option>
-            <option value="SUPERSTAR SILVER">SUPERSTAR SILVER</option>
-          </select>
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">Ext. Color</label>
+                  <select className="form-select" name="ext_color">
+                    <option value="">-- Select Ext. Color --</option>
+                    <option value="ELEGANT BLACK">ELEGANT BLACK</option>
+                    <option value="IVORY WHITE">IVORY WHITE</option>
+                    <option value="MOONLIGHT GRAY">MOONLIGHT GRAY</option>
+                    <option value="SUPERSTAR SILVER">SUPERSTAR SILVER</option>
+                  </select>
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">Int. Color</label>
-          <select className="form-select" name="int_color">
-            <option value="">-- Select Int. Color --</option>
-            <option value="BLACK">BLACK</option>
-          </select>
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">Int. Color</label>
+                  <select className="form-select" name="int_color">
+                    <option value="">-- Select Int. Color --</option>
+                    <option value="BLACK">BLACK</option>
+                  </select>
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">Order Month</label>
-          <input type="text" className="form-control" name="order_month" />
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">Order Month</label>
+                  <input type="text" className="form-control" name="order_month" />
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">Production Estimate</label>
-          <input type="text" className="form-control" name="production_estimate" />
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">Production Estimate</label>
+                  <input type="text" className="form-control" name="production_estimate" />
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">Shipping Date</label>
-          <input type="date" className="form-control" name="shipping_date" />
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">Shipping Date</label>
+                  <input type="date" className="form-control" name="shipping_date" />
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">Arrival Date</label>
-          <input type="date" className="form-control" name="arrival_date" />
-        </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">Arrival Date</label>
+                  <input type="date" className="form-control" name="arrival_date" />
+                </div>
 
-        <div className="col-md-4 mb-3">
-          <label className="form-label">Shipping Indication</label>
-          <select className="form-select" name="shipping_indication">
-            <option value="SHIPPED">SHIPPED</option>
-            <option value="DELIVERED">DELIVERED</option>
-          </select>
-        </div>
-      </div>
+                <div className="col-md-4 mb-3">
+                  <label className="form-label">Shipping Indication</label>
+                  <select className="form-select" name="shipping_indication">
+                    <option value="SHIPPED">SHIPPED</option>
+                    <option value="DELIVERED">DELIVERED</option>
+                  </select>
+                </div>
+              </div>
 
-      <button type="submit" className="btn btn-primary mt-3">Submit Order</button>
-    </form>
-  </div>
-)}
-
-
-
-
-
-
-
+              <button type="submit" className="btn btn-primary mt-3">Submit Order</button>
+            </form>
+          </div>
+        )}
       </main>
 
       {/* Add/Edit Item Modal */}
       {showAddItemModal && (
         <div className="modal show d-block" tabIndex="-1" role="dialog">
-          <div
-            className="modal-dialog modal-dialog-centered modal-lg"
-            role="document"
-          >
+          <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">
-                  {itemForm.id ? `Edit Item - ${itemForm.id}` : "Add New Item"}
-                </h5>
+                <h5 className="modal-title">Update Inventory Item</h5>
                 <button
                   type="button"
                   className="btn-close"
@@ -1446,164 +1444,220 @@ const InventoryManagement = () => {
               </div>
               <div className="modal-body">
                 <form>
-                  <div className="mb-3">
-                    <label htmlFor="item-name" className="form-label">
-                      Item Name *
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="item-name"
-                      value={itemForm.name}
-                      onChange={(e) =>
-                        setItemForm({ ...itemForm, name: e.target.value })
-                      }
-                    />
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="stock-number" className="form-label">
+                        Stock Number
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="stock-number"
+                        value={itemForm.stockNumber || "GA05E1"}
+                        readOnly
+                      />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="vin" className="form-label">
+                        VIN
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="vin"
+                        value={itemForm.vin || "LMGBR11871144264"}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="engine" className="form-label">
+                        Engine
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="engine"
+                        value={itemForm.engine || "K500535"}
+                        readOnly
+                      />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="bl" className="form-label">
+                        BL
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="bl"
+                        value={itemForm.bl || "EUROSHBJXD11613 BB2A-CW7-00"}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="ocn-spec" className="form-label">
+                        OCN SPEC
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="ocn-spec"
+                        value={itemForm.ocnSpec || "BB2A-CW7-00"}
+                        readOnly
+                      />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="model" className="form-label">
+                        Model
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="model"
+                        value={itemForm.model || "EMPGW"}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="country" className="form-label">
+                        Country
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="country"
+                        value={itemForm.country || "INF"}
+                        readOnly
+                      />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="vin-year" className="form-label">
+                        VIN Year
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="vin-year"
+                        value={itemForm.vinYear || "2006"}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="ext-color" className="form-label">
+                        Ext. Color
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="ext-color"
+                        value={itemForm.extColor || "ELEGANT BLACK"}
+                        readOnly
+                      />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="int-color" className="form-label">
+                        Int. Color
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="int-color"
+                        value={itemForm.intColor || "BLACK"}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="order-month" className="form-label">
+                        Order Month
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="order-month"
+                        value={itemForm.orderMonth || "12/12/2024"}
+                        readOnly
+                      />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="production-estimate" className="form-label">
+                        Production Estimate
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="production-estimate"
+                        value={itemForm.productionEstimate || "1/21/2025"}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="shipping-date" className="form-label">
+                        Shipping Date
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="shipping-date"
+                        value={itemForm.shippingDate || "3/3/2025"}
+                        readOnly
+                      />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="arrival-date" className="form-label">
+                        Arrival Date
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="arrival-date"
+                        value={itemForm.arrivalDate || "mm/dd/yyyy"}
+                        onChange={(e) =>
+                          setItemForm({ ...itemForm, arrivalDate: e.target.value })
+                        }
+                      />
+                    </div>
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="category" className="form-label">
-                      Category *
+                    <label htmlFor="shipping-indication" className="form-label">
+                      Shipping Indication
                     </label>
                     <select
-                      id="category"
+                      id="shipping-indication"
                       className="form-select"
-                      value={itemForm.category}
+                      value={itemForm.shippingIndication || "Delivered"}
                       onChange={(e) =>
-                        setItemForm({ ...itemForm, category: e.target.value })
+                        setItemForm({ ...itemForm, shippingIndication: e.target.value })
                       }
                     >
-                      <option value="">-- Select Category --</option>
-                      {categories.map((category) => (
-                        <option key={category.id} value={category.name}>
-                          {category.name}
-                        </option>
-                      ))}
+                      <option value="Delivered">Delivered</option>
+                      <option value="Shipped">Shipped</option>
+                      <option value="Pending">Pending</option>
                     </select>
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="quantity" className="form-label">
-                      Quantity *
-                    </label>
-                    <div className="input-group">
-                      <button
-                        className="btn"
-                        type="button"
-                        onClick={() =>
-                          setItemForm({
-                            ...itemForm,
-                            quantity: Math.max(0, itemForm.quantity - 1),
-                          })
-                        }
-                      >
-                        <i className="fas fa-minus"></i>
-                      </button>
-                      <input
-                        type="number"
-                        className="form-control text-center"
-                        min="0"
-                        id="quantity"
-                        value={itemForm.quantity}
-                        onChange={(e) =>
-                          setItemForm({
-                            ...itemForm,
-                            quantity: parseInt(e.target.value) || 0,
-                          })
-                        }
-                      />
-                      <button
-                        className="btn"
-                        type="button"
-                        onClick={() =>
-                          setItemForm({
-                            ...itemForm,
-                            quantity: itemForm.quantity + 1,
-                          })
-                        }
-                      >
-                        <i className="fas fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="price" className="form-label">
-                      Price ($) *
-                    </label>
-                    <div className="">
-                      <span className="input-group-text">$</span>
-                      <input
-                        type="number"
-                        className="form-control"
-                        id="price"
-                        placeholder="0.00"
-                        value={itemForm.price}
-                        onChange={(e) =>
-                          setItemForm({
-                            ...itemForm,
-                            price: parseFloat(e.target.value) || 0,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Status *</label>
-                    <div>
-                      <div className="form-check form-check-inline">
-                        <input
-                          className="form-check-input mt-0"
-                          type="radio"
-                          id="status-active"
-                          name="status"
-                          checked={itemForm.status === "Active"}
-                          onChange={() =>
-                            setItemForm({ ...itemForm, status: "Active" })
-                          }
-                        />
-                        <label
-                          className="form-check-label ms-2"
-                          htmlFor="status-active"
-                        >
-                          Active
-                        </label>
-                      </div>
-                      <div className="form-check form-check-inline">
-                        <input
-                          className="form-check-input mt-0"
-                          type="radio"
-                          id="status-inactive"
-                          name="status"
-                          checked={itemForm.status === "Inactive"}
-                          onChange={() =>
-                            setItemForm({ ...itemForm, status: "Inactive" })
-                          }
-                        />
-                        <label
-                          className="form-check-label ms-2"
-                          htmlFor="status-inactive"
-                        >
-                          Inactive
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="notes" className="form-label">
-                      Notes
-                    </label>
-                    <textarea
-                      className="form-control"
-                      id="notes"
-                      rows="3"
-                      value={itemForm.notes}
-                      onChange={(e) =>
-                        setItemForm({ ...itemForm, notes: e.target.value })
-                      }
-                    ></textarea>
                   </div>
                 </form>
               </div>
@@ -1613,7 +1667,7 @@ const InventoryManagement = () => {
                   className="btn btn-primary"
                   onClick={handleSaveItem}
                 >
-                  {itemForm.id ? "Update Item" : "Add Item"}
+                  Update Item
                 </button>
                 <button
                   type="button"
@@ -1697,416 +1751,6 @@ const InventoryManagement = () => {
           </div>
         </div>
       </>
-
-      {/* Item Details Modal */}
-      {showItemDetailsModal && selectedItem && (
-        <div className="fixed z-20 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6">
-                <div className="flex justify-between items-start">
-                  <div className="flex items-center">
-                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
-                      <i className="fas fa-car text-indigo-600"></i>
-                    </div>
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                      <h3 className="text-lg leading-6 font-medium text-gray-900">
-                        {selectedItem.name}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        {selectedItem.id} - {selectedItem.category}
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
-                    onClick={() => setShowItemDetailsModal(false)}
-                  >
-                    <span className="sr-only">Close</span>
-                    <i className="fas fa-times"></i>
-                  </button>
-                </div>
-
-                <div className="mt-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="md:col-span-1">
-                      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                        <div className="p-4 border-b border-gray-200 bg-gray-50">
-                          <h4 className="text-base font-medium text-gray-800">
-                            Item Details
-                          </h4>
-                        </div>
-                        <div className="p-4 space-y-3">
-                          <div>
-                            <p className="text-sm font-medium text-gray-500">
-                              Status
-                            </p>
-                            <p className="mt-1">
-                              <span
-                                className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeColor(
-                                  selectedItem.status
-                                )}`}
-                              >
-                                {selectedItem.status}
-                              </span>
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-500">
-                              Quantity
-                            </p>
-                            <p className="mt-1 text-sm text-gray-900">
-                              <span
-                                className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStockLevelIndicator(
-                                  selectedItem.quantity
-                                )}`}
-                              >
-                                {selectedItem.quantity}
-                              </span>
-                              {selectedItem.quantity === 0 && (
-                                <span className="ml-2 text-red-600">
-                                  Out of stock
-                                </span>
-                              )}
-                              {selectedItem.quantity > 0 &&
-                                selectedItem.quantity < 5 && (
-                                  <span className="ml-2 text-yellow-600">
-                                    Low stock
-                                  </span>
-                                )}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-500">
-                              Price
-                            </p>
-                            <p className="mt-1 text-sm text-gray-900">
-                              ${selectedItem.price.toLocaleString()}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-500">
-                              Total Value
-                            </p>
-                            <p className="mt-1 text-sm text-gray-900">
-                              $
-                              {(
-                                selectedItem.price * selectedItem.quantity
-                              ).toLocaleString()}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-500">
-                              Last Updated
-                            </p>
-                            <p className="mt-1 text-sm text-gray-900">
-                              {new Date(
-                                selectedItem.lastUpdated
-                              ).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 bg-white rounded-lg border border-gray-200 overflow-hidden">
-                        <div className="p-4 border-b border-gray-200 bg-gray-50">
-                          <h4 className="text-base font-medium text-gray-800">
-                            Notes
-                          </h4>
-                        </div>
-                        <div className="p-4">
-                          <p className="text-sm text-gray-600">
-                            {selectedItem.notes || "No notes available."}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 bg-white rounded-lg border border-gray-200 overflow-hidden">
-                        <div className="p-4 border-b border-gray-200 bg-gray-50">
-                          <h4 className="text-base font-medium text-gray-800">
-                            Quick Actions
-                          </h4>
-                        </div>
-                        <div className="p-4 space-y-2">
-                          <button
-                            onClick={() => {
-                              setShowItemDetailsModal(false);
-                              handleEditItem(selectedItem);
-                            }}
-                            className="w-full flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 cursor-pointer !rounded-button whitespace-nowrap"
-                          >
-                            <i className="fas fa-edit mr-2"></i> Edit Item
-                          </button>
-                          <button
-                            onClick={() => {
-                              setShowItemDetailsModal(false);
-                              handleDeleteConfirmation(selectedItem.id);
-                            }}
-                            className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap"
-                          >
-                            <i className="fas fa-trash mr-2"></i> Delete Item
-                          </button>
-                          <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                            <i className="fas fa-shopping-cart mr-2"></i> Order
-                            More
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="md:col-span-2 space-y-4">
-                      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                        <div className="p-4 border-b border-gray-200 bg-gray-50">
-                          <h4 className="text-base font-medium text-gray-800">
-                            Vehicle Information
-                          </h4>
-                        </div>
-                        <div className="p-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                              <img
-                                src={`https://readdy.ai/api/search-image?query=modern%2520$%7BselectedItem.category.toLowerCase%28%29%7D%2520car%2520on%2520plain%2520white%2520background%252C%2520professional%2520product%2520photography%252C%2520high%2520quality%252C%2520detailed%252C%2520studio%2520lighting%252C%2520clean%2520background&width=400&height=300&seq=${selectedItem.id}&orientation=landscape`}
-                                alt={selectedItem.name}
-                                className="w-full h-auto rounded-lg object-cover"
-                              />
-                            </div>
-                            <div className="space-y-3">
-                              <div>
-                                <p className="text-sm font-medium text-gray-500">
-                                  Model
-                                </p>
-                                <p className="mt-1 text-sm text-gray-900">
-                                  {selectedItem.name}
-                                </p>
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium text-gray-500">
-                                  Category
-                                </p>
-                                <p className="mt-1 text-sm text-gray-900">
-                                  {selectedItem.category}
-                                </p>
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium text-gray-500">
-                                  Year
-                                </p>
-                                <p className="mt-1 text-sm text-gray-900">
-                                  2025
-                                </p>
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium text-gray-500">
-                                  Engine
-                                </p>
-                                <p className="mt-1 text-sm text-gray-900">
-                                  {selectedItem.category === "Electric"
-                                    ? "Electric Motor"
-                                    : selectedItem.category === "Hybrid"
-                                      ? "Hybrid Engine"
-                                      : "2.0L Turbo"}
-                                </p>
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium text-gray-500">
-                                  Transmission
-                                </p>
-                                <p className="mt-1 text-sm text-gray-900">
-                                  Automatic
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                        <div className="p-4 border-b border-gray-200 bg-gray-50">
-                          <h4 className="text-base font-medium text-gray-800">
-                            Stock History
-                          </h4>
-                        </div>
-                        <div className="p-4">
-                          <div
-                            ref={itemDetailsChartRef}
-                            style={{ height: "200px" }}
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                        <div className="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-                          <h4 className="text-base font-medium text-gray-800">
-                            Inventory History
-                          </h4>
-                          <button className="text-sm text-indigo-600 hover:text-indigo-800 cursor-pointer !rounded-button whitespace-nowrap">
-                            View All
-                          </button>
-                        </div>
-                        <div className="overflow-x-auto">
-                          <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                              <tr>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                  Date
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                  Action
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                  Quantity
-                                </th>
-                                <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                  Notes
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                              {selectedItem.history &&
-                                selectedItem.history.length > 0 ? (
-                                selectedItem.history.map((entry, index) => (
-                                  <tr key={index}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                      {new Date(entry.date).toLocaleDateString(
-                                        "en-US",
-                                        {
-                                          year: "numeric",
-                                          month: "short",
-                                          day: "numeric",
-                                        }
-                                      )}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                      {entry.action}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                      {entry.quantity}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                      {entry.notes || "—"}
-                                    </td>
-                                  </tr>
-                                ))
-                              ) : (
-                                <tr>
-                                  <td
-                                    colSpan="4"
-                                    className="px-6 py-4 text-center text-sm text-gray-500"
-                                  >
-                                    No inventory history available.
-                                  </td>
-                                </tr>
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-
-                      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                        <div className="p-4 border-b border-gray-200 bg-gray-50">
-                          <h4 className="text-base font-medium text-gray-800">
-                            Related Documents
-                          </h4>
-                        </div>
-                        <div className="p-4">
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                              <div className="flex items-center">
-                                <i className="fas fa-file-pdf text-red-500 mr-3 text-lg"></i>
-                                <div>
-                                  <p className="text-sm font-medium text-gray-900">
-                                    Product Specification
-                                  </p>
-                                  <p className="text-xs text-gray-500">
-                                    PDF, 2.4 MB
-                                  </p>
-                                </div>
-                              </div>
-                              <button className="text-indigo-600 hover:text-indigo-800 cursor-pointer !rounded-button whitespace-nowrap">
-                                <i className="fas fa-download"></i>
-                              </button>
-                            </div>
-                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                              <div className="flex items-center">
-                                <i className="fas fa-file-image text-blue-500 mr-3 text-lg"></i>
-                                <div>
-                                  <p className="text-sm font-medium text-gray-900">
-                                    Vehicle Images
-                                  </p>
-                                  <p className="text-xs text-gray-500">
-                                    ZIP, 15.7 MB
-                                  </p>
-                                </div>
-                              </div>
-                              <button className="text-indigo-600 hover:text-indigo-800 cursor-pointer !rounded-button whitespace-nowrap">
-                                <i className="fas fa-download"></i>
-                              </button>
-                            </div>
-                            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                              <div className="flex items-center">
-                                <i className="fas fa-file-excel text-green-500 mr-3 text-lg"></i>
-                                <div>
-                                  <p className="text-sm font-medium text-gray-900">
-                                    Pricing Sheet
-                                  </p>
-                                  <p className="text-xs text-gray-500">
-                                    XLSX, 1.2 MB
-                                  </p>
-                                </div>
-                              </div>
-                              <button className="text-indigo-600 hover:text-indigo-800 cursor-pointer !rounded-button whitespace-nowrap">
-                                <i className="fas fa-download"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={() => setShowItemDetailsModal(false)}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
