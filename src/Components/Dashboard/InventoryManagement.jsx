@@ -261,34 +261,6 @@ const InventoryManagement = () => {
     },
   ]);
 
-  // Sample inventory history data
-  const inventoryHistory = [
-    {
-      date: "2025-06-15",
-      action: "Stock Update",
-      quantity: "+5",
-      user: "John Doe",
-    },
-    {
-      date: "2025-06-10",
-      action: "Stock Update",
-      quantity: "+10",
-      user: "Sarah Johnson",
-    },
-    {
-      date: "2025-05-28",
-      action: "Initial Stock",
-      quantity: "+15",
-      user: "Mike Wilson",
-    },
-    {
-      date: "2025-05-20",
-      action: "Price Update",
-      quantity: "0",
-      user: "John Doe",
-    },
-  ];
-
   // Sample categories for dropdown
   const categories = [
     { id: "1", name: "SUV" },
@@ -414,13 +386,6 @@ const InventoryManagement = () => {
     setShowAddItemModal(true);
   };
 
-
-  // Handle view item details
-  const handleViewItemDetails = (item) => {
-    setSelectedItem(item);
-    setShowItemDetailsModal(true);
-  };
-
   // Handle save item
   const handleSaveItem = () => {
     if (itemForm.id) {
@@ -458,35 +423,10 @@ const InventoryManagement = () => {
     setShowAddItemModal(false);
   };
 
-  // Handle create new item
-  const handleCreateNewItem = () => {
-    setItemForm({
-      id: "",
-      name: "",
-      category: "",
-      quantity: 0,
-      status: "Active",
-      lastUpdated: new Date().toISOString().split("T")[0],
-      notes: "",
-      price: 0,
-    });
-    setShowAddItemModal(true);
-  };
-
-  // Handle delete confirmation
-  const handleDeleteConfirmation = (id) => {
-    setItemToDelete(id);
-    setShowDeleteConfirmation(true);
-  };
-
-  // Handle delete item
-  const handleDeleteItem = () => {
-    if (itemToDelete) {
-      setInventory(inventory.filter((item) => item.id !== itemToDelete));
-      setShowDeleteConfirmation(false);
-      setItemToDelete(null);
-    }
-  };
+  const handleDeleteItem = (itemToDelete) => {
+  const updatedItems = items.filter((i) => i.id !== itemToDelete.id);
+  setItems(updatedItems);
+};
 
   // Filter inventory based on search and filters
   const filteredInventory = inventory.filter((item) => {
@@ -506,57 +446,35 @@ const InventoryManagement = () => {
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
-  // Get status badge color
-  const getStatusBadgeColor = (status) => {
-    switch (status.toLowerCase()) {
-      case "active":
-        return "bg-green-100 text-green-800";
-      case "inactive":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
+
+  const handleDownloadCSV = () => {
+    // Transform your inventory data to match the expected format
+    const exportData = inventoryData.map(item => ({
+      "Stock Number": item.stock,
+      "VIN": item.vin,
+      "Engine": item.engine,
+      "BL": item.bl,
+      "OCN SPEC": item.ocnSpec,
+      "Model": item.model,
+      "Country": item.country,
+      "VIN Year": item.vinYear,
+      "Ext. Color": item.extColor,
+      "Int. Color": item.intColor,
+      "Order Month": item.orderMonth,
+      "Production Estimate": item.productionEstimate,
+      "Shipping Date": item.shippingDate,
+      "Arrival Date": item.arrivalDate,
+      "Shipping Indication": item.shippingIndication
+    }));
+
+    // Create worksheet and workbook
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Inventory");
+
+    // Export the file
+    XLSX.writeFile(wb, "Inventory_Export.xlsx");
   };
-
-  // Get stock level indicator
-  const getStockLevelIndicator = (quantity) => {
-    if (quantity === 0) {
-      return "bg-red-100 text-red-800";
-    } else if (quantity < 5) {
-      return "bg-yellow-100 text-yellow-800";
-    } else {
-      return "bg-green-100 text-green-800";
-    }
-  };
-  
-const handleDownloadCSV = () => {
-  // Transform your inventory data to match the expected format
-  const exportData = inventoryData.map(item => ({
-    "Stock Number": item.stock,
-    "VIN": item.vin,
-    "Engine": item.engine,
-    "BL": item.bl,
-    "OCN SPEC": item.ocnSpec,
-    "Model": item.model,
-    "Country": item.country,
-    "VIN Year": item.vinYear,
-    "Ext. Color": item.extColor,
-    "Int. Color": item.intColor,
-    "Order Month": item.orderMonth,
-    "Production Estimate": item.productionEstimate,
-    "Shipping Date": item.shippingDate,
-    "Arrival Date": item.arrivalDate,
-    "Shipping Indication": item.shippingIndication
-  }));
-
-  // Create worksheet and workbook
-  const ws = XLSX.utils.json_to_sheet(exportData);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Inventory");
-
-  // Export the file
-  XLSX.writeFile(wb, "Inventory_Export.xlsx");
-};
 
   useEffect(() => {
     // Initialize chart only if the ref is available
@@ -748,12 +666,6 @@ const handleDownloadCSV = () => {
         chart.resize();
       };
       window.addEventListener('resize', handleResize);
-
-      // Cleanup
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        chart.dispose();
-      };
     }
   }, []);
 
@@ -826,7 +738,6 @@ const handleDownloadCSV = () => {
 
         {activeTab === "inventory" && (
           <div>
-            {/* Filters and Charts */}
             {/* Shipping Timeline Chart */}
             <div className="bg-white rounded-lg shadow p-6 mt-6">
               <h3 className="text-lg font-medium text-gray-800 mb-4">Shipping & Delivery Timeline</h3>
@@ -922,13 +833,25 @@ const handleDownloadCSV = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                          {/* Edit Button */}
                           <button
-                            className="text-indigo-600 hover:text-indigo-900"
+                            className="text-indigo-600 hover:text-indigo-900 me-3"
                             onClick={() => handleEditItem(item)}
+                            title="Edit"
                           >
                             <i className="fas fa-edit"></i>
                           </button>
+
+                          {/* Delete Button */}
+                          <button
+                            className="text-red-600 hover:text-red-800"
+                            onClick={() => handleDeleteItem(item)}
+                            title="Delete"
+                          >
+                            <i className="fas fa-trash-alt"></i>
+                          </button>
                         </td>
+
                       </tr>
                     ))}
                   </tbody>
@@ -1682,20 +1605,8 @@ const handleDownloadCSV = () => {
           <div className="modal-backdrop fade show"></div>
         </div>
       )}
-
-      {/* Delete Confirmation Modal */}
       <>
-        {/* Trigger Button (for example purposes) */}
-        {/* <button
-          type="button"
-          className="btn btn-danger"
-          data-bs-toggle="modal"
-          data-bs-target="#deleteConfirmationModal"
-        >
-          Delete Item
-        </button> */}
 
-        {/* Delete Confirmation Modal */}
         <div
           className="modal fade"
           id="deleteConfirmationModal"
