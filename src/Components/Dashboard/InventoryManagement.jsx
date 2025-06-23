@@ -5,6 +5,8 @@ import * as echarts from "echarts";
 import { utils, writeFile } from "xlsx";
 import * as XLSX from "xlsx";
 const InventoryManagement = () => {
+  const timelineChartRef = useRef(null);
+  const statusChartRef = useRef(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeMenu, setActiveMenu] = useState("inventory");
   const [showUserDropdown, setShowUserDropdown] = useState(false);
@@ -19,88 +21,7 @@ const InventoryManagement = () => {
   const [viewMode, setViewMode] = useState("list");
   const [showItemDetailsModal, setShowItemDetailsModal] = useState(false);
   const [demo, selectedItem] = useState();
-  const [selectedBrand, setSelectedBrand] = useState("");
-
-const allInventory = [
-  // ✅ BAIC
-  {
-    SHIP_DATE: "2026-08-10",
-    BRAND: "BAIC",
-    OCN_SPEC: "BJ2032F7VA1K-PE",
-    MODEL: "BJ40 PLUS",
-    COUNTRY: "TAG",
-    YEAR: "2026",
-    EXT_COLOR: "FLAME RED",
-    INT_COLOR: "BLACK",
-    TBD3: "Yes",
-    ORDER_NO: "BAIC-001",
-  },
-  {
-    SHIP_DATE: "2026-08-12",
-    BRAND: "BAIC",
-    OCN_SPEC: "BJ6470X52MHEV",
-    MODEL: "BJ30",
-    COUNTRY: "TOP",
-    YEAR: "2026",
-    EXT_COLOR: "PLATINUM GREY",
-    INT_COLOR: "BLACK",
-    TBD3: "Yes",
-    ORDER_NO: "BAIC-002",
-  },
-
-  // ✅ Chang’an
-  {
-    SHIP_DATE: "2026-07-05",
-    BRAND: "Chang’an",
-    OCN_SPEC: "CA1041H8L",
-    MODEL: "E-STAR",
-    COUNTRY: "TAG",
-    YEAR: "2026",
-    EXT_COLOR: "WHITE",
-    INT_COLOR: "BEIGE",
-    TBD3: "No",
-    ORDER_NO: "CHAN-001",
-  },
-  {
-    SHIP_DATE: "2026-07-08",
-    BRAND: "Chang’an",
-    OCN_SPEC: "CA1022",
-    MODEL: "UNI-T",
-    COUNTRY: "TOP",
-    YEAR: "2026",
-    EXT_COLOR: "BLACK",
-    INT_COLOR: "GREY",
-    TBD3: "Yes",
-    ORDER_NO: "CHAN-002",
-  },
-
-  // ✅ Geely
-  {
-    SHIP_DATE: "2026-06-15",
-    BRAND: "Geely",
-    OCN_SPEC: "GX71B",
-    MODEL: "Coolray",
-    COUNTRY: "TAG",
-    YEAR: "2026",
-    EXT_COLOR: "SILVER",
-    INT_COLOR: "BLACK",
-    TBD3: "No",
-    ORDER_NO: "GEELY-001",
-  },
-  {
-    SHIP_DATE: "2026-06-18",
-    BRAND: "Geely",
-    OCN_SPEC: "FY11",
-    MODEL: "Tugella",
-    COUNTRY: "TOP",
-    YEAR: "2026",
-    EXT_COLOR: "BLUE",
-    INT_COLOR: "BLACK/RED",
-    TBD3: "Yes",
-    ORDER_NO: "GEELY-002",
-  },
-];
-
+  
 
   // Sample inventory data
   const [inventory, setInventory] = useState([
@@ -422,6 +343,209 @@ const allInventory = [
     utils.book_append_sheet(wb, ws, "inventory");
     writeFile(wb, "inventory_Export.csv");
   };
+
+
+  useEffect(() => {
+    // Initialize chart only if the ref is available
+    if (timelineChartRef.current) {
+      const chart = echarts.init(timelineChartRef.current);
+
+      // Sample shipping data (replace with your actual data)
+      const shippingData = [
+        {
+          stock: 'GA0561',
+          model: 'EMPOW',
+          shippingDate: '2025-03-03',
+          arrivalDate: '2025-04-19',
+          status: 'DELIVERED',
+          color: '#10B981' // green
+        },
+        {
+          stock: 'GA0562',
+          model: 'EMPOW',
+          shippingDate: '2025-03-03',
+          arrivalDate: '2025-04-19',
+          status: 'SHIPPED',
+          color: '#3B82F6' // blue
+        },
+        {
+          stock: 'GA0563',
+          model: 'EMPOW',
+          shippingDate: '2025-03-03',
+          arrivalDate: '2025-04-19',
+          status: 'DELIVERED',
+          color: '#10B981'
+        },
+        {
+          stock: 'GA0564',
+          model: 'EMPOW',
+          shippingDate: '2025-03-03',
+          arrivalDate: '2025-04-19',
+          status: 'SHIPPED',
+          color: '#3B82F6'
+        },
+        {
+          stock: 'GA0565',
+          model: 'EMPOW',
+          shippingDate: '2025-03-03',
+          arrivalDate: '2025-04-19',
+          status: 'DELIVERED',
+          color: '#10B981'
+        },
+        {
+          stock: 'GA0566',
+          model: 'EMPOW',
+          shippingDate: '2025-03-03',
+          arrivalDate: '2025-04-19',
+          status: 'SHIPPED',
+          color: '#3B82F6'
+        },
+        {
+          stock: 'GA0567',
+          model: 'EMPOW',
+          shippingDate: '2025-03-03',
+          arrivalDate: '2025-04-19',
+          status: 'SHIPPED',
+          color: '#3B82F6'
+        }
+      ];
+
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          },
+          formatter: function(params) {
+            const data = params[0].data;
+            return `
+              <div class="p-2">
+                <div class="font-bold">${data.stock}</div>
+                <div>Model: ${data.model}</div>
+                <div>Shipping: ${new Date(data.shippingDate).toLocaleDateString()}</div>
+                <div>Arrival: ${new Date(data.arrivalDate).toLocaleDateString()}</div>
+                <div class="mt-1">
+                  Status: <span class="font-semibold ${data.status === 'DELIVERED' ? 'text-green-600' : 'text-blue-600'}">${data.status}</span>
+                </div>
+              </div>
+            `;
+          }
+        },
+        legend: {
+          data: ['DELIVERED', 'SHIPPED'],
+          top: 0,
+          textStyle: {
+            color: '#6B7280'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          data: shippingData.map(item => item.stock),
+          axisLabel: {
+            rotate: 45,
+            color: '#6B7280'
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#E5E7EB'
+            }
+          }
+        },
+        yAxis: {
+          type: 'value',
+          name: 'Timeline',
+          nameTextStyle: {
+            color: '#6B7280'
+          },
+          axisLabel: {
+            color: '#6B7280',
+            formatter: function(value) {
+              // Convert numeric month to month names
+              const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+              return months[value - 1] || '';
+            }
+          },
+          min: 3, // March
+          max: 5, // May
+          interval: 1,
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: '#E5E7EB'
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: '#F3F4F6'
+            }
+          }
+        },
+        series: [
+          {
+            name: 'Shipping Date',
+            type: 'bar',
+            stack: 'timeline',
+            barWidth: 15,
+            itemStyle: {
+              color: function(params) {
+                return shippingData[params.dataIndex].color;
+              },
+              borderRadius: [4, 4, 0, 0]
+            },
+            data: shippingData.map(item => ({
+              value: parseInt(item.shippingDate.split('-')[1]), // month
+              stock: item.stock,
+              model: item.model,
+              shippingDate: item.shippingDate,
+              arrivalDate: item.arrivalDate,
+              status: item.status
+            }))
+          },
+          {
+            name: 'Transit Time',
+            type: 'bar',
+            stack: 'timeline',
+            barWidth: 15,
+            itemStyle: {
+              color: '#E5E7EB', // gray for transit
+              borderRadius: [0, 0, 4, 4]
+            },
+            data: shippingData.map(item => ({
+              value: parseInt(item.arrivalDate.split('-')[1]) - parseInt(item.shippingDate.split('-')[1]),
+              stock: item.stock,
+              model: item.model,
+              shippingDate: item.shippingDate,
+              arrivalDate: item.arrivalDate,
+              status: item.status
+            }))
+          }
+        ]
+      };
+
+      chart.setOption(option);
+
+      // Handle window resize
+      const handleResize = () => {
+        chart.resize();
+      };
+      window.addEventListener('resize', handleResize);
+
+      // Cleanup
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        chart.dispose();
+      };
+    }
+  }, []);
+
+
+
   return (
     <div>
       {/* Main Content */}
@@ -454,15 +578,14 @@ const allInventory = [
           </div>
         </div>
 
-
         {/* Tab Navigation */}
         <div className="mb-6 border-b border-gray-200">
           <nav className="-mb-px flex space-x-8">
             <button
               onClick={() => setActiveTab("inventory")}
               className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === "inventory"
-                  ? "border-indigo-500 text-indigo-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                ? "border-indigo-500 text-indigo-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
             >
               <i className="fas fa-warehouse mr-2"></i> Inventory List
@@ -470,17 +593,17 @@ const allInventory = [
             <button
               onClick={() => setActiveTab("reports")}
               className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === "reports"
-                  ? "border-indigo-500 text-indigo-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                ? "border-indigo-500 text-indigo-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
             >
               <i className="fas fa-chart-bar mr-2"></i> Reports
             </button>
             <button
               onClick={() => setActiveTab("ordersystem")}
-              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === "order"
-                  ? "border-indigo-500 text-indigo-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === "ordersystem"
+                ? "border-indigo-500 text-indigo-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
             >
               <i className="fas fa-chart-bar mr-2"></i> Order System
@@ -491,238 +614,282 @@ const allInventory = [
         {activeTab === "inventory" && (
           <>
             {/* Filters and Charts */}
+            {/* Shipping Timeline Chart */}
+            <div className="bg-white rounded-lg shadow p-6 mt-6">
+      <h3 className="text-lg font-medium text-gray-800 mb-4">Shipping & Delivery Timeline</h3>
+      <div className="h-80">
+        <div ref={timelineChartRef} className="w-full h-full"></div>
+      </div>
+    </div>
 
             {/* Inventory Table */}
             <div className="bg-white rounded-lg shadow overflow-hidden">
               <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-200 bg-gray-50">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-
                   {/* Heading */}
                   <h3 className="text-base sm:text-lg font-medium text-gray-800">
-                    Inventory List
+                    Shipping Distribution
                   </h3>
+
 
                   {/* Action Buttons */}
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
                     <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
                       <i className="fas fa-filter mr-2"></i> Filter
                     </button>
-
-                    <button className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto">
+                    <button
+                      className="flex items-center justify-center px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 transition w-full sm:w-auto"
+                      onClick={handleDownloadCSV}
+                    >
                       <i className="fas fa-file-export mr-2"></i> Export
                     </button>
                   </div>
-
                 </div>
               </div>
 
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STOCK</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">VIN</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ENGINE</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">BL</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">OCN SPEC</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">MODEL</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">COUNTRY</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">VIN YEAR</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">EXT. COLOR</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">INT. COLOR</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ORDER MONTH</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PRODUCTION ESTIMATE</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SHIPPING DATE</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ARRIVAL DATE</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SHIPPING INDICATION</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {/* GA0561 */}
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0561</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L87T3144264</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">K500535</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ELEGANT BLACK</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                          DELIVERED
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button className="text-blue-600 hover:text-blue-900 mr-3">
+                          <i className="fas fa-eye"></i>
+                        </button>
+                        <button className="text-indigo-600 hover:text-indigo-900">
+                          <i className="fas fa-edit"></i>
+                        </button>
+                      </td>
+                    </tr>
 
-              {viewMode === "list" ? (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Item ID
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Name
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Category
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Quantity
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Status
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Last Updated
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Price
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {filteredInventory.map((item) => (
-                        <tr key={item.id} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">
-                            {item.id}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">
-                              {item.name}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {item.category}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                              className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStockLevelIndicator(
-                                item.quantity
-                              )}`}
-                            >
-                              {item.quantity}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                              className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeColor(
-                                item.status
-                              )}`}
-                            >
-                              {item.status}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {new Date(item.lastUpdated).toLocaleDateString(
-                              "en-US",
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              }
-                            )}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            ${item.price.toLocaleString()}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div className="flex justify-end space-x-2">
-                              <button
-                                onClick={() => handleEditItem(item)}
-                                className="text-blue-600 hover:text-blue-900 cursor-pointer !rounded-button whitespace-nowrap"
-                                title="Edit Item"
-                              >
-                                <i className="fas fa-edit"></i>
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleDeleteConfirmation(item.id)
-                                }
-                                className="text-red-600 hover:text-red-900 cursor-pointer !rounded-button whitespace-nowrap"
-                                title="Delete Item"
-                              >
-                                <i className="fas fa-trash"></i>
-                              </button>
-                              <div className="relative inline-block text-left"></div>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredInventory.map((item) => (
-                    <div
-                      key={item.id}
-                      className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
-                    >
-                      <div className="p-5">
-                        <div className="flex justify-between items-start">
-                          <h3 className="text-lg font-medium text-gray-900 truncate">
-                            {item.name}
-                          </h3>
-                          <span
-                            className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeColor(
-                              item.status
-                            )}`}
-                          >
-                            {item.status}
-                          </span>
-                        </div>
-                        <p className="mt-1 text-sm text-gray-500">
-                          {item.category}
-                        </p>
-                        <div className="mt-4 flex justify-between items-center">
-                          <div>
-                            <p className="text-sm text-gray-500">Quantity</p>
-                            <p
-                              className={`text-lg font-semibold ${item.quantity === 0
-                                  ? "text-red-600"
-                                  : "text-gray-900"
-                                }`}
-                            >
-                              {item.quantity}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-sm text-gray-500">Price</p>
-                            <p className="text-lg font-semibold text-gray-900">
-                              ${item.price.toLocaleString()}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="mt-4 text-sm text-gray-500">
-                          <p className="truncate">{item.notes}</p>
-                        </div>
-                        <div className="mt-5 flex justify-between items-center pt-4 border-t border-gray-200">
-                          <p className="text-xs text-gray-500">
-                            Last updated:{" "}
-                            {new Date(item.lastUpdated).toLocaleDateString()}
-                          </p>
-                          <div className="flex space-x-2">
-                            <button
-                              id={`view-details-${item.id}`}
-                              className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap"
-                              title="View Details"
-                              onClick={() => handleViewItemDetails(item)}
-                            >
-                              <i className="fas fa-eye"></i>
-                            </button>
-                            <button
-                              onClick={() => handleEditItem(item)}
-                              className="text-blue-600 hover:text-blue-900 cursor-pointer !rounded-button whitespace-nowrap"
-                              title="Edit Item"
-                            >
-                              <i className="fas fa-edit"></i>
-                            </button>
-                            <button
-                              onClick={() => handleDeleteConfirmation(item.id)}
-                              className="text-red-600 hover:text-red-900 cursor-pointer !rounded-button whitespace-nowrap"
-                              title="Delete Item"
-                            >
-                              <i className="fas fa-trash"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    {/* GA0562 */}
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0562</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L85T3144263</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">K500537</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ELEGANT BLACK</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                          SHIPPED
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button className="text-blue-600 hover:text-blue-900 mr-3">
+                          <i className="fas fa-eye"></i>
+                        </button>
+                        <button className="text-indigo-600 hover:text-indigo-900">
+                          <i className="fas fa-edit"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    {/* Add remaining rows in similar fashion */}
+                    {/* GA0563 */}
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0563</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L82T3144267</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">K500610</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">IVORY WHITE</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                          DELIVERED
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button className="text-blue-600 hover:text-blue-900 mr-3">
+                          <i className="fas fa-eye"></i>
+                        </button>
+                        <button className="text-indigo-600 hover:text-indigo-900">
+                          <i className="fas fa-edit"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    {/* GA0564 */}
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0564</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L86T3144272</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">K500617</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">MOONLIGHT GRAY</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                          SHIPPED
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button className="text-blue-600 hover:text-blue-900 mr-3">
+                          <i className="fas fa-eye"></i>
+                        </button>
+                        <button className="text-indigo-600 hover:text-indigo-900">
+                          <i className="fas fa-edit"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    {/* GA0565 */}
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0565</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L84T3144271</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">500616</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">MOONLIGHT GRAY</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                          DELIVERED
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button className="text-blue-600 hover:text-blue-900 mr-3">
+                          <i className="fas fa-eye"></i>
+                        </button>
+                        <button className="text-indigo-600 hover:text-indigo-900">
+                          <i className="fas fa-edit"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    {/* GA0566 */}
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0566</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L82T3144270</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">K500615</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">MOONLIGHT GRAY</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                          SHIPPED
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button className="text-blue-600 hover:text-blue-900 mr-3">
+                          <i className="fas fa-eye"></i>
+                        </button>
+                        <button className="text-indigo-600 hover:text-indigo-900">
+                          <i className="fas fa-edit"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    {/* GA0567 */}
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">GA0567</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">LMGBB1L86T3144269</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">500614</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EUKOSHBM2011613 BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BB2A-CW7-00</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">EMPOW</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">INF</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">SUPERSTAR SILVEI</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BLACK</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12/12/2024</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1/21/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3/3/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4/19/2025</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                          SHIPPED
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button className="text-blue-600 hover:text-blue-900 mr-3">
+                          <i className="fas fa-eye"></i>
+                        </button>
+                        <button className="text-indigo-600 hover:text-indigo-900">
+                          <i className="fas fa-edit"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
               {/* Pagination */}
               <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
@@ -737,31 +904,17 @@ const allInventory = [
                 <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                   <div>
                     <p className="text-sm text-gray-700">
-                      Showing <span className="font-medium">1</span> to{" "}
-                      <span className="font-medium">
-                        {filteredInventory.length}
-                      </span>{" "}
-                      of{" "}
-                      <span className="font-medium">
-                        {filteredInventory.length}
-                      </span>{" "}
-                      results
+                      Showing <span className="font-medium">1</span> to <span className="font-medium">7</span> of <span className="font-medium">7</span> results
                     </p>
                   </div>
                   <div>
-                    <nav
-                      className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                      aria-label="Pagination"
-                    >
+                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                       <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
                         <span className="sr-only">Previous</span>
                         <i className="fas fa-chevron-left"></i>
                       </button>
                       <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-indigo-50 text-sm font-medium text-indigo-600 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
                         1
-                      </button>
-                      <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
-                        2
                       </button>
                       <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap">
                         <span className="sr-only">Next</span>
@@ -772,6 +925,7 @@ const allInventory = [
                 </div>
               </div>
             </div>
+
           </>
         )}
 
@@ -1158,7 +1312,7 @@ const allInventory = [
           </div>
         )}
 
-{activeTab === "ordersystem" && (
+     {activeTab === "ordersystem" && (
   <div className="container mt-4">
     <h3 className="mb-4">Place New Order</h3>
 
@@ -1262,6 +1416,7 @@ const allInventory = [
     </form>
   </div>
 )}
+
 
 
 
