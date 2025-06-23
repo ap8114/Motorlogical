@@ -1160,65 +1160,110 @@ const allInventory = [
 
 {activeTab === "ordersystem" && (
   <div className="container mt-4">
-    <h3 className="mb-4">Order System - Brand-wise Inventory</h3>
+    <h3 className="mb-4">Place New Order</h3>
 
-    {/* Brand Selector */}
-    <div className="mb-3">
-      <label htmlFor="brandSelect" className="form-label">Select Brand</label>
-      <select
-        id="brandSelect"
-        className="form-select"
-        value={selectedBrand}
-        onChange={(e) => setSelectedBrand(e.target.value)}
-      >
-        <option value="">-- Choose Brand --</option>
-        {[...new Set(allInventory.map(item => item.BRAND))].map(brand => (
-          <option key={brand} value={brand}>{brand}</option>
-        ))}
-      </select>
-    </div>
+    <form >
+      <div className="row">
+        <div className="col-md-4 mb-3">
+          <label className="form-label">Stock</label>
+          <input type="text" className="form-control" name="stock" required />
+        </div>
 
-    {/* Table */}
-    {selectedBrand && (
-      <div className="table-responsive">
-        <table className="table table-bordered table-striped">
-          <thead className="table-light">
-            <tr>
-              <th>SHIP DATE</th>
-              <th>BRAND</th>
-              <th>OCN SPEC</th>
-              <th>MODEL</th>
-              <th>COUNTRY</th>
-              <th>YEAR</th>
-              <th>EXT. COLOR</th>
-              <th>INT. COLOR</th>
-              <th>TBD3</th>
-              <th>ORDER NO</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allInventory
-              .filter(item => item.BRAND === selectedBrand)
-              .map((item, index) => (
-                <tr key={index}>
-                  <td>{item.SHIP_DATE}</td>
-                  <td>{item.BRAND}</td>
-                  <td>{item.OCN_SPEC}</td>
-                  <td>{item.MODEL}</td>
-                  <td>{item.COUNTRY}</td>
-                  <td>{item.YEAR}</td>
-                  <td>{item.EXT_COLOR}</td>
-                  <td>{item.INT_COLOR}</td>
-                  <td>{item.TBD3}</td>
-                  <td>{item.ORDER_NO}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className="col-md-4 mb-3">
+          <label className="form-label">VIN</label>
+          <input type="text" className="form-control" name="vin" required />
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">Engine</label>
+          <input type="text" className="form-control" name="engine" />
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">BL</label>
+          <input type="text" className="form-control" name="bl" />
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">OCN Spec</label>
+          <input type="text" className="form-control" name="ocn_spec" />
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">Model</label>
+          <select className="form-select" name="model" required>
+            <option value="">-- Select Model --</option>
+            <option value="EMPOW">EMPOW</option>
+          </select>
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">Country</label>
+          <select className="form-select" name="country">
+            <option value="">-- Select Country --</option>
+            <option value="INF">INF</option>
+          </select>
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">VIN Year</label>
+          <input type="text" className="form-control" name="vin_year" />
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">Ext. Color</label>
+          <select className="form-select" name="ext_color">
+            <option value="">-- Select Ext. Color --</option>
+            <option value="ELEGANT BLACK">ELEGANT BLACK</option>
+            <option value="IVORY WHITE">IVORY WHITE</option>
+            <option value="MOONLIGHT GRAY">MOONLIGHT GRAY</option>
+            <option value="SUPERSTAR SILVER">SUPERSTAR SILVER</option>
+          </select>
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">Int. Color</label>
+          <select className="form-select" name="int_color">
+            <option value="">-- Select Int. Color --</option>
+            <option value="BLACK">BLACK</option>
+          </select>
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">Order Month</label>
+          <input type="text" className="form-control" name="order_month" />
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">Production Estimate</label>
+          <input type="text" className="form-control" name="production_estimate" />
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">Shipping Date</label>
+          <input type="date" className="form-control" name="shipping_date" />
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">Arrival Date</label>
+          <input type="date" className="form-control" name="arrival_date" />
+        </div>
+
+        <div className="col-md-4 mb-3">
+          <label className="form-label">Shipping Indication</label>
+          <select className="form-select" name="shipping_indication">
+            <option value="SHIPPED">SHIPPED</option>
+            <option value="DELIVERED">DELIVERED</option>
+          </select>
+        </div>
       </div>
-    )}
+
+      <button type="submit" className="btn btn-primary mt-3">Submit Order</button>
+    </form>
   </div>
 )}
+
+
 
 
 
