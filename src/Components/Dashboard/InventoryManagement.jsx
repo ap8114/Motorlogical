@@ -1288,14 +1288,14 @@ const InventoryManagement = () => {
       {/* Delete Confirmation Modal */}
       <>
         {/* Trigger Button (for example purposes) */}
-        <button
+        {/* <button
           type="button"
           className="btn btn-danger"
           data-bs-toggle="modal"
           data-bs-target="#deleteConfirmationModal"
         >
           Delete Item
-        </button>
+        </button> */}
 
         {/* Delete Confirmation Modal */}
         <div
