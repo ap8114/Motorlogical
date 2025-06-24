@@ -5,6 +5,42 @@ import * as echarts from "echarts";
 import { utils, writeFile } from "xlsx";
 import * as XLSX from "xlsx";
 const InventoryManagement = () => {
+  const [editIndex, setEditIndex] = useState(null);
+  const [inventoryForm, setInventoryForm] = useState({
+    sourceName: "",
+    stock: "",
+    manu: "",
+    manu2: "",
+    invoice: "",
+    payment: "",
+    pmtStatus: "",
+    payTerms: "",
+    vin: "",
+    engine: "",
+    key: "",
+    bl: "",
+    shipDate: "",
+    brand: "",
+    ocnSpec: "",
+    model: "",
+    country: "",
+    myYear: "",
+    extColor: "",
+    intColor: "",
+    tbd3: "",
+    orderMonth: "",
+    prodEst: "",
+    shipEst: "",
+    estArr: "",
+    shpDte: "",
+    arrEst: "",
+    arrDate: "",
+    shipIndication: "",
+  });
+  const [selectedStatus, setSelectedStatus] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedBrand, setSelectedBrand] = useState('');
+
   const timelineChartRef = useRef(null);
   const statusChartRef = useRef(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -30,7 +66,7 @@ const InventoryManagement = () => {
       stock: 'GA0561',
       vin: 'LMGBB1L87T3144264',
       engine: 'K500535',
-      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
+      bl: 'EUKOSHBM201201613 BB2A-CW7-00',
       ocnSpec: 'BB2A-CW7-00',
       model: 'EMPOW',
       country: 'INF',
@@ -43,9 +79,6 @@ const InventoryManagement = () => {
       arrivalDate: '4/19/2025',
       shippingIndication: 'DELIVERED'
     },
-    // ... (keep all your existing MG items)
-
-    // New BAIC data
     {
       stock: 'BA0057',
       sourceName: 'New Tracking BAIC.xlsm',
@@ -77,17 +110,6 @@ const InventoryManagement = () => {
       arrDate: '1/0/1900',
       shippingIndication: 'ORDERED'
     },
-    {
-      stock: 'BA0058',
-      sourceName: 'New Tracking BAIC.xlsm',
-      // ... same structure as BA0057 with different values
-      model: 'BJ40 PLUS',
-      extColor: 'SNOW WHITE',
-      shippingIndication: 'ORDERED'
-    },
-    // ... add all other BAIC items in same format
-
-    // New Changan data
     {
       stock: 'CH0558',
       sourceName: 'New Tracking Changan.xlsm',
@@ -150,62 +172,7 @@ const InventoryManagement = () => {
       arrDate: '4/11/2024',
       shippingIndication: 'DELIVERED'
     },
-    {
-      stock: 'GA0561',
-      vin: 'LMGBB1L87T3144264',
-      engine: 'K500535',
-      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
-      ocnSpec: 'BB2A-CW7-00',
-      model: 'EMPOW',
-      country: 'INF',
-      vinYear: '2026',
-      extColor: 'ELEGANT BLACK',
-      intColor: 'BLACK',
-      orderMonth: '12/12/2024',
-      productionEstimate: '1/21/2025',
-      shippingDate: '3/3/2025',
-      arrivalDate: '4/19/2025',
-      shippingIndication: 'DELIVERED'
-    },
-    // ... other existing MG entries ...
 
-    // Additional MG entries
-    {
-      stock: 'GA0571',
-      vin: 'LMGBB1L89T3144280',
-      engine: 'K500621',
-      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
-      ocnSpec: 'BB2A-CW7-00',
-      model: 'EMPOW',
-      country: 'INF',
-      vinYear: '2026',
-      extColor: 'METALLIC SILVER',
-      intColor: 'BLACK',
-      orderMonth: '12/22/2024',
-      productionEstimate: '1/31/2025',
-      shippingDate: '3/12/2025',
-      arrivalDate: '4/30/2025',
-      shippingIndication: 'SHIPPED'
-    },
-    {
-      stock: 'GA0572',
-      vin: 'LMGBB1L81T3144281',
-      engine: 'K500622',
-      bl: 'EUKOSHBM2011613 BB2A-CW7-00',
-      ocnSpec: 'BB2A-CW7-00',
-      model: 'EMPOW',
-      country: 'INF',
-      vinYear: '2026',
-      extColor: 'ROYAL BLUE',
-      intColor: 'BEIGE',
-      orderMonth: '12/24/2024',
-      productionEstimate: '2/2/2025',
-      shippingDate: '3/15/2025',
-      arrivalDate: '5/3/2025',
-      shippingIndication: 'ORDERED'
-    },
-
-    // BAIC entries
     {
       stock: 'BA0083',
       sourceName: 'New Tracking BAIC.xlsm',
@@ -237,77 +204,7 @@ const InventoryManagement = () => {
       arrDate: '1/0/1900',
       shippingIndication: 'ORDERED'
     },
-    {
-      stock: 'BA0084',
-      sourceName: 'New Tracking BAIC.xlsm',
-      // ... other fields ...
-      model: 'BJ30 PLUS',
-      extColor: 'GLACIER WHITE',
-      intColor: 'BROWN',
-      shippingIndication: 'PRODUCTION'
-    },
-
-    // Changan entries
-    {
-      stock: 'CH1046',
-      sourceName: 'New Tracking Changan.xlsm',
-      manu: '',
-      manu2: '2023CA0193',
-      invoice: '',
-      payment: '',
-      pmtStatus: '',
-      payTerms: '',
-      vin: 'LS5A3DKR5SA960874',
-      engine: 'RM0AD008815',
-      key: '0',
-      bl: 'CHN0990796',
-      shipDate: '5/8/2024',
-      brand: 'CHANGAN',
-      ocnSpec: 'SC7144GCC6.CHH3001',
-      model: 'CS35 PLUS 3',
-      country: 'FBM',
-      vinYear: '2025',
-      extColor: 'TITANIUM SILVER GREY',
-      intColor: 'BLACK',
-      tbd3: '2025',
-      orderMonth: '9/21/2023',
-      prodEst: '10/31/2023',
-      shipEst: '',
-      estArr: 'TBA',
-      shpDte: '5/8/2024',
-      arrEst: 'TBA',
-      arrDate: '7/15/2024',
-      shippingIndication: 'DELIVERED'
-    },
-    {
-      stock: 'CH1047',
-      sourceName: 'New Tracking Changan.xlsm',
-      // ... other fields ...
-      model: 'UNI-K 2',
-      extColor: 'INTERSTELLAR GRAY',
-      shippingIndication: 'IN TRANSIT'
-    },
-
-    // Additional brand examples (Hyundai)
-    {
-      stock: 'HY2101',
-      sourceName: 'Hyundai_Tracking.xlsm',
-      vin: 'KMHLN4AE3PU123456',
-      engine: 'G4FP123456',
-      model: 'TUCSON',
-      country: 'KOR',
-      vinYear: '2025',
-      extColor: 'SHIMMERING SILVER',
-      intColor: 'BLACK',
-      orderMonth: '11/15/2024',
-      productionEstimate: '12/20/2024',
-      shippingDate: '2/5/2025',
-      arrivalDate: '3/22/2025',
-      shippingIndication: 'PRODUCTION'
-    },
-    // ... add all other Changan items in same format
   ]);
-
 
   // Sample inventory data
   const [inventory, setInventory] = useState([
@@ -477,26 +374,12 @@ const InventoryManagement = () => {
 
   const [data, setData] = useState(inventoryData);
 
-  const handleEditItem = (item) => {
-    setItemForm({
-      stockNumber: item.stock,
-      vin: item.vin,
-      engine: item.engine,
-      bl: item.bl,
-      ocnSpec: item.ocnSpec,
-      model: item.model,
-      country: item.country,
-      vinYear: item.vinYear,
-      extColor: item.extColor,
-      intColor: item.intColor,
-      orderMonth: item.orderMonth,
-      productionEstimate: item.productionEstimate,
-      shippingDate: item.shippingDate,
-      arrivalDate: item.arrivalDate,
-      shippingIndication: item.shippingIndication
-    });
-    setShowAddItemModal(true);
-  };
+
+  const handleEditInventory = (item, index) => {
+  setInventoryForm(item);      // Pre-fill form with selected item
+  setEditIndex(index);         // Store which row is being edited
+  setShowInventoryModal(true); // Open modal
+};
 
   // Handle save item
   const handleSaveItem = () => {
@@ -785,6 +668,66 @@ const InventoryManagement = () => {
     }
   }, []);
 
+
+  const handleSaveInventory = () => {
+    if (editIndex !== null) {
+      // Update existing inventory
+      const updated = [...data];
+      updated[editIndex] = inventoryForm;
+      setData(updated);
+      setEditIndex(null);
+    } else {
+      // Add new inventory
+      setData([...data, inventoryForm]);
+    }
+
+    // Reset form & close modal
+    setInventoryForm({
+      stock: '',
+      manu: '',
+      // other fields you use in your form
+    });
+    setShowInventoryModal(false);
+  };
+
+
+  const handleAddInventory = () => {
+    setEditIndex(null);
+    setInventoryForm({
+      sourceName: "",
+      stock: "",
+      manu: "",
+      manu2: "",
+      invoice: "",
+      payment: "",
+      pmtStatus: "",
+      payTerms: "",
+      vin: "",
+      engine: "",
+      key: "",
+      bl: "",
+      shipDate: "",
+      brand: "",
+      ocnSpec: "",
+      model: "",
+      country: "",
+      myYear: "",
+      extColor: "",
+      intColor: "",
+      tbd3: "",
+      orderMonth: "",
+      prodEst: "",
+      shipEst: "",
+      estArr: "",
+      shpDte: "",
+      arrEst: "",
+      arrDate: "",
+      shipIndication: "",
+    });
+    setShowInventoryModal(true);
+  };
+  const [showInventoryModal, setShowInventoryModal] = useState(false);
+
   return (
     <div>
       {/* Main Content */}
@@ -951,7 +894,8 @@ const InventoryManagement = () => {
                     {/* ➕ Add Inventory Button */}
                     <button
                       className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition w-full sm:w-auto"
-                      onClick={() => setShowAddModal(true)}
+
+                      onClick={handleAddInventory}
                     >
                       <i className="fas fa-plus mr-2"></i> Add Inventory
                     </button>
@@ -965,41 +909,42 @@ const InventoryManagement = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source.Name</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STOCK #</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">MANU#</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">MANU#2</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">INVOICE#</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PAYMENT</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PMT STATUS</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PAY. TERMS</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">VIN#</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ENGINE#</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">KEY#</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">BL#</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SHIP DATE</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">BRAND</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">OCN SPEC</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">MODEL</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">COUNTRY</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">MY YEAR</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">EXT. COLOR</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">INT. COLOR</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TBD3</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ORDER MONTH</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PROD. EST</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SHIP. EST</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">EST ARR</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SHP DTE</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ARR EST</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ARR. DATE</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SHIP INDICATION</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">Source.Name</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">STOCK #</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MANU#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MANU#2</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">INVOICE#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PAYMENT</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PMT STATUS</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PAY. TERMS</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">VIN#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ENGINE#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">KEY#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">BL#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHIP DATE</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">BRAND</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">OCN SPEC</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MODEL</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">COUNTRY</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MY YEAR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">EXT. COLOR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">INT. COLOR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">TBD3</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ORDER MONTH</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PROD. EST</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHIP. EST</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">EST ARR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHP DTE</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ARR EST</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ARR. DATE</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHIP INDICATION</th>
+                      <th className="px-6 py-3 text-right text-sm font-bold text-gray-700 uppercase tracking-wide">Actions</th>
                     </tr>
+
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {data.map((item) => (
-                      <tr key={item.stock} className="hover:bg-gray-50">
+                    {data.map((item, idx) => (
+                      <tr key={item.stock || idx} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.sourceName}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.stock}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.manu}</td>
@@ -1042,7 +987,7 @@ const InventoryManagement = () => {
                           {/* Edit Button */}
                           <button
                             className="text-indigo-600 hover:text-indigo-900 me-3"
-                            onClick={() => handleEditItem(item)}
+                            onClick={() => handleEditInventory(item, idx)}
                             title="Edit"
                           >
                             <i className="fas fa-edit"></i>
@@ -1051,7 +996,7 @@ const InventoryManagement = () => {
                           {/* Delete Button */}
                           <button
                             className="text-red-600 hover:text-red-800"
-                            onClick={() => handleDeleteItem(item)}
+                            onClick={() => handleDeleteInventory(idx)}
                             title="Delete"
                           >
                             <i className="fas fa-trash-alt"></i>
@@ -1157,192 +1102,105 @@ const InventoryManagement = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Category
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Total Models
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Total Units
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Low Stock
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Out of Stock
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Total Value
-                      </th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">Source.Name</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">STOCK #</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MANU#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MANU#2</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">INVOICE#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PAYMENT</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PMT STATUS</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PAY. TERMS</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">VIN#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ENGINE#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">KEY#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">BL#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHIP DATE</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">BRAND</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">OCN SPEC</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MODEL</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">COUNTRY</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MY YEAR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">EXT. COLOR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">INT. COLOR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">TBD3</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ORDER MONTH</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PROD. EST</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHIP. EST</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">EST ARR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHP DTE</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ARR EST</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ARR. DATE</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHIP INDICATION</th>
+                      <th className="px-6 py-3 text-right text-sm font-bold text-gray-700 uppercase tracking-wide">Actions</th>
                     </tr>
+
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        SUV
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        1
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        15
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        0
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        0
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $675,000
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        Sedan
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        1
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        8
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        0
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        0
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $308,000
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        Luxury
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        1
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        3
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        1
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        0
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $216,000
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        Compact
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        1
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        22
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        0
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        0
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $572,000
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        Electric
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        1
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        0
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        0
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        1
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $0
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        Hybrid
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        1
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        7
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        1
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        0
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        $297,500
-                      </td>
-                    </tr>
-                    <tr className="bg-gray-50 font-medium">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                        TOTAL
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                        6
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                        55
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                        2
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                        1
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                        $2,068,500
-                      </td>
-                    </tr>
+                    {data.map((item, idx) => (
+                      <tr key={item.stock || idx} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.sourceName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.stock}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.manu}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.manu2}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.invoice}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.payment}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.pmtStatus}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.payTerms}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.vin}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.engine}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.key}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.bl}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.shipDate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.brand}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.ocnSpec}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.model}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.country}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.myYear}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.extColor}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.intColor}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.tbd3}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.orderMonth}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.prodEst}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.shipEst}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.estArr}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.shpDte}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.arrEst}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.arrDate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${item.shipIndication === 'DELIVERED'
+                            ? 'bg-green-100 text-green-800'
+                            : item.shipIndication === 'SHIPPED'
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                            {item.shipIndication}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                          {/* Edit Button */}
+                          <button
+                            className="text-indigo-600 hover:text-indigo-900 me-3"
+                            onClick={() => handleEditInventory(item, idx)}
+                            title="Edit"
+                          >
+                            <i className="fas fa-edit"></i>
+                          </button>
+
+                          {/* Delete Button */}
+                          <button
+                            className="text-red-600 hover:text-red-800"
+                            onClick={() => handleDeleteInventory(idx)}
+                            title="Delete"
+                          >
+                            <i className="fas fa-trash-alt"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
 
-              <div className="mt-6 text-sm text-gray-500">
-                <p>Report generated on: June 19, 2025 at 10:30 AM</p>
-              </div>
             </div>
 
             <div className="bg-white rounded-lg shadow p-6">
@@ -1353,96 +1211,101 @@ const InventoryManagement = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Date
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Report Type
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Format
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        User
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Actions
-                      </th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">Source.Name</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">STOCK #</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MANU#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MANU#2</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">INVOICE#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PAYMENT</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PMT STATUS</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PAY. TERMS</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">VIN#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ENGINE#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">KEY#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">BL#</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHIP DATE</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">BRAND</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">OCN SPEC</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MODEL</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">COUNTRY</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">MY YEAR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">EXT. COLOR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">INT. COLOR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">TBD3</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ORDER MONTH</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">PROD. EST</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHIP. EST</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">EST ARR</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHP DTE</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ARR EST</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">ARR. DATE</th>
+                      <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">SHIP INDICATION</th>
+                      <th className="px-6 py-3 text-right text-sm font-bold text-gray-700 uppercase tracking-wide">Actions</th>
                     </tr>
+
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Jun 18, 2025
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Inventory Summary
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        PDF
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        John Doe
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap">
-                          Download
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Jun 15, 2025
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Stock Level Report
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Excel
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        John Doe
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap">
-                          Download
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Jun 10, 2025
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        Category Analysis
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        PDF
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Sarah Johnson
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-indigo-600 hover:text-indigo-900 cursor-pointer !rounded-button whitespace-nowrap">
-                          Download
-                        </button>
-                      </td>
-                    </tr>
+                    {data.map((item, idx) => (
+                      <tr key={item.stock || idx} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.sourceName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.stock}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.manu}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.manu2}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.invoice}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.payment}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.pmtStatus}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.payTerms}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.vin}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.engine}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.key}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.bl}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.shipDate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.brand}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.ocnSpec}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.model}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.country}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.myYear}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.extColor}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.intColor}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.tbd3}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.orderMonth}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.prodEst}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.shipEst}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.estArr}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.shpDte}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.arrEst}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.arrDate}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${item.shipIndication === 'DELIVERED'
+                            ? 'bg-green-100 text-green-800'
+                            : item.shipIndication === 'SHIPPED'
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                            {item.shipIndication}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                          {/* Edit Button */}
+                          <button
+                            className="text-indigo-600 hover:text-indigo-900 me-3"
+                            onClick={() => handleEditInventory(item, idx)}
+                            title="Edit"
+                          >
+                            <i className="fas fa-edit"></i>
+                          </button>
+
+                          {/* Delete Button */}
+                          <button
+                            className="text-red-600 hover:text-red-800"
+                            onClick={() => handleDeleteInventory(idx)}
+                            title="Delete"
+                          >
+                            <i className="fas fa-trash-alt"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -1453,9 +1316,9 @@ const InventoryManagement = () => {
       </main>
 
       {/* Add/Edit Item Modal */}
-      {showAddItemModal && (
+      {showInventoryModal && (
         <div className="modal show d-block" tabIndex="-1" role="dialog">
-          <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
+          <div className="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Update Inventory Item</h5>
@@ -1469,214 +1332,189 @@ const InventoryManagement = () => {
               <div className="modal-body">
                 <form>
                   <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="stock-number" className="form-label">
-                        Stock Number
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="stock-number"
-                        value={itemForm.stockNumber || "GA05E1"}
-                        readOnly
-                      />
+                    {/* First Column */}
+                    <div className="col-md-4">
+                      <div className="mb-3">
+                        <label htmlFor="source-name" className="form-label">Source Name</label>
+                        <input type="text" className="form-control" id="source-name" value={itemForm.sourceName || ""} readOnly />
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="stock-number" className="form-label">Stock Number</label>
+                        <input type="text" className="form-control" id="stock-number" value={itemForm.stockNumber || "GA05E1"} readOnly />
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="manu-number" className="form-label">MANU#</label>
+                        <input type="text" className="form-control" id="manu-number" value={itemForm.manuNumber || ""} readOnly />
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="manu-number2" className="form-label">MANU#2</label>
+                        <input type="text" className="form-control" id="manu-number2" value={itemForm.manuNumber2 || ""} readOnly />
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="invoice-number" className="form-label">INVOICE#</label>
+                        <input type="text" className="form-control" id="invoice-number" value={itemForm.invoiceNumber || ""} readOnly />
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="payment" className="form-label">PAYMENT</label>
+                        <input type="text" className="form-control" id="payment" value={itemForm.payment || ""} readOnly />
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="payment-status" className="form-label">PMT STATUS</label>
+                        <input type="text" className="form-control" id="payment-status" value={itemForm.paymentStatus || ""} readOnly />
+                      </div>
                     </div>
 
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="vin" className="form-label">
-                        VIN
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="vin"
-                        value={itemForm.vin || "LMGBR11871144264"}
-                        readOnly
-                      />
-                    </div>
-                  </div>
+                    {/* Second Column */}
+                    <div className="col-md-4">
+                      <div className="mb-3">
+                        <label htmlFor="payment-terms" className="form-label">PAY. TERMS</label>
+                        <input type="text" className="form-control" id="payment-terms" value={itemForm.paymentTerms || ""} readOnly />
+                      </div>
 
-                  <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="engine" className="form-label">
-                        Engine
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="engine"
-                        value={itemForm.engine || "K500535"}
-                        readOnly
-                      />
-                    </div>
+                      <div className="mb-3">
+                        <label htmlFor="vin" className="form-label">VIN#</label>
+                        <input type="text" className="form-control" id="vin" value={itemForm.vin || "LMGBR11871144264"} readOnly />
+                      </div>
 
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="bl" className="form-label">
-                        BL
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="bl"
-                        value={itemForm.bl || "EUROSHBJXD11613 BB2A-CW7-00"}
-                        readOnly
-                      />
-                    </div>
-                  </div>
+                      <div className="mb-3">
+                        <label htmlFor="engine" className="form-label">ENGINE#</label>
+                        <input type="text" className="form-control" id="engine" value={itemForm.engine || "K500535"} readOnly />
+                      </div>
 
-                  <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="ocn-spec" className="form-label">
-                        OCN SPEC
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="ocn-spec"
-                        value={itemForm.ocnSpec || "BB2A-CW7-00"}
-                        readOnly
-                      />
+                      <div className="mb-3">
+                        <label htmlFor="key-number" className="form-label">KEY#</label>
+                        <input type="text" className="form-control" id="key-number" value={itemForm.keyNumber || ""} readOnly />
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="bl" className="form-label">BL#</label>
+                        <input type="text" className="form-control" id="bl" value={itemForm.bl || "EUROSHBJXD11613 BB2A-CW7-00"} readOnly />
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="ship-date" className="form-label">SHIP DATE</label>
+                        <input type="text" className="form-control" id="ship-date" value={itemForm.shipDate || ""} readOnly />
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="brand" className="form-label">BRAND</label>
+                        <input type="text" className="form-control" id="brand" value={itemForm.brand || ""} readOnly />
+                      </div>
                     </div>
 
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="model" className="form-label">
-                        Model
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="model"
-                        value={itemForm.model || "EMPGW"}
-                        readOnly
-                      />
-                    </div>
-                  </div>
+                    {/* Third Column */}
+                    <div className="col-md-4">
+                      <div className="mb-3">
+                        <label htmlFor="ocn-spec" className="form-label">OCN SPEC</label>
+                        <input type="text" className="form-control" id="ocn-spec" value={itemForm.ocnSpec || "BB2A-CW7-00"} readOnly />
+                      </div>
 
-                  <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="country" className="form-label">
-                        Country
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="country"
-                        value={itemForm.country || "INF"}
-                        readOnly
-                      />
-                    </div>
+                      <div className="mb-3">
+                        <label htmlFor="model" className="form-label">MODEL</label>
+                        <input type="text" className="form-control" id="model" value={itemForm.model || "EMPGW"} readOnly />
+                      </div>
 
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="vin-year" className="form-label">
-                        VIN Year
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="vin-year"
-                        value={itemForm.vinYear || "2006"}
-                        readOnly
-                      />
-                    </div>
-                  </div>
+                      <div className="mb-3">
+                        <label htmlFor="country" className="form-label">COUNTRY</label>
+                        <input type="text" className="form-control" id="country" value={itemForm.country || "INF"} readOnly />
+                      </div>
 
-                  <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="ext-color" className="form-label">
-                        Ext. Color
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="ext-color"
-                        value={itemForm.extColor || "ELEGANT BLACK"}
-                        readOnly
-                      />
-                    </div>
+                      <div className="mb-3">
+                        <label htmlFor="vin-year" className="form-label">MY YEAR</label>
+                        <input type="text" className="form-control" id="vin-year" value={itemForm.vinYear || ""} readOnly />
+                      </div>
 
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="int-color" className="form-label">
-                        Int. Color
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="int-color"
-                        value={itemForm.intColor || "BLACK"}
-                        readOnly
-                      />
+                      <div className="mb-3">
+                        <label htmlFor="ext-color" className="form-label">EXT. COLOR</label>
+                        <input type="text" className="form-control" id="ext-color" value={itemForm.extColor || ""} readOnly />
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="int-color" className="form-label">INT. COLOR</label>
+                        <input type="text" className="form-control" id="int-color" value={itemForm.intColor || "BLACK"} readOnly />
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="tbd3" className="form-label">TBD3</label>
+                        <input type="text" className="form-control" id="tbd3" value={itemForm.tbd3 || ""} readOnly />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="order-month" className="form-label">
-                        Order Month
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="order-month"
-                        value={itemForm.orderMonth || "12/12/2024"}
-                        readOnly
-                      />
+                  {/* Second Row */}
+                  <div className="row mt-3">
+                    <div className="col-md-3">
+                      <div className="mb-3">
+                        <label htmlFor="order-month" className="form-label">ORDER MONTH</label>
+                        <input type="text" className="form-control" id="order-month" value={itemForm.orderMonth || "12/12/2024"} readOnly />
+                      </div>
                     </div>
 
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="production-estimate" className="form-label">
-                        Production Estimate
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="production-estimate"
-                        value={itemForm.productionEstimate || "1/21/2025"}
-                        readOnly
-                      />
+                    <div className="col-md-3">
+                      <div className="mb-3">
+                        <label htmlFor="production-estimate" className="form-label">PROD. EST</label>
+                        <input type="text" className="form-control" id="production-estimate" value={itemForm.productionEstimate || "1/21/2025"} readOnly />
+                      </div>
+                    </div>
+
+                    <div className="col-md-3">
+                      <div className="mb-3">
+                        <label htmlFor="ship-estimate" className="form-label">SHIP. EST</label>
+                        <input type="text" className="form-control" id="ship-estimate" value={itemForm.shipEstimate || ""} readOnly />
+                      </div>
+                    </div>
+
+                    <div className="col-md-3">
+                      <div className="mb-3">
+                        <label htmlFor="est-arrival" className="form-label">EST ARR</label>
+                        <input type="text" className="form-control" id="est-arrival" value={itemForm.estArrival || ""} readOnly />
+                      </div>
                     </div>
                   </div>
 
+                  {/* Third Row */}
                   <div className="row">
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="shipping-date" className="form-label">
-                        Shipping Date
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="shipping-date"
-                        value={itemForm.shippingDate || "3/3/2025"}
-                        readOnly
-                      />
+                    <div className="col-md-4">
+                      <div className="mb-3">
+                        <label htmlFor="shipping-date" className="form-label">SHP DTE</label>
+                        <input type="text" className="form-control" id="shipping-date" value={itemForm.shippingDate || "3/3/2025"} readOnly />
+                      </div>
                     </div>
 
-                    <div className="col-md-6 mb-3">
-                      <label htmlFor="arrival-date" className="form-label">
-                        Arrival Date
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="arrival-date"
-                        value={itemForm.arrivalDate || "mm/dd/yyyy"}
-                        onChange={(e) =>
-                          setItemForm({ ...itemForm, arrivalDate: e.target.value })
-                        }
-                      />
+                    <div className="col-md-4">
+                      <div className="mb-3">
+                        <label htmlFor="arrival-estimate" className="form-label">ARR EST</label>
+                        <input type="text" className="form-control" id="arrival-estimate" value={itemForm.arrivalEstimate || ""} readOnly />
+                      </div>
+                    </div>
+
+                    <div className="col-md-4">
+                      <div className="mb-3">
+                        <label htmlFor="arrival-date" className="form-label">ARR. DATE</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="arrival-date"
+                          value={itemForm.arrivalDate || "mm/dd/yyyy"}
+                          onChange={(e) => setItemForm({ ...itemForm, arrivalDate: e.target.value })}
+                        />
+                      </div>
                     </div>
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="shipping-indication" className="form-label">
-                      Shipping Indication
-                    </label>
+                    <label htmlFor="shipping-indication" className="form-label">SHIP INDICATION</label>
                     <select
                       id="shipping-indication"
                       className="form-select"
                       value={itemForm.shippingIndication || "Delivered"}
-                      onChange={(e) =>
-                        setItemForm({ ...itemForm, shippingIndication: e.target.value })
-                      }
+                      onChange={(e) => setItemForm({ ...itemForm, shippingIndication: e.target.value })}
                     >
                       <option value="Delivered">Delivered</option>
                       <option value="Shipped">Shipped</option>
@@ -1687,16 +1525,14 @@ const InventoryManagement = () => {
               </div>
               <div className="modal-footer">
                 <button
-                  type="button"
                   className="btn btn-primary"
-                  onClick={handleSaveItem}
+                  onClick={handleSaveInventory}
                 >
-                  Update Item
+                  Save
                 </button>
                 <button
-                  type="button"
                   className="btn btn-secondary"
-                  onClick={() => setShowAddItemModal(false)}
+                  onClick={() => setShowInventoryModal(false)}
                 >
                   Cancel
                 </button>
@@ -1763,6 +1599,7 @@ const InventoryManagement = () => {
           </div>
         </div>
       </>
+
     </div>
   );
 };
