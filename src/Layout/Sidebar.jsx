@@ -63,7 +63,7 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
                     <>
                         {navItem("/manager/dashboard", "fas fa-tachometer-alt", "Dashboard")}
                         {navItem("/manager/ordermanagement", "fas fa-box-open", "Order Management")}
-                        {navItem("/manager/managerinventory", "fas fa-warehouse", "logistics")}
+                        {navItem("/inventorymanagement", "fas fa-warehouse", "logistics")}
                         {navItem("/manager/managerreports", "fas fa-chart-line", "Reports")}
                         {navItem("/manager/managerstaff", "fas fa-users-cog", "Staff Management")}
 
@@ -74,7 +74,7 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
                     <>
                         {navItem("/salesperson/salespersondashboard", "fas fa-tachometer-alt", "Dashboard")}
                         {navItem("/salesperson/salespersonorder", "fas fa-shopping-cart", "Order Management")}
-                        {navItem("/salesperson/salespersoninventory", "fas fa-boxes", "Inventory")}
+                        {navItem("/inventorymanagement", "fas fa-boxes", "logistics")}
                         {navItem("/salesperson/salespersoncustomerinfo", "fas fa-user-friends", "Customer Information")}
 
                     </>
