@@ -376,10 +376,10 @@ const InventoryManagement = () => {
 
 
   const handleEditInventory = (item, index) => {
-  setInventoryForm(item);      // Pre-fill form with selected item
-  setEditIndex(index);         // Store which row is being edited
-  setShowInventoryModal(true); // Open modal
-};
+    setInventoryForm(item);      // Pre-fill form with selected item
+    setEditIndex(index);         // Store which row is being edited
+    setShowInventoryModal(true); // Open modal
+  };
 
   // Handle save item
   const handleSaveItem = () => {
@@ -974,15 +974,23 @@ const InventoryManagement = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.arrEst}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.arrDate}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${item.shipIndication === 'DELIVERED'
-                            ? 'bg-green-100 text-green-800'
-                            : item.shipIndication === 'SHIPPED'
-                              ? 'bg-blue-100 text-blue-800'
-                              : 'bg-yellow-100 text-yellow-800'
-                            }`}>
-                            {item.shipIndication}
+                          <span
+                            className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
+      ${item.shippingIndication === 'DELIVERED'
+                                ? 'bg-green-100 text-green-800'
+                                : item.shippingIndication === 'SHIPPED'
+                                  ? 'bg-yellow-100 text-yellow-800'
+                                  : item.shippingIndication === 'CANCELLED'
+                                    ? 'bg-red-100 text-red-800'
+                                    : item.shippingIndication === 'ORDERED'
+                                      ? 'bg-gray-200 text-gray-800'
+                                      : 'bg-slate-100 text-slate-800'
+                              }`}
+                          >
+                            {item.shippingIndication}
                           </span>
                         </td>
+
                         <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                           {/* Edit Button */}
                           <button
@@ -1167,15 +1175,23 @@ const InventoryManagement = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.arrEst}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.arrDate}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${item.shipIndication === 'DELIVERED'
-                            ? 'bg-green-100 text-green-800'
-                            : item.shipIndication === 'SHIPPED'
-                              ? 'bg-blue-100 text-blue-800'
-                              : 'bg-yellow-100 text-yellow-800'
-                            }`}>
-                            {item.shipIndication}
+                          <span
+                            className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
+      ${item.shippingIndication === 'DELIVERED'
+                                ? 'bg-green-100 text-green-800'
+                                : item.shippingIndication === 'SHIPPED'
+                                  ? 'bg-yellow-100 text-yellow-800'
+                                  : item.shippingIndication === 'CANCELLED'
+                                    ? 'bg-red-100 text-red-800'
+                                    : item.shippingIndication === 'ORDERED'
+                                      ? 'bg-gray-200 text-gray-800'
+                                      : 'bg-slate-100 text-slate-800'
+                              }`}
+                          >
+                            {item.shippingIndication}
                           </span>
                         </td>
+
                         <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                           {/* Edit Button */}
                           <button
@@ -1276,15 +1292,23 @@ const InventoryManagement = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.arrEst}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.arrDate}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${item.shipIndication === 'DELIVERED'
-                            ? 'bg-green-100 text-green-800'
-                            : item.shipIndication === 'SHIPPED'
-                              ? 'bg-blue-100 text-blue-800'
-                              : 'bg-yellow-100 text-yellow-800'
-                            }`}>
-                            {item.shipIndication}
+                          <span
+                            className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
+      ${item.shippingIndication === 'DELIVERED'
+                                ? 'bg-green-100 text-green-800'
+                                : item.shippingIndication === 'SHIPPED'
+                                  ? 'bg-yellow-100 text-yellow-800'
+                                  : item.shippingIndication === 'CANCELLED'
+                                    ? 'bg-red-100 text-red-800'
+                                    : item.shippingIndication === 'ORDERED'
+                                      ? 'bg-gray-200 text-gray-800'
+                                      : 'bg-slate-100 text-slate-800'
+                              }`}
+                          >
+                            {item.shippingIndication}
                           </span>
                         </td>
+
                         <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                           {/* Edit Button */}
                           <button
