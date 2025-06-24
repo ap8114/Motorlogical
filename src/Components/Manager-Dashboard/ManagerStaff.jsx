@@ -210,7 +210,7 @@ const ManagerStaff = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Staff Management</h1>
           <p className="text-gray-600 mt-2">Manage your dealership's sales team</p>
-          <div className="h-1 w-24 bg-indigo-600 mt-4"></div>
+     
         </div>
         
         {/* Staff List Section */}
@@ -227,9 +227,7 @@ const ManagerStaff = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <i className="fas fa-search text-gray-400"></i>
-                </div>
+               
               </div>
               
               <div className="relative">
@@ -242,9 +240,7 @@ const ManagerStaff = () => {
                   <option value="active">Active Only</option>
                   <option value="inactive">Inactive Only</option>
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <i className="fas fa-chevron-down text-xs"></i>
-                </div>
+             
               </div>
               
               <button
@@ -347,22 +343,23 @@ const ManagerStaff = () => {
           </div>
           
           {filteredStaff.length > 0 && (
-            <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-4">
-              <div>
-                <p className="text-sm text-gray-700">
-                  Showing <span className="font-medium">{filteredStaff.length}</span> of{' '}
-                  <span className="font-medium">{staffMembers.length}</span> staff members
-                </p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <button className="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-50 !rounded-button whitespace-nowrap cursor-pointer">
-                  <i className="fas fa-file-export mr-1"></i> Export
-                </button>
-                <button className="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-50 !rounded-button whitespace-nowrap cursor-pointer">
-                  <i className="fas fa-print mr-1"></i> Print
-                </button>
-              </div>
-            </div>
+           <div className="mt-4 flex flex-col md:flex-row md:items-center md:justify-between border-t border-gray-200 pt-4 gap-4">
+  <div className="text-center md:text-left">
+    <p className="text-sm text-gray-700">
+      Showing <span className="font-medium">{filteredStaff.length}</span> of{' '}
+      <span className="font-medium">{staffMembers.length}</span> staff members
+    </p>
+  </div>
+  <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 space-y-2 sm:space-y-0 w-full md:w-auto justify-center md:justify-end">
+    <button className="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-50 !rounded-button whitespace-nowrap w-full sm:w-auto">
+      <i className="fas fa-file-export mr-1"></i> Export
+    </button>
+    <button className="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-50 !rounded-button whitespace-nowrap w-full sm:w-auto">
+      <i className="fas fa-print mr-1"></i> Print
+    </button>
+  </div>
+</div>
+
           )}
         </div>
         
@@ -430,143 +427,134 @@ const ManagerStaff = () => {
       </div>
       
       {/* Add/Edit Staff Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center">
-          <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 md:mx-auto">
-            <div className="flex justify-between items-center p-5 border-b">
-              <h3 className="text-xl font-semibold text-gray-800">
-                {currentStaff ? 'Edit Staff Member' : 'Add New Staff Member'}
-              </h3>
-              <button
-                onClick={handleCloseModal}
-                className="text-gray-400 hover:text-gray-500 cursor-pointer"
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-            
-            <form onSubmit={handleSubmit} className="p-6">
-              <div className="mb-4">
-                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="fullName"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border ${
-                    formErrors.fullName ? 'border-red-500' : 'border-gray-300'
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm`}
-                  placeholder="Enter full name"
-                />
-                {formErrors.fullName && (
-                  <p className="mt-1 text-xs text-red-500">{formErrors.fullName}</p>
-                )}
-              </div>
-              
-              <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border ${
-                    formErrors.email ? 'border-red-500' : 'border-gray-300'
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm`}
-                  placeholder="Enter email address"
-                />
-                {formErrors.email && (
-                  <p className="mt-1 text-xs text-red-500">{formErrors.email}</p>
-                )}
-              </div>
-              
-              <div className="mb-4">
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border ${
-                    formErrors.phone ? 'border-red-500' : 'border-gray-300'
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm`}
-                  placeholder="Enter phone number"
-                />
-                {formErrors.phone && (
-                  <p className="mt-1 text-xs text-red-500">{formErrors.phone}</p>
-                )}
-              </div>
-              
-              <div className="mb-4">
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
-                  Role
-                </label>
-                <div className="relative">
-                  <select
-                    id="role"
-                    name="role"
-                    value={formData.role}
-                    onChange={handleSelectChange}
-                    className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md appearance-none cursor-pointer text-sm"
-                  >
-                    <option value="Sales Rep">Sales Rep</option>
-                    <option value="Senior Sales Rep">Senior Sales Rep</option>
-                    <option value="Sales Manager">Sales Manager</option>
-                    <option value="Finance Manager">Finance Manager</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <i className="fas fa-chevron-down text-xs"></i>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mb-6">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="status"
-                    name="status"
-                    checked={formData.status}
-                    onChange={handleInputChange}
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer"
-                  />
-                  <label htmlFor="status" className="ml-2 block text-sm text-gray-700 cursor-pointer">
-                    Active Status
-                  </label>
-                </div>
-                <p className="mt-1 text-xs text-gray-500">
-                  Inactive staff will not appear in customer-facing applications
-                </p>
-              </div>
-              
-              <div className="flex justify-end space-x-3 border-t pt-4">
-                <button
-                  type="button"
-                  onClick={handleCloseModal}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 !rounded-button whitespace-nowrap cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 !rounded-button whitespace-nowrap cursor-pointer"
-                >
-                  {currentStaff ? 'Update Staff' : 'Add Staff'}
-                </button>
-              </div>
-            </form>
-          </div>
+     {showModal && (
+  <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(75, 85, 99, 0.5)' }}>
+    <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-content shadow">
+        <div className="modal-header">
+          <h5 className="modal-title">
+            {currentStaff ? 'Edit Staff Member' : 'Add New Staff Member'}
+          </h5>
+          <button type="button" className="btn-close" onClick={handleCloseModal}></button>
         </div>
-      )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="modal-body">
+            {/* Full Name */}
+            <div className="mb-3">
+              <label htmlFor="fullName" className="form-label">
+                Full Name <span className="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                className={`form-control ${formErrors.fullName ? 'is-invalid' : ''}`}
+                id="fullName"
+                name="fullName"
+                placeholder="Enter full name"
+                value={formData.fullName}
+                onChange={handleInputChange}
+              />
+              {formErrors.fullName && (
+                <div className="invalid-feedback">{formErrors.fullName}</div>
+              )}
+            </div>
+
+            {/* Email */}
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">
+                Email <span className="text-danger">*</span>
+              </label>
+              <input
+                type="email"
+                className={`form-control ${formErrors.email ? 'is-invalid' : ''}`}
+                id="email"
+                name="email"
+                placeholder="Enter email address"
+                value={formData.email}
+                onChange={handleInputChange}
+              />
+              {formErrors.email && (
+                <div className="invalid-feedback">{formErrors.email}</div>
+              )}
+            </div>
+
+            {/* Phone */}
+            <div className="mb-3">
+              <label htmlFor="phone" className="form-label">
+                Phone <span className="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                className={`form-control ${formErrors.phone ? 'is-invalid' : ''}`}
+                id="phone"
+                name="phone"
+                placeholder="Enter phone number"
+                value={formData.phone}
+                onChange={handleInputChange}
+              />
+              {formErrors.phone && (
+                <div className="invalid-feedback">{formErrors.phone}</div>
+              )}
+            </div>
+
+            {/* Role */}
+            <div className="mb-3">
+              <label htmlFor="role" className="form-label">Role</label>
+              <select
+                className="form-select"
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleSelectChange}
+              >
+                <option value="Sales Rep">Sales Rep</option>
+                <option value="Senior Sales Rep">Senior Sales Rep</option>
+                <option value="Sales Manager">Sales Manager</option>
+                <option value="Finance Manager">Finance Manager</option>
+              </select>
+            </div>
+
+            {/* Status */}
+            <div className="mb-3 form-check">
+              <input
+                type="checkbox"
+                className="form-check-input me-1"
+                id="status"
+                name="status"
+                checked={formData.status}
+                onChange={handleInputChange}
+              />
+              <label className="form-check-label" htmlFor="status">
+                Active Status
+              </label>
+              <div className="form-text">
+                Inactive staff will not appear in customer-facing applications.
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleCloseModal}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+            >
+              {currentStaff ? 'Update Staff' : 'Add Staff'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

@@ -1,32 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
-// interface Product {
-//   id: number;
-//   name: string;
-//   price: number;
-// }
-
-// interface Order {
-//   id: string;
-//   product: string;
-//   productId: number;
-//   quantity: number;
-//   customerName: string;
-//   customerPhone: string;
-//   notes: string;
-//   status: 'Pending' | 'Processing' | 'Shipped' | 'Delivered';
-//   orderDate: string;
-// }
-
 const SalespersonOrder = ({ orders, userId }) => {
-
   const [filteredOrders, setFilteredOrders] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [formData, setFormData] = useState({
+    productId: '',
+    quantity: 1,
+    customerName: '',
+    customerPhone: '',
+    notes: ''
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [alert, setAlert] = useState(null);
 
-  const handleSubmit = (e) => {
-  e.preventDefault(); // prevent page reload
-  // your form logic here
-  console.log("Form submitted");
-};
+  const ordersPerPage = 5;
 
   useEffect(() => {
     if (Array.isArray(orders)) {
@@ -35,19 +25,6 @@ const SalespersonOrder = ({ orders, userId }) => {
     }
   }, [orders, userId]);
 
-  // State declarations (unchanged)
-  const [products, setProducts] = useState();
-
-  const [formData, setFormData] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
-  const [selectedOrder, setSelectedOrder] = useState();
-  const [alert, setAlert] = useState();
-  
-  const ordersPerPage = 5;
-
-  // Show alert and auto-hide
   useEffect(() => {
     if (alert) {
       const timer = setTimeout(() => setAlert(null), 3000);
@@ -55,48 +32,59 @@ const SalespersonOrder = ({ orders, userId }) => {
     }
   }, [alert]);
 
-  // Handle input change (unchanged)
-  const handleInputChange = (e) => {}
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
-  // Handle form submission
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-    
-  //   // Validation
-  //   if (!formData.customerName || !formData.customerPhone) {
-  //     setAlert({type: 'error', message: 'Please fill in all required fields'});
-  //     return;
-  //   }
-    
-  //   try {
-  //     // Submit logic (unchanged)
-      
-  //     // Show success
-  //     setAlert({type: 'success', message: 'Order submitted successfully!'});
-      
-  //     // Reset form
-  //     setFormData({});
-      
-  //   } catch (error) {
-  //     setAlert({type: 'error', message: 'Failed to submit order. Please try again.'});
-  //   }
-  // };
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  // Filter and pagination logic (unchanged)
-  
+    if (!formData.customerName || !formData.customerPhone) {
+      setAlert({ type: 'danger', message: 'Please fill in all required fields' });
+      return;
+    }
+
+    // Here you would typically submit the order to your backend
+    setAlert({ type: 'success', message: 'Order submitted successfully!' });
+    setFormData({
+      productId: '',
+      quantity: 1,
+      customerName: '',
+      customerPhone: '',
+      notes: ''
+    });
+  };
+
+  // Filter orders based on search term and status filter
+  const filteredAndSearchedOrders = filteredOrders.filter(order => {
+    const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.product.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'All' || order.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
-  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+  const currentOrders = filteredAndSearchedOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const totalPages = Math.ceil(filteredAndSearchedOrders.length / ordersPerPage);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
 
-  // const filteredOrders = orders.filter(order => order.salespersonId === userId);
-
-
-  // Helper functions (unchanged)
-  const formatDate = (dateString) => {};
   const getStatusColor = (status) => {
-    switch(status) {
+    switch (status) {
       case 'Pending': return 'bg-warning text-dark';
       case 'Processing': return 'bg-info text-white';
       case 'Shipped': return 'bg-primary text-white';
@@ -104,25 +92,46 @@ const SalespersonOrder = ({ orders, userId }) => {
       default: return 'bg-secondary text-white';
     }
   };
-  const getStatusIndex = (status) => {};
+
+  const getStatusIndex = (status) => {
+    switch (status) {
+      case 'Pending': return 0;
+      case 'Processing': return 1;
+      case 'Shipped': return 2;
+      case 'Delivered': return 3;
+      default: return 0;
+    }
+  };
+
+  // Mock products data - replace with your actual data
+  useEffect(() => {
+    setProducts([
+      { id: 1, name: 'Product 1', price: 19.99 },
+      { id: 2, name: 'Product 2', price: 29.99 },
+      { id: 3, name: 'Product 3', price: 39.99 }
+    ]);
+    // Set default product if available
+    if (products.length > 0 && !formData.productId) {
+      setFormData(prev => ({ ...prev, productId: products[0].id }));
+    }
+  }, []);
 
   return (
     <div className="min-vh-100 bg-light py-4">
-      {/* Alert notifications */}
       {alert && (
         <div className={`fixed-top m-4 alert alert-${alert.type} alert-dismissible fade show`} role="alert">
           {alert.message}
           <button type="button" className="btn-close" onClick={() => setAlert(null)}></button>
         </div>
       )}
-      
+
       <div className="container">
         {/* Place Order Form */}
         <div className="mb-5">
-          <h2 className="h2 text-dark mb-3">
-            Place Order <span className="text-primary">.</span>
+          <h2 className="h5 text-dark mb-3">
+            Place Order
           </h2>
-          
+
           <div className="card shadow-sm">
             <div className="card-body">
               <form onSubmit={handleSubmit}>
@@ -137,15 +146,16 @@ const SalespersonOrder = ({ orders, userId }) => {
                       value={formData.productId}
                       onChange={handleInputChange}
                       className="form-select"
+                      required
                     >
                       {products.map(product => (
                         <option key={product.id} value={product.id}>
-                          {product.name} - ${product.price}
+                          {product.name} - ${product.price.toFixed(2)}
                         </option>
                       ))}
                     </select>
                   </div>
-                  
+
                   <div className="col-md-6">
                     <label htmlFor="quantity" className="form-label">
                       Quantity
@@ -158,9 +168,10 @@ const SalespersonOrder = ({ orders, userId }) => {
                       value={formData.quantity}
                       onChange={handleInputChange}
                       className="form-control"
+                      required
                     />
                   </div>
-                  
+
                   <div className="col-md-6">
                     <label htmlFor="customerName" className="form-label">
                       Customer Name <span className="text-danger">*</span>
@@ -175,7 +186,7 @@ const SalespersonOrder = ({ orders, userId }) => {
                       className="form-control"
                     />
                   </div>
-                  
+
                   <div className="col-md-6">
                     <label htmlFor="customerPhone" className="form-label">
                       Customer Phone <span className="text-danger">*</span>
@@ -190,7 +201,7 @@ const SalespersonOrder = ({ orders, userId }) => {
                       className="form-control"
                     />
                   </div>
-                  
+
                   <div className="col-12">
                     <label htmlFor="notes" className="form-label">
                       Order Notes
@@ -205,7 +216,7 @@ const SalespersonOrder = ({ orders, userId }) => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="d-flex justify-content-end">
                   <button
                     type="submit"
@@ -219,13 +230,13 @@ const SalespersonOrder = ({ orders, userId }) => {
             </div>
           </div>
         </div>
-        
+
         {/* Order Status Tracker */}
         <div className="mb-5">
-          <h2 className="h2 text-dark mb-3">
-            Order Status Tracker <span className="text-primary">.</span>
+          <h2 className="h5 text-dark mb-3">
+            Order Status Tracker 
           </h2>
-          
+
           {selectedOrder ? (
             <div className="card shadow-sm">
               <div className="card-body">
@@ -239,25 +250,25 @@ const SalespersonOrder = ({ orders, userId }) => {
                     <span className="fw-medium">{selectedOrder.customerName}</span>
                   </div>
                 </div>
-                
+
                 <div className="order-tracker">
                   <div className="progress mb-4" style={{ height: '8px' }}>
-                    <div 
-                      className="progress-bar bg-primary" 
+                    <div
+                      className="progress-bar bg-primary"
                       role="progressbar"
                       style={{ width: `${(getStatusIndex(selectedOrder.status) + 1) * 25}%` }}
                     ></div>
                   </div>
-                  
+
                   <div className="d-flex justify-content-between">
                     {['Pending', 'Processing', 'Shipped', 'Delivered'].map((status, index) => {
                       const currentIndex = getStatusIndex(selectedOrder.status);
                       const isComplete = index < currentIndex;
                       const isCurrent = index === currentIndex;
-                      
+
                       return (
                         <div key={status} className="text-center position-relative" style={{ zIndex: 1 }}>
-                          <div 
+                          <div
                             className={`d-inline-flex align-items-center justify-content-center rounded-circle ${isComplete || isCurrent ? 'bg-primary text-white' : 'bg-light text-muted border'}`}
                             style={{ width: '40px', height: '40px' }}
                           >
@@ -285,19 +296,19 @@ const SalespersonOrder = ({ orders, userId }) => {
             </div>
           )}
         </div>
-        
+
         {/* My Orders Table */}
         <div>
           <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
-            <h2 className="h2 text-dark mb-3 mb-md-0">
-              My Orders <span className="text-primary">.</span>
+            <h2 className="h5 text-dark mb-3 mb-md-0">
+              My Orders
             </h2>
             <span className="badge bg-light text-dark fs-6 px-3 py-2">
               <i className="fas fa-clipboard-list me-2"></i>
-              {filteredOrders.length} orders
+              {filteredAndSearchedOrders.length} orders
             </span>
           </div>
-          
+
           <div className="card shadow-sm">
             <div className="card-header bg-white py-3">
               <div className="row g-3 align-items-center">
@@ -315,7 +326,7 @@ const SalespersonOrder = ({ orders, userId }) => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="col-md-4">
                   <select
                     value={statusFilter}
@@ -329,7 +340,7 @@ const SalespersonOrder = ({ orders, userId }) => {
                     <option value="Delivered">Delivered</option>
                   </select>
                 </div>
-                
+
                 <div className="col-md-2 text-md-end">
                   <button className="btn btn-outline-secondary w-100">
                     <i className="fas fa-download me-2"></i> Export
@@ -337,7 +348,7 @@ const SalespersonOrder = ({ orders, userId }) => {
                 </div>
               </div>
             </div>
-            
+
             <div className="card-body p-0">
               <div className="table-responsive">
                 <table className="table table-hover align-middle mb-0">
@@ -390,17 +401,17 @@ const SalespersonOrder = ({ orders, userId }) => {
                   </tbody>
                 </table>
               </div>
-              
+
               {/* Pagination */}
-              {filteredOrders.length > 0 && (
+              {filteredAndSearchedOrders.length > 0 && (
                 <div className="card-footer bg-white">
                   <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
                     <div className="mb-2 mb-md-0">
                       Showing {indexOfFirstOrder + 1} to{' '}
-                      {Math.min(indexOfLastOrder, filteredOrders.length)} of{' '}
-                      {filteredOrders.length} orders
+                      {Math.min(indexOfLastOrder, filteredAndSearchedOrders.length)} of{' '}
+                      {filteredAndSearchedOrders.length} orders
                     </div>
-                    
+
                     <nav>
                       <ul className="pagination mb-0">
                         <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
@@ -411,13 +422,13 @@ const SalespersonOrder = ({ orders, userId }) => {
                             <i className="fas fa-chevron-left"></i>
                           </button>
                         </li>
-                        
+
                         {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                          <li 
-                            key={page} 
+                          <li
+                            key={page}
                             className={`page-item ${currentPage === page ? 'active' : ''}`}
                           >
-                            <button 
+                            <button
                               className="page-link"
                               onClick={() => setCurrentPage(page)}
                             >
@@ -425,7 +436,7 @@ const SalespersonOrder = ({ orders, userId }) => {
                             </button>
                           </li>
                         ))}
-                        
+
                         <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                           <button
                             className="page-link"

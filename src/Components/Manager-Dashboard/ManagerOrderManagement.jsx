@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Button, Table, Form, Row, Col, Badge } from 'react-bootstrap';
+import { Modal, Button, Table, Form, Row, Col, Badge, Container } from 'react-bootstrap';
 import { FaEye } from 'react-icons/fa';
 
 const initialOrders = [
@@ -63,60 +63,65 @@ const OrderManagement = () => {
   };
 
   return (
-    <div className="p-4">
-      <h3 className="fw-bold mb-2 fs-4 py-2">Order Management</h3>
-     
+    <Container fluid className="py-4">
+      <Row className="mb-3">
+        <Col>
+          <h3 className="fw-bold fs-3">Order Management</h3>
+        </Col>
+        <Col xs="auto">
+          <Button variant="primary" onClick={() => setShowAddModal(true)}>
+            + New Order
+          </Button>
+        </Col>
+      </Row>
 
-      <Button variant="primary" className="mb-3" onClick={() => setShowAddModal(true)}>
-        + New Order
-      </Button>
-
-      <Table hover>
-        <thead>
-          <tr>
-            <th>ORDER ID</th>
-            <th>CUSTOMER</th>
-            <th>PRODUCTS</th>
-            <th>QUANTITY</th>
-            <th>STATUS</th>
-            <th>DATE PLACED</th>
-            <th>ACTIONS</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map(order => (
-            <tr key={order.id}>
-              <td>#{order.id}</td>
-              <td>
-                {order.customer}
-                <br />
-                <span className="text-muted">{order.phone}</span>
-              </td>
-              <td>{order.product}</td>
-              <td>{order.quantity}</td>
-              <td>
-                <Badge bg={order.status === 'Processing' ? 'warning' : 'info'} text="dark">
-                  {order.status}
-                </Badge>
-              </td>
-              <td>{order.date}</td>
-              <td>
-                <FaEye
-                  role="button"
-                  className="text-primary"
-                  onClick={() => {
-                    setSelectedOrder(order);
-                    setShowViewModal(true);
-                  }}
-                />
-              </td>
+      <div className="table-responsive">
+        <Table hover bordered className="align-middle text-nowrap">
+          <thead className="table-light">
+            <tr>
+              <th>ORDER ID</th>
+              <th>CUSTOMER</th>
+              <th>PRODUCTS</th>
+              <th>QUANTITY</th>
+              <th>STATUS</th>
+              <th>DATE PLACED</th>
+              <th>ACTIONS</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {orders.map(order => (
+              <tr key={order.id}>
+                <td>#{order.id}</td>
+                <td>
+                  <div className="fw-semibold">{order.customer}</div>
+                  <small className="text-muted">{order.phone}</small>
+                </td>
+                <td>{order.product}</td>
+                <td>{order.quantity}</td>
+                <td>
+                  <Badge bg={order.status === 'Processing' ? 'warning' : 'info'} text="dark">
+                    {order.status}
+                  </Badge>
+                </td>
+                <td>{order.date}</td>
+                <td>
+                  <FaEye
+                    role="button"
+                    className="text-primary"
+                    onClick={() => {
+                      setSelectedOrder(order);
+                      setShowViewModal(true);
+                    }}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
 
       {/* New Order Modal */}
-      <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
+      <Modal show={showAddModal} onHide={() => setShowAddModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Place New Order</Modal.Title>
         </Modal.Header>
@@ -157,8 +162,9 @@ const OrderManagement = () => {
               <Form.Label>Quantity</Form.Label>
               <Form.Control
                 type="number"
+                min={1}
                 value={newOrder.quantity}
-                onChange={e => setNewOrder({ ...newOrder, quantity: e.target.value })}
+                onChange={e => setNewOrder({ ...newOrder, quantity: Number(e.target.value) })}
               />
             </Form.Group>
           </Form>
@@ -173,8 +179,8 @@ const OrderManagement = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Order Detail Modal */}
-      <Modal show={showViewModal} onHide={() => setShowViewModal(false)}>
+      {/* Order Details Modal */}
+      <Modal show={showViewModal} onHide={() => setShowViewModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Order Details #{selectedOrder?.id}</Modal.Title>
         </Modal.Header>
@@ -182,38 +188,30 @@ const OrderManagement = () => {
           {selectedOrder && (
             <>
               <Row className="mb-2">
-                <Col><strong>Customer Name</strong><br />{selectedOrder.customer}</Col>
-                <Col><strong>Phone</strong><br />{selectedOrder.phone}</Col>
+                <Col sm={6}><strong>Customer Name</strong><br />{selectedOrder.customer}</Col>
+                <Col sm={6}><strong>Phone</strong><br />{selectedOrder.phone}</Col>
               </Row>
               <Row className="mb-2">
-                <Col><strong>Products</strong><br />{selectedOrder.product}</Col>
-                <Col><strong>Quantity</strong><br />{selectedOrder.quantity}</Col>
+                <Col sm={6}><strong>Products</strong><br />{selectedOrder.product}</Col>
+                <Col sm={6}><strong>Quantity</strong><br />{selectedOrder.quantity}</Col>
               </Row>
               <Row className="mb-2">
-                <Col><strong>Status</strong><br />{selectedOrder.status}</Col>
-                <Col><strong>Date Placed</strong><br />{selectedOrder.date}</Col>
+                <Col sm={6}><strong>Status</strong><br />{selectedOrder.status}</Col>
+                <Col sm={6}><strong>Date Placed</strong><br />{selectedOrder.date}</Col>
               </Row>
               <hr />
               <h6 className="mt-3">Order Timeline</h6>
               <ul className="list-unstyled">
-                <li>
-                  <span className="text-primary">●</span> Order placed — {selectedOrder.date}
-                </li>
-                <li>
-                  <span className="text-muted">○</span> Processing
-                </li>
-                <li>
-                  <span className="text-muted">○</span> Ready for delivery
-                </li>
-                <li>
-                  <span className="text-muted">○</span> Delivered
-                </li>
+                <li><span className="text-primary">●</span> Order placed — {selectedOrder.date}</li>
+                <li><span className="text-muted">○</span> Processing</li>
+                <li><span className="text-muted">○</span> Ready for delivery</li>
+                <li><span className="text-muted">○</span> Delivered</li>
               </ul>
             </>
           )}
         </Modal.Body>
       </Modal>
-    </div>
+    </Container>
   );
 };
 

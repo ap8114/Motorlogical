@@ -36,7 +36,7 @@ const Header = ({ onToggleSidebar }) => {
           {/* synced status  */}
            <button className="synced-btn">
             <span className="synced-icon"></span>
-            <span className="d-none d-sm-inline">Synced</span>
+            <span className="d-none d-sm-inline text-dark">Synced</span>
           </button>
 
           {/* notification */}
