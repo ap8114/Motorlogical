@@ -104,47 +104,44 @@ const Setting = () => {
                         </button>
                     </div>
                 </div>
-                
+
                 {/* Settings Tabs */}
                 <div className="bg-white rounded shadow mb-4 mb-md-5 mb-lg-6">
                     <div className="border-bottom">
-                     <nav className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4 mb-4">
-  <button
-    onClick={() => setActiveTab('general')}
-    className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${
-      activeTab === 'general'
-        ? 'bg-blue-600 text-white'
-        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-    }`}
-  >
-    <i className="fas fa-sliders-h mr-2"></i> General Settings
-  </button>
+                        <nav className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4 mb-4">
+                            <button
+                                onClick={() => setActiveTab('general')}
+                                className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${activeTab === 'general'
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
+                            >
+                                <i className="fas fa-sliders-h mr-2"></i> General Settings
+                            </button>
 
-  <button
-    onClick={() => setActiveTab('notifications')}
-    className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${
-      activeTab === 'notifications'
-        ? 'bg-blue-600 text-white'
-        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-    }`}
-  >
-    <i className="fas fa-bell mr-2"></i> Notification Preferences
-  </button>
+                            <button
+                                onClick={() => setActiveTab('notifications')}
+                                className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${activeTab === 'notifications'
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
+                            >
+                                <i className="fas fa-bell mr-2"></i> Notification Preferences
+                            </button>
 
-  <button
-    onClick={() => setActiveTab('inventory')}
-    className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${
-      activeTab === 'inventory'
-        ? 'bg-blue-600 text-white'
-        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-    }`}
-  >
-    <i className="fas fa-warehouse mr-2"></i> Inventory Settings
-  </button>
-</nav>
+                            <button
+                                onClick={() => setActiveTab('inventory')}
+                                className={`flex items-center px-4 py-2 text-sm font-medium rounded-full transition whitespace-nowrap ${activeTab === 'inventory'
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
+                            >
+                                <i className="fas fa-warehouse mr-2"></i> Inventory Settings
+                            </button>
+                        </nav>
 
                     </div>
-                    
+
                     {/* Tab Content */}
                     <div className="p-3 p-md-4">
                         {/* General Settings Tab */}
@@ -231,7 +228,7 @@ const Setting = () => {
                                         <p className="mt-1 small text-muted">Format for displaying dates throughout the system</p>
                                     </div>
                                 </div>
-                                
+
                                 <div className="mt-4 mt-md-5">
                                     <h3 className="h6 h5-md font-medium text-dark mb-3">Company Information</h3>
                                     <div className="row g-3 g-md-4">
@@ -273,7 +270,7 @@ const Setting = () => {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="mt-4 mt-md-5 d-flex justify-content-end">
                                     <button className="btn btn-primary btn-sm btn-md-normal">
                                         <i className="fas fa-save me-1 me-md-2"></i> Save General Settings
@@ -286,7 +283,7 @@ const Setting = () => {
                         {activeTab === 'notifications' && (
                             <div>
                                 <h2 className="h5 h4-md font-medium text-dark mb-3 mb-md-4">Notification Preferences</h2>
-                                
+
                                 <div className="bg-white border rounded p-3 p-md-4 mb-3 mb-md-4">
                                     <h3 className="h6 h5-md font-medium text-dark mb-3 mb-md-4">Email Notifications</h3>
                                     <div className="row g-3">
@@ -336,7 +333,7 @@ const Setting = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    
+
                                     <div className="mt-3 mt-md-4">
                                         <label className="form-label text-muted mb-1">Email Recipients</label>
                                         <input
@@ -348,7 +345,7 @@ const Setting = () => {
                                         <p className="mt-1 small text-muted">Separate multiple email addresses with commas</p>
                                     </div>
                                 </div>
-                                
+
                                 <div className="bg-white border rounded p-3 p-md-4 mb-3 mb-md-4">
                                     <h3 className="h6 h5-md font-medium text-dark mb-3 mb-md-4">In-App Notifications</h3>
                                     <div className="row g-3">
@@ -399,7 +396,7 @@ const Setting = () => {
                                         ))}
                                     </div>
                                 </div>
-                                
+
                                 <div className="bg-white border rounded p-3 p-md-4">
                                     <h3 className="h6 h5-md font-medium text-dark mb-3 mb-md-4">Notification Schedule</h3>
                                     <div className="row g-3 g-md-4">
@@ -425,7 +422,7 @@ const Setting = () => {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="mt-4 mt-md-5 d-flex justify-content-end">
                                     <button className="btn btn-primary btn-sm btn-md-normal">
                                         <i className="fas fa-save me-1 me-md-2"></i> Save Notification Settings
@@ -438,7 +435,7 @@ const Setting = () => {
                         {activeTab === 'inventory' && (
                             <div>
                                 <h2 className="h5 h4-md font-medium text-dark mb-3 mb-md-4">Inventory Settings</h2>
-                                
+
                                 <div className="bg-white border rounded p-3 p-md-4 mb-3 mb-md-4">
                                     <h3 className="h6 h5-md font-medium text-dark mb-3 mb-md-4">Stock Level Thresholds</h3>
                                     <div className="row g-3 g-md-4">
@@ -496,7 +493,7 @@ const Setting = () => {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="bg-white border rounded p-3 p-md-4 mb-3 mb-md-4">
                                     <h3 className="h6 h5-md font-medium text-dark mb-3 mb-md-4">Auto-Reorder Rules</h3>
                                     <div className="mb-3 mb-md-4">
@@ -545,7 +542,7 @@ const Setting = () => {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="bg-white border rounded p-3 p-md-4">
                                     <h3 className="h6 h5-md font-medium text-dark mb-3 mb-md-4">Inventory Display Settings</h3>
                                     <div className="row g-3 g-md-4">
@@ -586,7 +583,7 @@ const Setting = () => {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="mt-4 mt-md-5 d-flex justify-content-end">
                                     <button className="btn btn-primary btn-sm btn-md-normal">
                                         <i className="fas fa-save me-1 me-md-2"></i> Save Inventory Settings
