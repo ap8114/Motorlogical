@@ -46,7 +46,7 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
     // 👇 Role-based menu setup
     const getMenuItems = () => {
         switch (role) {
-            case "Admin":
+            case "admin":
                 return (
                     <>
                         {navItem("/dashboard", "fas fa-th-large", "Dashboard")}
