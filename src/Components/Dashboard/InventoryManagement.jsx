@@ -456,7 +456,7 @@ const InventoryManagement = () => {
       "BL": item.bl,
       "OCN SPEC": item.ocnSpec,
       "Model": item.model,
-      "Country": item.country,
+    "Country": item.country,
       "VIN Year": item.vinYear,
       "Ext. Color": item.extColor,
       "Int. Color": item.intColor,
