@@ -10,7 +10,10 @@ input:focus{
     border: 1px solid #023047 !important;
 }
 
-
+/* Ensure SweetAlert appears above everything else */
+.swal2-container {
+  z-index: 99999 !important;
+}
 
 /* General Modal Styling */
 .modal-backdrop {
