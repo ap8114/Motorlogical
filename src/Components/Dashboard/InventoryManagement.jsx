@@ -58,7 +58,7 @@ const InventoryManagement = () => {
 
         {activeTab === "inventory" && <div><InventoryList/></div>}
 
-        {activeTab === "reports" && <div>{/* <Report/> */}</div>}
+        {activeTab === "reports" && <div><Report/></div>}
       </main>
     </div>
   );

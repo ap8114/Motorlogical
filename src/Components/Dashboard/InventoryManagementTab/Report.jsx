@@ -1,6 +1,114 @@
 import React from "react";
 
 function Report() {
+  // Sample data for the tables
+  const data = [
+    {
+      sourceName: "Main Warehouse",
+      stock: "STK001",
+      manu: "MAN001",
+      manu2: "MAN002",
+      invoice: "INV001",
+      payment: "$25,000",
+      pmtStatus: "PAID",
+      payTerms: "NET 30",
+      vin: "1HGCM82633A123456",
+      engine: "ENG001",
+      key: "KEY001",
+      bl: "BL001",
+      shipDate: "2023-05-15",
+      brand: "Toyota",
+      ocnSpec: "OCN001",
+      model: "Camry",
+      country: "Japan",
+      myYear: "2023",
+      extColor: "Red",
+      intColor: "Black",
+      tbd3: "N/A",
+      orderMonth: "April",
+      prodEst: "2023-04-10",
+      shipEst: "2023-05-01",
+      estArr: "2023-05-15",
+      shpDte: "2023-05-01",
+      arrEst: "2023-05-15",
+      arrDate: "2023-05-16",
+      shippingIndication: "DELIVERED"
+    },
+    {
+      sourceName: "West Warehouse",
+      stock: "STK002",
+      manu: "MAN003",
+      manu2: "MAN004",
+      invoice: "INV002",
+      payment: "$32,500",
+      pmtStatus: "PENDING",
+      payTerms: "NET 15",
+      vin: "5XYZH4AG4JH123456",
+      engine: "ENG002",
+      key: "KEY002",
+      bl: "BL002",
+      shipDate: "2023-06-20",
+      brand: "Honda",
+      ocnSpec: "OCN002",
+      model: "Accord",
+      country: "Japan",
+      myYear: "2023",
+      extColor: "Blue",
+      intColor: "Beige",
+      tbd3: "N/A",
+      orderMonth: "May",
+      prodEst: "2023-05-15",
+      shipEst: "2023-06-10",
+      estArr: "2023-06-20",
+      shpDte: "2023-06-10",
+      arrEst: "2023-06-20",
+      arrDate: "",
+      shippingIndication: "SHIPPED"
+    },
+    {
+      sourceName: "East Warehouse",
+      stock: "STK003",
+      manu: "MAN005",
+      manu2: "MAN006",
+      invoice: "INV003",
+      payment: "$28,750",
+      pmtStatus: "PAID",
+      payTerms: "NET 30",
+      vin: "2T1BURHE5GC123456",
+      engine: "ENG003",
+      key: "KEY003",
+      bl: "BL003",
+      shipDate: "",
+      brand: "Ford",
+      ocnSpec: "OCN003",
+      model: "Fusion",
+      country: "USA",
+      myYear: "2023",
+      extColor: "White",
+      intColor: "Black",
+      tbd3: "N/A",
+      orderMonth: "June",
+      prodEst: "2023-06-01",
+      shipEst: "2023-06-25",
+      estArr: "2023-07-05",
+      shpDte: "",
+      arrEst: "2023-07-05",
+      arrDate: "",
+      shippingIndication: "ORDERED"
+    }
+  ];
+
+  // Handler functions
+  const handleEditInventory = (item, index) => {
+    console.log("Editing item:", item, "at index:", index);
+    // Add your edit logic here
+  };
+
+  const handleDeleteInventory = (index) => {
+    console.log("Deleting item at index:", index);
+    // Add your delete logic here
+  };
+
   return (
     <div>
       <div className="min-h-[600px]">
@@ -414,8 +522,8 @@ function Report() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {data.map((item, idx) => (
-                  <tr key={item.stock || idx} className="hover:bg-gray-50">
+                {data.slice(0, 2).map((item, idx) => (
+                  <tr key={`export-${item.stock}-${idx}`} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {item.sourceName}
                     </td>
