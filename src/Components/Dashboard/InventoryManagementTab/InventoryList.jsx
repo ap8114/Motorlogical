@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-
+import React, { useState, useRef, useEffect } from "react";
+import * as echarts from "echarts";
 function InventoryList() {
   // State for search and filters
   const [searchTerm, setSearchTerm] = useState("");
@@ -80,6 +80,199 @@ function InventoryList() {
 
   // Chart ref
   const timelineChartRef = useRef(null);
+
+   useEffect(() => {
+      // Initialize chart only if the ref is available
+      if (timelineChartRef.current) {
+        const chart = echarts.init(timelineChartRef.current);
+  
+        // Sample shipping data (replace with your actual data)
+        const shippingData = [
+          {
+            stock: 'GA0561',
+            model: 'EMPOW',
+            shippingDate: '2025-03-03',
+            arrivalDate: '2025-04-19',
+            status: 'DELIVERED',
+            color: '#10B981' // green
+          },
+          {
+            stock: 'GA0562',
+            model: 'EMPOW',
+            shippingDate: '2025-03-03',
+            arrivalDate: '2025-04-19',
+            status: 'SHIPPED',
+            color: '#3B82F6' // blue
+          },
+          {
+            stock: 'GA0563',
+            model: 'EMPOW',
+            shippingDate: '2025-03-03',
+            arrivalDate: '2025-04-19',
+            status: 'DELIVERED',
+            color: '#10B981'
+          },
+          {
+            stock: 'GA0564',
+            model: 'EMPOW',
+            shippingDate: '2025-03-03',
+            arrivalDate: '2025-04-19',
+            status: 'SHIPPED',
+            color: '#3B82F6'
+          },
+          {
+            stock: 'GA0565',
+            model: 'EMPOW',
+            shippingDate: '2025-03-03',
+            arrivalDate: '2025-04-19',
+            status: 'DELIVERED',
+            color: '#10B981'
+          },
+          {
+            stock: 'GA0566',
+            model: 'EMPOW',
+            shippingDate: '2025-03-03',
+            arrivalDate: '2025-04-19',
+            status: 'SHIPPED',
+            color: '#3B82F6'
+          },
+          {
+            stock: 'GA0567',
+            model: 'EMPOW',
+            shippingDate: '2025-03-03',
+            arrivalDate: '2025-04-19',
+            status: 'SHIPPED',
+            color: '#3B82F6'
+          }
+        ];
+  
+        const option = {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            },
+            formatter: function (params) {
+              const data = params[0].data;
+              return `
+                <div class="p-2">
+                  <div class="font-bold">${data.stock}</div>
+                  <div>Model: ${data.model}</div>
+                  <div>Shipping: ${new Date(data.shippingDate).toLocaleDateString()}</div>
+                  <div>Arrival: ${new Date(data.arrivalDate).toLocaleDateString()}</div>
+                  <div class="mt-1">
+                    Status: <span class="font-semibold ${data.status === 'DELIVERED' ? 'text-green-600' : 'text-blue-600'}">${data.status}</span>
+                  </div>
+                </div>
+              `;
+            }
+          },
+          legend: {
+            data: ['DELIVERED', 'SHIPPED'],
+            top: 0,
+            textStyle: {
+              color: '#6B7280'
+            }
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            data: shippingData.map(item => item.stock),
+            axisLabel: {
+              rotate: 45,
+              color: '#6B7280'
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#E5E7EB'
+              }
+            }
+          },
+          yAxis: {
+            type: 'value',
+            name: 'Timeline',
+            nameTextStyle: {
+              color: '#6B7280'
+            },
+            axisLabel: {
+              color: '#6B7280',
+              formatter: function (value) {
+                // Convert numeric month to month names
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+                return months[value - 1] || '';
+              }
+            },
+            min: 3, // March
+            max: 5, // May
+            interval: 1,
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: '#E5E7EB'
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                color: '#F3F4F6'
+              }
+            }
+          },
+          series: [
+            {
+              name: 'Shipping Date',
+              type: 'bar',
+              stack: 'timeline',
+              barWidth: 15,
+              itemStyle: {
+                color: function (params) {
+                  return shippingData[params.dataIndex].color;
+                },
+                borderRadius: [4, 4, 0, 0]
+              },
+              data: shippingData.map(item => ({
+                value: parseInt(item.shippingDate.split('-')[1]), // month
+                stock: item.stock,
+                model: item.model,
+                shippingDate: item.shippingDate,
+                arrivalDate: item.arrivalDate,
+                status: item.status
+              }))
+            },
+            {
+              name: 'Transit Time',
+              type: 'bar',
+              stack: 'timeline',
+              barWidth: 15,
+              itemStyle: {
+                color: '#E5E7EB', // gray for transit
+                borderRadius: [0, 0, 4, 4]
+              },
+              data: shippingData.map(item => ({
+                value: parseInt(item.arrivalDate.split('-')[1]) - parseInt(item.shippingDate.split('-')[1]),
+                stock: item.stock,
+                model: item.model,
+                shippingDate: item.shippingDate,
+                arrivalDate: item.arrivalDate,
+                status: item.status
+              }))
+            }
+          ]
+        };
+  
+        chart.setOption(option);
+  
+        // Handle window resize
+        const handleResize = () => {
+          chart.resize();
+        };
+        window.addEventListener('resize', handleResize);
+      }
+    }, []);
 
   // Handler functions
   const handleAddInventory = () => {
