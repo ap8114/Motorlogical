@@ -1361,37 +1361,37 @@ const InventoryManagement = () => {
                     <div className="col-md-4">
                       <div className="mb-3">
                         <label htmlFor="source-name" className="form-label">Source Name</label>
-                        <input type="text" className="form-control" id="source-name" value={itemForm.sourceName || ""} readOnly />
+                        <input type="text" className="form-control" id="source-name" value={itemForm.sourceName || ""}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="stock-number" className="form-label">Stock Number</label>
-                        <input type="text" className="form-control" id="stock-number" value={itemForm.stockNumber || "GA05E1"} readOnly />
+                        <input type="text" className="form-control" id="stock-number" value={itemForm.stockNumber || "GA05E1"}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="manu-number" className="form-label">MANU#</label>
-                        <input type="text" className="form-control" id="manu-number" value={itemForm.manuNumber || ""} readOnly />
+                        <input type="text" className="form-control" id="manu-number" value={itemForm.manuNumber || ""}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="manu-number2" className="form-label">MANU#2</label>
-                        <input type="text" className="form-control" id="manu-number2" value={itemForm.manuNumber2 || ""} readOnly />
+                        <input type="text" className="form-control" id="manu-number2" value={itemForm.manuNumber2 || ""}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="invoice-number" className="form-label">INVOICE#</label>
-                        <input type="text" className="form-control" id="invoice-number" value={itemForm.invoiceNumber || ""} readOnly />
+                        <input type="text" className="form-control" id="invoice-number" value={itemForm.invoiceNumber || ""}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="payment" className="form-label">PAYMENT</label>
-                        <input type="text" className="form-control" id="payment" value={itemForm.payment || ""} readOnly />
+                        <input type="text" className="form-control" id="payment" value={itemForm.payment || ""}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="payment-status" className="form-label">PMT STATUS</label>
-                        <input type="text" className="form-control" id="payment-status" value={itemForm.paymentStatus || ""} readOnly />
+                        <input type="text" className="form-control" id="payment-status" value={itemForm.paymentStatus || ""}  />
                       </div>
                     </div>
 
@@ -1399,37 +1399,37 @@ const InventoryManagement = () => {
                     <div className="col-md-4">
                       <div className="mb-3">
                         <label htmlFor="payment-terms" className="form-label">PAY. TERMS</label>
-                        <input type="text" className="form-control" id="payment-terms" value={itemForm.paymentTerms || ""} readOnly />
+                        <input type="text" className="form-control" id="payment-terms" value={itemForm.paymentTerms || ""}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="vin" className="form-label">VIN#</label>
-                        <input type="text" className="form-control" id="vin" value={itemForm.vin || "LMGBR11871144264"} readOnly />
+                        <input type="text" className="form-control" id="vin" value={itemForm.vin || "LMGBR11871144264"}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="engine" className="form-label">ENGINE#</label>
-                        <input type="text" className="form-control" id="engine" value={itemForm.engine || "K500535"} readOnly />
+                        <input type="text" className="form-control" id="engine" value={itemForm.engine || "K500535"}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="key-number" className="form-label">KEY#</label>
-                        <input type="text" className="form-control" id="key-number" value={itemForm.keyNumber || ""} readOnly />
+                        <input type="text" className="form-control" id="key-number" value={itemForm.keyNumber || ""}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="bl" className="form-label">BL#</label>
-                        <input type="text" className="form-control" id="bl" value={itemForm.bl || "EUROSHBJXD11613 BB2A-CW7-00"} readOnly />
+                        <input type="text" className="form-control" id="bl" value={itemForm.bl || "EUROSHBJXD11613 BB2A-CW7-00"}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="ship-date" className="form-label">SHIP DATE</label>
-                        <input type="text" className="form-control" id="ship-date" value={itemForm.shipDate || ""} readOnly />
+                        <input type="text" className="form-control" id="ship-date" value={itemForm.shipDate || ""}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="brand" className="form-label">BRAND</label>
-                        <input type="text" className="form-control" id="brand" value={itemForm.brand || ""} readOnly />
+                        <input type="text" className="form-control" id="brand" value={itemForm.brand || ""}  />
                       </div>
                     </div>
 
@@ -1437,37 +1437,37 @@ const InventoryManagement = () => {
                     <div className="col-md-4">
                       <div className="mb-3">
                         <label htmlFor="ocn-spec" className="form-label">OCN SPEC</label>
-                        <input type="text" className="form-control" id="ocn-spec" value={itemForm.ocnSpec || "BB2A-CW7-00"} readOnly />
+                        <input type="text" className="form-control" id="ocn-spec" value={itemForm.ocnSpec || "BB2A-CW7-00"}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="model" className="form-label">MODEL</label>
-                        <input type="text" className="form-control" id="model" value={itemForm.model || "EMPGW"} readOnly />
+                        <input type="text" className="form-control" id="model" value={itemForm.model || "EMPGW"}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="country" className="form-label">COUNTRY</label>
-                        <input type="text" className="form-control" id="country" value={itemForm.country || "INF"} readOnly />
+                        <input type="text" className="form-control" id="country" value={itemForm.country || "INF"}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="vin-year" className="form-label">MY YEAR</label>
-                        <input type="text" className="form-control" id="vin-year" value={itemForm.vinYear || ""} readOnly />
+                        <input type="text" className="form-control" id="vin-year" value={itemForm.vinYear || ""}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="ext-color" className="form-label">EXT. COLOR</label>
-                        <input type="text" className="form-control" id="ext-color" value={itemForm.extColor || ""} readOnly />
+                        <input type="text" className="form-control" id="ext-color" value={itemForm.extColor || ""}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="int-color" className="form-label">INT. COLOR</label>
-                        <input type="text" className="form-control" id="int-color" value={itemForm.intColor || "BLACK"} readOnly />
+                        <input type="text" className="form-control" id="int-color" value={itemForm.intColor || "BLACK"}  />
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="tbd3" className="form-label">TBD3</label>
-                        <input type="text" className="form-control" id="tbd3" value={itemForm.tbd3 || ""} readOnly />
+                        <input type="text" className="form-control" id="tbd3" value={itemForm.tbd3 || ""}  />
                       </div>
                     </div>
                   </div>
@@ -1477,28 +1477,28 @@ const InventoryManagement = () => {
                     <div className="col-md-3">
                       <div className="mb-3">
                         <label htmlFor="order-month" className="form-label">ORDER MONTH</label>
-                        <input type="text" className="form-control" id="order-month" value={itemForm.orderMonth || "12/12/2024"} readOnly />
+                        <input type="text" className="form-control" id="order-month" value={itemForm.orderMonth || "12/12/2024"}  />
                       </div>
-                    </div>
+                    </div> 
 
                     <div className="col-md-3">
                       <div className="mb-3">
                         <label htmlFor="production-estimate" className="form-label">PROD. EST</label>
-                        <input type="text" className="form-control" id="production-estimate" value={itemForm.productionEstimate || "1/21/2025"} readOnly />
+                        <input type="text" className="form-control" id="production-estimate" value={itemForm.productionEstimate || "1/21/2025"}  />
                       </div>
                     </div>
 
                     <div className="col-md-3">
                       <div className="mb-3">
                         <label htmlFor="ship-estimate" className="form-label">SHIP. EST</label>
-                        <input type="text" className="form-control" id="ship-estimate" value={itemForm.shipEstimate || ""} readOnly />
+                        <input type="text" className="form-control" id="ship-estimate" value={itemForm.shipEstimate || ""}  />
                       </div>
                     </div>
 
                     <div className="col-md-3">
                       <div className="mb-3">
                         <label htmlFor="est-arrival" className="form-label">EST ARR</label>
-                        <input type="text" className="form-control" id="est-arrival" value={itemForm.estArrival || ""} readOnly />
+                        <input type="text" className="form-control" id="est-arrival" value={itemForm.estArrival || ""}  />
                       </div>
                     </div>
                   </div>
@@ -1508,14 +1508,14 @@ const InventoryManagement = () => {
                     <div className="col-md-4">
                       <div className="mb-3">
                         <label htmlFor="shipping-date" className="form-label">SHP DTE</label>
-                        <input type="text" className="form-control" id="shipping-date" value={itemForm.shippingDate || "3/3/2025"} readOnly />
+                        <input type="text" className="form-control" id="shipping-date" value={itemForm.shippingDate || "3/3/2025"}  />
                       </div>
                     </div>
 
                     <div className="col-md-4">
                       <div className="mb-3">
                         <label htmlFor="arrival-estimate" className="form-label">ARR EST</label>
-                        <input type="text" className="form-control" id="arrival-estimate" value={itemForm.arrivalEstimate || ""} readOnly />
+                        <input type="text" className="form-control" id="arrival-estimate" value={itemForm.arrivalEstimate || ""}  />
                       </div>
                     </div>
 
