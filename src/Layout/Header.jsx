@@ -1,10 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./Sidebar.css"
-import logo from "../assets/image.png"
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./Sidebar.css";
+import logo from "../assets/image.png";
+
+import axios from "axios";
+import BASE_URL from "../../utils/Config";
+import api from "../../utils/axiosInterceptor";
 const Header = ({ onToggleSidebar }) => {
   return (
-    <header className="py-4 px-3 header">
+    <header className="py-4 px-3 header position-relative">
       <div className="d-flex align-items-center justify-content-between">
         {/* Toggle button - visible on mobile and tablet */}
         <button
@@ -48,7 +52,10 @@ const Header = ({ onToggleSidebar }) => {
 
           {/* User profile */}
           <div className="d-flex align-items-center me-3 ms-2">
-            <div className="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center" style={{ width: "35px", height: "35px" }}>
+            <div
+              className="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center"
+              style={{ width: "35px", height: "35px" }}
+            >
               M
             </div>
             <div className="ms-2 d-none d-md-block">
