@@ -66,6 +66,10 @@ const Login = () => {
     }
   };
 
+const autoLogin = (email, password) => {
+  setFormData({ email, password }); // Only set the fields, no login
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: "#023047" }}>
@@ -83,11 +87,11 @@ const Login = () => {
                   className="max-h-12"
                 />
               </div>
-              <h1 className="text-3xl font-bold text-gray-800 mb-6">Welcome Back</h1>
+              <h1 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h1>
 
-              <div className="border-b border-gray-300 mb-6"></div>
 
-              <div className="space-y-4">
+
+              <div className="">
                 <input
                   type="email"
                   name="email"
@@ -124,6 +128,37 @@ const Login = () => {
                   <span>Log in</span>
                   <i className="fas fa-arrow-right ml-2"></i>
                 </button>
+            <div className="row mt-3 p-1">
+  <div className="col-sm-4">
+    <button
+      className="text-white rounded-lg text-base p-2 w-full"
+      style={{ backgroundColor: "#023047" }}
+      onClick={() => autoLogin("admin@gmail.com", "admin@123")}
+    >
+      Admin
+    </button>
+  </div>
+  <div className="col-sm-4">
+    <button
+      className="text-white rounded-lg text-base p-2 w-full"
+      style={{ backgroundColor: "#023047" }}
+      onClick={() => autoLogin("manager@gmail.com", "manager@123")}
+    >
+      Manager
+    </button>
+  </div>
+  <div className="col-sm-4">
+    <button
+      className="text-white rounded-lg text-base p-2 w-full"
+      style={{ backgroundColor: "#023047" }}
+      onClick={() => autoLogin("salesperson@gmail.com", "salesperson@123")}
+    >
+      Salesperson
+    </button>
+  </div>
+</div>
+
+
               </div>
             </div>
           </div>

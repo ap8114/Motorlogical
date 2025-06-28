@@ -58,7 +58,7 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
                         {navItem("/setting", "fas fa-sliders-h", "Settings")}
                     </>
                 );
-            case "Manager":
+            case "manager":
                 return (
                     <>
                         {navItem("/manager/dashboard", "fas fa-tachometer-alt", "Dashboard")}
@@ -69,7 +69,7 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
 
                     </>
                 );
-            case "Salesperson":
+            case "salesperson":
                 return (
                     <>
                         {navItem("/salesperson/salespersondashboard", "fas fa-tachometer-alt", "Dashboard")}
