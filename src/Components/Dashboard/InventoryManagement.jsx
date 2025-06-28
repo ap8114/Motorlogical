@@ -1345,11 +1345,12 @@ const InventoryManagement = () => {
           <div className="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Update Inventory Item</h5>
+                <h5 className="modal-title">Add Inventory Item</h5>
+                
                 <button
                   type="button"
                   className="btn-close"
-                  onClick={() => setShowAddItemModal(false)}
+                  onClick={() => setShowInventoryModal(false)}
                   aria-label="Close"
                 ></button>
               </div>
