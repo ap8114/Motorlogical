@@ -22,31 +22,17 @@ const UserManagement = () => {
   // Form state for add/edit user
   const [isEditing, setIsEditing] = useState(false);
   const [userForm, setUserForm] = useState({
-    id: "",
+
     name: "",
     email: "",
     password: "",
     role: "",
     dealership_id: "",
     status: true,
-    createdDate: "",
+
   });
   // Sample user data
-  const [users, setUsers] = useState([
-    {
-      id: "1",
-      name: "John Smith",
-      email: "john.smith@example.com",
-      role: "Manager",
-      dealership_id: "City Motors",
-      status: true,
-      lastLogin: "2025-06-18 14:30",
-      createdDate: "2024-12-15",
-      avatar:
-        "https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20middle-aged%20business%20man%20with%20short%20brown%20hair%20wearing%20a%20blue%20suit%20with%20neutral%20background%2C%20high%20quality%20portrait%20photo%2C%20professional%20looking%2C%20business%20attire&width=40&height=40&seq=1&orientation=squarish",
-    },
-    
-  ]);
+  const [users, setUsers] = useState([ ]);
   // Sample activity log data
   const activityLog = [
     {
@@ -117,7 +103,18 @@ const UserManagement = () => {
     }
   };
 
+
+  const fatchUser  = async()=>{
+  try {
+    const responce = await api.get('user')
+setUsers(responce.data)
+console.log("ggg", responce)
+  } catch (error) {
+    console.log(error)
+  }
+}
   useEffect(() => {
+    fatchUser();
     fetchDealership();
   }, []);
   // Toggle sidebar
@@ -128,18 +125,22 @@ const UserManagement = () => {
   const toggleUserDropdown = () => {
     setShowUserDropdown(!showUserDropdown);
   };
+
+
+
+
   // Handle add user
   const handleAddUser = () => {
     setUserForm({
-      id: "",
+
       name: "",
       email: "",
       password: "",
       role: "",
       dealership_id: "",
       status: true,
-     
-      createdDate: new Date().toISOString().split("T")[0],
+
+
     });
     setIsEditing(false);
     setActiveTab("addEditUser");
@@ -147,15 +148,15 @@ const UserManagement = () => {
   // Handle edit user
   const handleEditUser = () => {
     setUserForm({
-      id: user.id,
+
       name: user.name,
       email: user.email,
       password: user.password,
       role: user.role,
       dealership_id: user.dealership_id,
       status: user.status,
-    
-      createdDate: user.createdDate,
+
+
     });
     setIsEditing(true);
     setActiveTab("addEditUser");
@@ -180,7 +181,7 @@ const UserManagement = () => {
       }
     });
     setActiveTab("usersList");
-    
+
   };
   // Handle delete confirmation
   const handleDeleteConfirmation = () => {
@@ -359,7 +360,7 @@ const UserManagement = () => {
                             <div className="flex-shrink-0 h-10 w-10">
                               <img
                                 className="h-10 w-10 rounded-full object-cover object-top"
-                                src={user.avatar}
+                                src="https://static.vecteezy.com/system/resources/previews/048/926/084/non_2x/silver-membership-icon-default-avatar-profile-icon-membership-icon-social-media-user-image-illustration-vector.jpg"
                                 alt=""
                               />
                             </div>
@@ -422,7 +423,7 @@ const UserManagement = () => {
                           {user.lastLogin}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {new Date(user.createdDate).toLocaleDateString(
+                          {new Date(user.created_at).toLocaleDateString(
                             "en-US",
                             {
                               year: "numeric",
@@ -580,6 +581,7 @@ const UserManagement = () => {
                             setUserForm({ ...userForm, role: e.target.value })
                           }
                         >
+                          <option value="">-- Select Dealership --</option>
                           <option value="Manager">Manager</option>
                           <option value="Salesperson">Salesperson</option>
                         </select>
@@ -630,12 +632,13 @@ const UserManagement = () => {
                       >
                         <option value="">-- Select Dealership --</option>
                         {dealerships.map((dealer) => (
-                          <option key={dealer.id} value={dealer.name}>
+                          <option key={dealer.id} value={dealer.id}>
                             {dealer.name}
                           </option>
                         ))}
                       </select>
                     </div>
+
 
                     {isEditing && (
                       <>
