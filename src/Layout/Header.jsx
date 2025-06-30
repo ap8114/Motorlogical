@@ -1,14 +1,32 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 import logo from "../assets/image.png";
 
+import axios from "axios";
+import BASE_URL from "../../utils/Config";
+import api from "../../utils/axiosInterceptor";
 const Header = ({ onToggleSidebar }) => {
-  const [showNotifications, setShowNotifications] = useState(false);
+  const storedUser = JSON.parse(localStorage.getItem("login_detail"));
+  const userId = storedUser ? storedUser.id : null;  // Safely access the ID
+  const navigate = useNavigate();
+  const handelLogout = async () => {
+    try {
+      const responce = await api.post(`${BASE_URL}/logout`, {
+        userId: userId,
+      });
+      navigate("/")
+      localStorage.removeItem("login");
+      localStorage.removeItem("role");
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("login_detail");
 
-  const toggleNotifications = () => {
-    setShowNotifications(!showNotifications);
-  };
+    } catch (error) {
+      console.log(error)
+    }
+  }
+const userData = JSON.parse(localStorage.getItem("login_detail"));
+console.log("Email:", userData.email);
 
   return (
     <header className="py-4 px-3 header position-relative">
@@ -29,49 +47,25 @@ const Header = ({ onToggleSidebar }) => {
             src={logo}
             alt="Motorlogical Logo"
             className="img-fluid sidebar-logo"
+
           />
         </div>
 
         {/* Synced button */}
-        <div></div>
+        <div>
+
+        </div>
 
         {/* Right section */}
         <div className="d-flex align-items-center gap-3">
-          {/* Synced status */}
-          <button className="synced-btn">
+          {/* synced status  */}
+          {/* <button className="synced-btn">
             <span className="synced-icon"></span>
             <span className="d-none d-sm-inline text-dark">Synced</span>
-          </button>
+          </button> */}
 
-          {/* Notification button */}
-          <div className="position-relative">
-            <button
-              className="btn position-relative"
-              onClick={toggleNotifications}
-            >
-              <i className="far fa-bell text-light"></i>
-              <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"></span>
-            </button>
+   
 
-            {/* Notification Dropdown */}
-            {showNotifications && (
-              <div
-                className="position-absolute end-0 mt-2 shadow p-3 bg-white rounded"
-                style={{ width: "250px", zIndex: 1000 }}
-              >
-                <h6 className="fw-bold mb-2">Notifications</h6>
-                <ul className="list-unstyled mb-0 small">
-                  <li className="mb-2 border-bottom pb-1 text-dark">
-                    🔔 New user signed up
-                  </li>
-                  <li className="mb-2 border-bottom pb-1 text-success">
-                    📦 Order #1234 has been shipped
-                  </li>
-                  <li className="text-danger">⚠️ Server memory usage is high</li>
-                </ul>
-              </div>
-            )}
-          </div>
 
           {/* User profile */}
           <div className="d-flex align-items-center me-3 ms-2">
@@ -79,20 +73,26 @@ const Header = ({ onToggleSidebar }) => {
               className="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center"
               style={{ width: "35px", height: "35px" }}
             >
-              M
+              {userData?.name?.charAt(0).toUpperCase()}
             </div>
             <div className="ms-2 d-none d-md-block">
-              <div className="fw-bold">Michael Johnson</div>
-              <div className="text-light small">Admin</div>
+              <div className="fw-bold">{userData.name}</div>
+              <div className="text-light small">{userData.role}</div>
             </div>
           </div>
 
-          {/* Logout */}
-          <Link to="/">
-            <button className="btn btn-outline-warning">
-              <i className="fas fa-sign-out-alt me-1"></i> Logout
-            </button>
-          </Link>
+          {/* Chevron down - hidden on mobile */}
+          {/* <button className="btn d-none d-md-inline-block">
+            <i className="fas fa-chevron-down text-light"></i>
+          </button> */}
+
+          {/* Logout - icon only on mobile */}
+
+
+          <button onClick={handelLogout} className="btn btn-outline-warning">
+            <i className="fas fa-sign-out-alt me-1"></i> Logout
+          </button>
+
         </div>
       </div>
     </header>

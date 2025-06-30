@@ -168,12 +168,21 @@ left: 100%;
     const toggleUserDropdown = () => {
         setShowUserDropdown(!showUserDropdown);
     };
+    const userData = JSON.parse(localStorage.getItem("login_detail"));
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) return "Good morning";
+        if (hour < 17) return "Good afternoon";
+        return "Good evening";
+    };
     return (
         <div>
             <main className="p-6">
                 <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-gray-800">Welcome back, John!</h1>
-                    <p className="text-gray-600 mt-1">Here's what's happening with your dealerships today.</p>
+                    <h1 className="text-2xl font-bold text-gray-800">
+                        {getGreeting()}, {userData?.name}!
+                    </h1>
+
                 </div>
                 {/* Metrics Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -642,95 +651,95 @@ left: 100%;
                 </div>
                 {/* Recent Activities */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-  {/* Recent Orders */}
-  <div className="bg-white rounded-lg shadow overflow-hidden">
-    <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-      <h2 className="text-base sm:text-lg font-medium text-gray-800">Recent Orders</h2>
-      <a href="#" className="text-sm text-indigo-600 hover:text-indigo-800">View All</a>
-    </div>
-    <div className="p-4 overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dealership</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200 bg-white text-sm">
-          {[
-            { id: "#ORD-5293", dealer: "City Motors", date: "Jun 19, 2025", status: "Completed", color: "green" },
-            { id: "#ORD-5292", dealer: "Highway Auto", date: "Jun 18, 2025", status: "Processing", color: "blue" },
-            { id: "#ORD-5291", dealer: "Luxury Cars Inc", date: "Jun 18, 2025", status: "Pending", color: "amber" },
-            { id: "#ORD-5290", dealer: "Downtown Autos", date: "Jun 17, 2025", status: "Cancelled", color: "red" },
-          ].map(({ id, dealer, date, status, color }) => (
-            <tr key={id}>
-              <td className="px-4 py-3 whitespace-nowrap text-gray-800">{id}</td>
-              <td className="px-4 py-3 whitespace-nowrap text-gray-600">{dealer}</td>
-              <td className="px-4 py-3 whitespace-nowrap text-gray-600">{date}</td>
-              <td className="px-4 py-3 whitespace-nowrap">
-                <span className={`px-2 py-1 text-xs rounded-full bg-${color}-100 text-${color}-800`}>
-                  {status}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </div>
+                    {/* Recent Orders */}
+                    <div className="bg-white rounded-lg shadow overflow-hidden">
+                        <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                            <h2 className="text-base sm:text-lg font-medium text-gray-800">Recent Orders</h2>
+                            <a href="#" className="text-sm text-indigo-600 hover:text-indigo-800">View All</a>
+                        </div>
+                        <div className="p-4 overflow-x-auto">
+                            <table className="min-w-full divide-y divide-gray-200">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dealership</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200 bg-white text-sm">
+                                    {[
+                                        { id: "#ORD-5293", dealer: "City Motors", date: "Jun 19, 2025", status: "Completed", color: "green" },
+                                        { id: "#ORD-5292", dealer: "Highway Auto", date: "Jun 18, 2025", status: "Processing", color: "blue" },
+                                        { id: "#ORD-5291", dealer: "Luxury Cars Inc", date: "Jun 18, 2025", status: "Pending", color: "amber" },
+                                        { id: "#ORD-5290", dealer: "Downtown Autos", date: "Jun 17, 2025", status: "Cancelled", color: "red" },
+                                    ].map(({ id, dealer, date, status, color }) => (
+                                        <tr key={id}>
+                                            <td className="px-4 py-3 whitespace-nowrap text-gray-800">{id}</td>
+                                            <td className="px-4 py-3 whitespace-nowrap text-gray-600">{dealer}</td>
+                                            <td className="px-4 py-3 whitespace-nowrap text-gray-600">{date}</td>
+                                            <td className="px-4 py-3 whitespace-nowrap">
+                                                <span className={`px-2 py-1 text-xs rounded-full bg-${color}-100 text-${color}-800`}>
+                                                    {status}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-  {/* Recent Activities */}
-  <div className="bg-white rounded-lg shadow overflow-hidden">
-    <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-      <h2 className="text-base sm:text-lg font-medium text-gray-800">Recent Activities</h2>
-      <a href="#" className="text-sm text-indigo-600 hover:text-indigo-800">View All</a>
-    </div>
-    <div className="p-4">
-      <ul className="divide-y divide-gray-200">
-        {[
-          {
-            icon: "fas fa-user-plus",
-            color: "blue",
-            text: <>New user <span className="font-medium">Sarah Johnson</span> was added to <span className="font-medium">City Motors</span></>,
-            time: "2 hours ago"
-          },
-          {
-            icon: "fas fa-check-circle",
-            color: "green",
-            text: <>Order <span className="font-medium">#ORD-5293</span> was marked as completed</>,
-            time: "3 hours ago"
-          },
-          {
-            icon: "fas fa-store",
-            color: "indigo",
-            text: <>Dealership <span className="font-medium">Luxury Cars Inc</span> updated their inventory</>,
-            time: "5 hours ago"
-          },
-          {
-            icon: "fas fa-sync",
-            color: "amber",
-            text: <>System update <span className="font-medium">v2.3.0</span> was successfully installed</>,
-            time: "1 day ago"
-          },
-        ].map((activity, idx) => (
-          <li key={idx} className="py-3">
-            <div className="flex items-start">
-              <div className={`w-8 h-8 rounded-full bg-${activity.color}-100 flex items-center justify-center text-${activity.color}-500`}>
-                <i className={activity.icon}></i>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm text-gray-800">{activity.text}</p>
-                <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
-</div>
+                    {/* Recent Activities */}
+                    <div className="bg-white rounded-lg shadow overflow-hidden">
+                        <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                            <h2 className="text-base sm:text-lg font-medium text-gray-800">Recent Activities</h2>
+                            <a href="#" className="text-sm text-indigo-600 hover:text-indigo-800">View All</a>
+                        </div>
+                        <div className="p-4">
+                            <ul className="divide-y divide-gray-200">
+                                {[
+                                    {
+                                        icon: "fas fa-user-plus",
+                                        color: "blue",
+                                        text: <>New user <span className="font-medium">Sarah Johnson</span> was added to <span className="font-medium">City Motors</span></>,
+                                        time: "2 hours ago"
+                                    },
+                                    {
+                                        icon: "fas fa-check-circle",
+                                        color: "green",
+                                        text: <>Order <span className="font-medium">#ORD-5293</span> was marked as completed</>,
+                                        time: "3 hours ago"
+                                    },
+                                    {
+                                        icon: "fas fa-store",
+                                        color: "indigo",
+                                        text: <>Dealership <span className="font-medium">Luxury Cars Inc</span> updated their inventory</>,
+                                        time: "5 hours ago"
+                                    },
+                                    {
+                                        icon: "fas fa-sync",
+                                        color: "amber",
+                                        text: <>System update <span className="font-medium">v2.3.0</span> was successfully installed</>,
+                                        time: "1 day ago"
+                                    },
+                                ].map((activity, idx) => (
+                                    <li key={idx} className="py-3">
+                                        <div className="flex items-start">
+                                            <div className={`w-8 h-8 rounded-full bg-${activity.color}-100 flex items-center justify-center text-${activity.color}-500`}>
+                                                <i className={activity.icon}></i>
+                                            </div>
+                                            <div className="ml-4">
+                                                <p className="text-sm text-gray-800">{activity.text}</p>
+                                                <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
             </main>
         </div>

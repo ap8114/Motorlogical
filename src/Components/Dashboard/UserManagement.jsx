@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import * as echarts from "echarts";
 import { Link } from "react-router-dom";
+import api from "../../../utils/axiosInterceptor";
+import axios from "axios";
 const UserManagement = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeMenu, setActiveMenu] = useState("users");
@@ -21,88 +23,29 @@ const UserManagement = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [userForm, setUserForm] = useState({
     id: "",
-    fullName: "",
+    name: "",
     email: "",
-    role: "Salesperson",
-    assignedDealership: "",
+    password: "",
+    role: "",
+    dealership_id: "",
     status: true,
-    lastLogin: "",
     createdDate: "",
   });
   // Sample user data
   const [users, setUsers] = useState([
     {
       id: "1",
-      fullName: "John Smith",
+      name: "John Smith",
       email: "john.smith@example.com",
       role: "Manager",
-      assignedDealership: "City Motors",
+      dealership_id: "City Motors",
       status: true,
       lastLogin: "2025-06-18 14:30",
       createdDate: "2024-12-15",
       avatar:
         "https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20middle-aged%20business%20man%20with%20short%20brown%20hair%20wearing%20a%20blue%20suit%20with%20neutral%20background%2C%20high%20quality%20portrait%20photo%2C%20professional%20looking%2C%20business%20attire&width=40&height=40&seq=1&orientation=squarish",
     },
-    {
-      id: "2",
-      fullName: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      role: "Salesperson",
-      assignedDealership: "Highway Auto",
-      status: true,
-      lastLogin: "2025-06-19 09:15",
-      createdDate: "2025-01-22",
-      avatar:
-        "https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20business%20woman%20with%20blonde%20hair%20wearing%20a%20black%20blazer%20with%20neutral%20background%2C%20high%20quality%20portrait%20photo%2C%20professional%20looking%2C%20business%20attire&width=40&height=40&seq=2&orientation=squarish",
-    },
-    {
-      id: "3",
-      fullName: "Michael Rodriguez",
-      email: "michael.rodriguez@example.com",
-      role: "Manager",
-      assignedDealership: "Luxury Cars Inc",
-      status: true,
-      lastLogin: "2025-06-17 16:45",
-      createdDate: "2025-02-10",
-      avatar:
-        "https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20hispanic%20business%20man%20with%20dark%20hair%20wearing%20a%20gray%20suit%20with%20neutral%20background%2C%20high%20quality%20portrait%20photo%2C%20professional%20looking%2C%20business%20attire&width=40&height=40&seq=3&orientation=squarish",
-    },
-    {
-      id: "4",
-      fullName: "David Wilson",
-      email: "david.wilson@example.com",
-      role: "Salesperson",
-      assignedDealership: "Downtown Autos",
-      status: false,
-      lastLogin: "2025-06-01 10:20",
-      createdDate: "2025-03-05",
-      avatar:
-        "https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20business%20man%20with%20glasses%20wearing%20a%20navy%20suit%20with%20neutral%20background%2C%20high%20quality%20portrait%20photo%2C%20professional%20looking%2C%20business%20attire&width=40&height=40&seq=4&orientation=squarish",
-    },
-    {
-      id: "5",
-      fullName: "Jessica Brown",
-      email: "jessica.brown@example.com",
-      role: "Salesperson",
-      assignedDealership: "Valley Vehicles",
-      status: true,
-      lastLogin: "2025-06-18 11:30",
-      createdDate: "2025-04-18",
-      avatar:
-        "https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20business%20woman%20with%20brown%20hair%20wearing%20a%20white%20blouse%20with%20neutral%20background%2C%20high%20quality%20portrait%20photo%2C%20professional%20looking%2C%20business%20attire&width=40&height=40&seq=5&orientation=squarish",
-    },
-    {
-      id: "6",
-      fullName: "Robert Lee",
-      email: "robert.lee@example.com",
-      role: "Manager",
-      assignedDealership: "Metro Motors",
-      status: false,
-      lastLogin: "2025-06-10 09:45",
-      createdDate: "2025-05-01",
-      avatar:
-        "https://readdy.ai/api/search-image?query=professional%20headshot%20of%20an%20asian%20business%20man%20wearing%20a%20black%20suit%20with%20neutral%20background%2C%20high%20quality%20portrait%20photo%2C%20professional%20looking%2C%20business%20attire&width=40&height=40&seq=6&orientation=squarish",
-    },
+    
   ]);
   // Sample activity log data
   const activityLog = [
@@ -161,16 +104,22 @@ const UserManagement = () => {
       device: "Safari / iOS",
     },
   ];
-  // Sample dealership data for dropdown
-  const dealerships = [
-    { id: "1", name: "City Motors" },
-    { id: "2", name: "Highway Auto" },
-    { id: "3", name: "Luxury Cars Inc" },
-    { id: "4", name: "Downtown Autos" },
-    { id: "5", name: "Valley Vehicles" },
-    { id: "6", name: "Metro Motors" },
-  ];
+  const [dealerships, setDealerships] = useState([]);
 
+
+  const fetchDealership = async () => {
+    try {
+      const response = await api.get("/dealership");
+      console.log("API Response:", response.data);
+      setDealerships(response.data); // assuming response.data is an array of dealerships
+    } catch (error) {
+      console.log("Error fetching dealerships:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDealership();
+  }, []);
   // Toggle sidebar
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
@@ -183,12 +132,13 @@ const UserManagement = () => {
   const handleAddUser = () => {
     setUserForm({
       id: "",
-      fullName: "",
+      name: "",
       email: "",
-      role: "Salesperson",
-      assignedDealership: "",
+      password: "",
+      role: "",
+      dealership_id: "",
       status: true,
-      lastLogin: "",
+     
       createdDate: new Date().toISOString().split("T")[0],
     });
     setIsEditing(false);
@@ -198,45 +148,39 @@ const UserManagement = () => {
   const handleEditUser = () => {
     setUserForm({
       id: user.id,
-      fullName: user.fullName,
+      name: user.name,
       email: user.email,
+      password: user.password,
       role: user.role,
-      assignedDealership: user.assignedDealership,
+      dealership_id: user.dealership_id,
       status: user.status,
-      lastLogin: user.lastLogin,
+    
       createdDate: user.createdDate,
     });
     setIsEditing(true);
     setActiveTab("addEditUser");
   };
   // Handle save user
-  const handleSaveUser = () => {
+  const handleSaveUser = async () => {
     if (isEditing) {
-      setUsers(
-        users.map((u) =>
-          u.id === userForm.id
-            ? {
-                ...u,
-                fullName: userForm.fullName,
-                email: userForm.email,
-                role: userForm.role,
-                assignedDealership: userForm.assignedDealership,
-                status: userForm.status,
-              }
-            : u
-        )
-      );
+      await api.put(`/createUser/${isEditing}`, userForm);
+
     } else {
-      const newUser = {
-        id: (users.length + 1).toString(),
-        ...userForm,
-        avatar: `https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20business%20person%20with%20neutral%20background%2C%20high%20quality%20portrait%20photo%2C%20professional%20looking%2C%20business%20attire&width=40&height=40&seq=${
-          users.length + 1
-        }&orientation=squarish`,
-      };
+      await api.post("/createUser", userForm)
       setUsers([...users, newUser]);
     }
+    await Swal.fire({
+      title: 'Saved!',
+      text: editingId !== null
+        ? 'User item has been updated.'
+        : 'New User item has been added.',
+      icon: 'success',
+      customClass: {
+        container: 'z-[99999]' // Very high z-index to ensure it's on top
+      }
+    });
     setActiveTab("usersList");
+    
   };
   // Handle delete confirmation
   const handleDeleteConfirmation = () => {
@@ -254,9 +198,9 @@ const UserManagement = () => {
   // Filter users based on search and filters
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
-      user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.assignedDealership.toLowerCase().includes(searchTerm.toLowerCase());
+      user.dealership_id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole =
       roleFilter === "all" ||
       (roleFilter === "manager" && user.role === "Manager") ||
@@ -276,82 +220,78 @@ const UserManagement = () => {
     <div>
       {/* Main Content */}
       <main className="p-6">
-    <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-  <div>
-    <h1 className="text-2xl font-bold text-gray-800">User Management</h1>
-    <p className="text-gray-600 mt-1">
-      Manage all your system users in one place
-    </p>
-  </div>
+        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800">User Management</h1>
+            <p className="text-gray-600 mt-1">
+              Manage all your system users in one place
+            </p>
+          </div>
 
-  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full md:w-auto">
-    <Link
-      to="/dashboard"
-      className="flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition whitespace-nowrap w-full sm:w-auto"
-    >
-      <i className="fas fa-arrow-left mr-2"></i> Back to Dealership
-    </Link>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full md:w-auto">
+            <Link
+              to="/dashboard"
+              className="flex items-center justify-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition whitespace-nowrap w-full sm:w-auto"
+            >
+              <i className="fas fa-arrow-left mr-2"></i> Back to Dealership
+            </Link>
 
-    <button
-      onClick={handleAddUser}
-      className="flex items-center justify-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition whitespace-nowrap w-full sm:w-auto"
-    >
-      <i className="fas fa-plus mr-2"></i> Add New User
-    </button>
-  </div>
-</div>
+            <button
+              onClick={handleAddUser}
+              className="flex items-center justify-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition whitespace-nowrap w-full sm:w-auto"
+            >
+              <i className="fas fa-plus mr-2"></i> Add New User
+            </button>
+          </div>
+        </div>
 
 
         {/* Tabs */}
         <div className="bg-white rounded-lg shadow mb-8">
-        <div className="border-b border-gray-200 overflow-x-auto">
-  <nav className="flex flex-wrap md:flex-nowrap -mb-px text-sm font-medium text-center whitespace-nowrap">
-    <button
-      className={`py-3 px-4 md:px-6 border-b-2 cursor-pointer flex items-center ${
-        activeTab === "usersList"
-          ? "border-indigo-500 text-indigo-600"
-          : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-      }`}
-      onClick={() => setActiveTab("usersList")}
-    >
-      <i className="fas fa-list mr-2"></i> Users List
-    </button>
+          <div className="border-b border-gray-200 overflow-x-auto">
+            <nav className="flex flex-wrap md:flex-nowrap -mb-px text-sm font-medium text-center whitespace-nowrap">
+              <button
+                className={`py-3 px-4 md:px-6 border-b-2 cursor-pointer flex items-center ${activeTab === "usersList"
+                  ? "border-indigo-500 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  }`}
+                onClick={() => setActiveTab("usersList")}
+              >
+                <i className="fas fa-list mr-2"></i> Users List
+              </button>
 
-    <button
-      className={`py-3 px-4 md:px-6 border-b-2 cursor-pointer flex items-center ${
-        activeTab === "addEditUser"
-          ? "border-indigo-500 text-indigo-600"
-          : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-      }`}
-      onClick={() => setActiveTab("addEditUser")}
-    >
-      <i className="fas fa-user-edit mr-2"></i>
-      {isEditing ? "Edit User" : "Add User"}
-    </button>
+              <button
+                className={`py-3 px-4 md:px-6 border-b-2 cursor-pointer flex items-center ${activeTab === "addEditUser"
+                  ? "border-indigo-500 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  }`}
+                onClick={() => setActiveTab("addEditUser")}
+              >
+                <i className="fas fa-user-edit mr-2"></i>
+                {isEditing ? "Edit User" : "Add User"}
+              </button>
 
-    <button
-      className={`py-3 px-4 md:px-6 border-b-2 cursor-pointer flex items-center ${
-        activeTab === "dealershipAssignment"
-          ? "border-indigo-500 text-indigo-600"
-          : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-      }`}
-      onClick={() => setActiveTab("dealershipAssignment")}
-    >
-      <i className="fas fa-building mr-2"></i> Dealership Assignment
-    </button>
+              <button
+                className={`py-3 px-4 md:px-6 border-b-2 cursor-pointer flex items-center ${activeTab === "dealershipAssignment"
+                  ? "border-indigo-500 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  }`}
+                onClick={() => setActiveTab("dealershipAssignment")}
+              >
+                <i className="fas fa-building mr-2"></i> Dealership Assignment
+              </button>
 
-    <button
-      className={`py-3 px-4 md:px-6 border-b-2 cursor-pointer flex items-center ${
-        activeTab === "activityLog"
-          ? "border-indigo-500 text-indigo-600"
-          : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-      }`}
-      onClick={() => setActiveTab("activityLog")}
-    >
-      <i className="fas fa-history mr-2"></i> Activity Log
-    </button>
-  </nav>
-</div>
+              <button
+                className={`py-3 px-4 md:px-6 border-b-2 cursor-pointer flex items-center ${activeTab === "activityLog"
+                  ? "border-indigo-500 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  }`}
+                onClick={() => setActiveTab("activityLog")}
+              >
+                <i className="fas fa-history mr-2"></i> Activity Log
+              </button>
+            </nav>
+          </div>
 
           {/* Users List Tab */}
           {activeTab === "usersList" && (
@@ -425,7 +365,7 @@ const UserManagement = () => {
                             </div>
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">
-                                {user.fullName}
+                                {user.name}
                               </div>
                             </div>
                           </div>
@@ -437,24 +377,22 @@ const UserManagement = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              user.role === "Manager"
-                                ? "bg-indigo-100 text-indigo-800"
-                                : "bg-green-100 text-green-800"
-                            }`}
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.role === "Manager"
+                              ? "bg-indigo-100 text-indigo-800"
+                              : "bg-green-100 text-green-800"
+                              }`}
                           >
                             {user.role}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {user.assignedDealership}
+                          {user.dealership_id}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <button
-                              className={`relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none ${
-                                user.status ? "bg-green-500" : "bg-gray-300"
-                              } !rounded-button whitespace-nowrap`}
+                              className={`relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none ${user.status ? "bg-green-500" : "bg-gray-300"
+                                } !rounded-button whitespace-nowrap`}
                               onClick={() => {
                                 setUsers(
                                   users.map((u) =>
@@ -466,17 +404,15 @@ const UserManagement = () => {
                               }}
                             >
                               <span
-                                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${
-                                  user.status
-                                    ? "translate-x-5"
-                                    : "translate-x-0"
-                                }`}
+                                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${user.status
+                                  ? "translate-x-5"
+                                  : "translate-x-0"
+                                  }`}
                               ></span>
                             </button>
                             <span
-                              className={`ml-2 text-sm ${
-                                user.status ? "text-green-600" : "text-gray-500"
-                              }`}
+                              className={`ml-2 text-sm ${user.status ? "text-green-600" : "text-gray-500"
+                                }`}
                             >
                               {user.status ? "Active" : "Inactive"}
                             </span>
@@ -572,9 +508,8 @@ const UserManagement = () => {
                 <div className="card-body">
                   <h5 className="card-title d-flex align-items-center mb-4">
                     <i
-                      className={`fas ${
-                        isEditing ? "fa-user-edit" : "fa-user-plus"
-                      } text-primary me-2`}
+                      className={`fas ${isEditing ? "fa-user-edit" : "fa-user-plus"
+                        } text-primary me-2`}
                     ></i>
                     {isEditing ? "Edit User" : "Add New User"}
                   </h5>
@@ -592,9 +527,9 @@ const UserManagement = () => {
                         type="text"
                         className="form-control"
                         id="full-name"
-                        value={userForm.fullName}
+                        value={userForm.name}
                         onChange={(e) =>
-                          setUserForm({ ...userForm, fullName: e.target.value })
+                          setUserForm({ ...userForm, name: e.target.value })
                         }
                       />
                     </div>
@@ -610,6 +545,20 @@ const UserManagement = () => {
                         value={userForm.email}
                         onChange={(e) =>
                           setUserForm({ ...userForm, email: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="password" className="form-label">
+                        Password *
+                      </label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id="password"
+                        value={userForm.password}
+                        onChange={(e) =>
+                          setUserForm({ ...userForm, password: e.target.value })
                         }
                       />
                     </div>
@@ -664,22 +613,18 @@ const UserManagement = () => {
                     <h6 className="mt-4 mb-3 border-bottom pb-2 text-muted">
                       Dealership Assignment
                     </h6>
-
                     <div className="mb-3">
-                      <label
-                        htmlFor="assigned-dealership"
-                        className="form-label"
-                      >
+                      <label htmlFor="assigned-dealership" className="form-label">
                         Assigned Dealership
                       </label>
                       <select
                         className="form-select"
                         id="assigned-dealership"
-                        value={userForm.assignedDealership}
+                        value={userForm.dealership_id}
                         onChange={(e) =>
                           setUserForm({
                             ...userForm,
-                            assignedDealership: e.target.value,
+                            dealership_id: e.target.value,
                           })
                         }
                       >
@@ -777,7 +722,7 @@ const UserManagement = () => {
                           <option value="">-- Select User --</option>
                           {users.map((user) => (
                             <option key={user.id} value={user.id}>
-                              {user.fullName}
+                              {user.name}
                             </option>
                           ))}
                         </select>
@@ -851,7 +796,7 @@ const UserManagement = () => {
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
                           {users
-                            .filter((u) => u.assignedDealership)
+                            .filter((u) => u.dealership_id)
                             .map((user) => (
                               <tr key={user.id} className="hover:bg-gray-50">
                                 <td className="px-6 py-4 whitespace-nowrap">
@@ -865,7 +810,7 @@ const UserManagement = () => {
                                     </div>
                                     <div className="ml-4">
                                       <div className="text-sm font-medium text-gray-900">
-                                        {user.fullName}
+                                        {user.name}
                                       </div>
                                       <div className="text-sm text-gray-500">
                                         {user.email}
@@ -875,17 +820,16 @@ const UserManagement = () => {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <span
-                                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                      user.role === "Manager"
-                                        ? "bg-indigo-100 text-indigo-800"
-                                        : "bg-green-100 text-green-800"
-                                    }`}
+                                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.role === "Manager"
+                                      ? "bg-indigo-100 text-indigo-800"
+                                      : "bg-green-100 text-green-800"
+                                      }`}
                                   >
                                     {user.role}
                                   </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  {user.assignedDealership}
+                                  {user.dealership_id}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                   {new Date(
@@ -955,7 +899,7 @@ const UserManagement = () => {
                       <select className="pl-3 pr-10 py-2 text-sm border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md">
                         <option>All Users</option>
                         {users.map((user) => (
-                          <option key={user.id}>{user.fullName}</option>
+                          <option key={user.id}>{user.name}</option>
                         ))}
                       </select>
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"></div>
@@ -1027,19 +971,18 @@ const UserManagement = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span
-                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                log.action === "Login"
-                                  ? "bg-green-100 text-green-800"
-                                  : log.action === "Profile Update"
+                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${log.action === "Login"
+                                ? "bg-green-100 text-green-800"
+                                : log.action === "Profile Update"
                                   ? "bg-blue-100 text-blue-800"
                                   : log.action === "Dealership Assignment"
-                                  ? "bg-indigo-100 text-indigo-800"
-                                  : log.action === "Status Change"
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : log.action === "Role Change"
-                                  ? "bg-purple-100 text-purple-800"
-                                  : "bg-gray-100 text-gray-800"
-                              }`}
+                                    ? "bg-indigo-100 text-indigo-800"
+                                    : log.action === "Status Change"
+                                      ? "bg-yellow-100 text-yellow-800"
+                                      : log.action === "Role Change"
+                                        ? "bg-purple-100 text-purple-800"
+                                        : "bg-gray-100 text-gray-800"
+                                }`}
                             >
                               {log.action}
                             </span>
@@ -1058,17 +1001,17 @@ const UserManagement = () => {
                     </tbody>
                   </table>
                 </div>
-           <div className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-  <div className="text-sm text-gray-700 text-center md:text-left">
-    Showing <span className="font-medium">1</span> to{" "}
-    <span className="font-medium">{activityLog.length}</span> of{" "}
-    <span className="font-medium">{activityLog.length}</span> activities
-  </div>
+                <div className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                  <div className="text-sm text-gray-700 text-center md:text-left">
+                    Showing <span className="font-medium">1</span> to{" "}
+                    <span className="font-medium">{activityLog.length}</span> of{" "}
+                    <span className="font-medium">{activityLog.length}</span> activities
+                  </div>
 
-  <button className="flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap w-full md:w-auto">
-    <i className="fas fa-file-export mr-2"></i> Export Log
-  </button>
-</div>
+                  <button className="flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer !rounded-button whitespace-nowrap w-full md:w-auto">
+                    <i className="fas fa-file-export mr-2"></i> Export Log
+                  </button>
+                </div>
 
               </div>
             </div>
@@ -1173,7 +1116,7 @@ const UserManagement = () => {
                             <option value="">-- Select User --</option>
                             {users.map((user) => (
                               <option key={user.id} value={user.id}>
-                                {user.fullName}
+                                {user.name}
                               </option>
                             ))}
                           </select>
