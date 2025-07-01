@@ -4,6 +4,7 @@ import * as echarts from "echarts";
 import { Link } from "react-router-dom";
 import api from "../../../utils/axiosInterceptor";
 import axios from "axios";
+import Swal from "sweetalert2";
 const UserManagement = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeMenu, setActiveMenu] = useState("users");
@@ -32,7 +33,7 @@ const UserManagement = () => {
 
   });
   // Sample user data
-  const [users, setUsers] = useState([ ]);
+  const [users, setUsers] = useState([]);
   // Sample activity log data
   const activityLog = [
     {
@@ -96,7 +97,7 @@ const UserManagement = () => {
   const fetchDealership = async () => {
     try {
       const response = await api.get("/dealership");
-      console.log("API Response:", response.data);
+      
       setDealerships(response.data); // assuming response.data is an array of dealerships
     } catch (error) {
       console.log("Error fetching dealerships:", error);
@@ -104,15 +105,15 @@ const UserManagement = () => {
   };
 
 
-  const fatchUser  = async()=>{
-  try {
-    const responce = await api.get('user')
-setUsers(responce.data)
-console.log("ggg", responce)
-  } catch (error) {
-    console.log(error)
+  const fatchUser = async () => {
+    try {
+      const responce = await api.get('user')
+      setUsers(responce.data)
+      
+    } catch (error) {
+      console.log(error)
+    }
   }
-}
   useEffect(() => {
     fatchUser();
     fetchDealership();
@@ -146,25 +147,29 @@ console.log("ggg", responce)
     setActiveTab("addEditUser");
   };
   // Handle edit user
-  const handleEditUser = () => {
+  const handleEditUser = (user) => {
+    if (!user || typeof user !== "object") {
+      console.warn("Invalid user passed to handleEditUser:", user);
+      return;
+    }
+
     setUserForm({
-
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      role: user.role,
-      dealership_id: user.dealership_id,
-      status: user.status,
-
-
+      name: user.name || "",
+      email: user.email || "",
+      password: user.password || "",
+      role: user.role || "",
+      dealership_id: user.dealership_id || "",
+      status: user.status === 1 ? true : false, // convert 1 to true
     });
-    setIsEditing(true);
+
+    setIsEditing(user.id); // track which user is being edited
     setActiveTab("addEditUser");
   };
+
   // Handle save user
   const handleSaveUser = async () => {
     if (isEditing) {
-      await api.put(`/createUser/${isEditing}`, userForm);
+      await api.put(`/user/${isEditing}`, userForm);
 
     } else {
       await api.post("/createUser", userForm)
@@ -172,36 +177,79 @@ console.log("ggg", responce)
     }
     await Swal.fire({
       title: 'Saved!',
-      text: editingId !== null
+      text: isEditing
         ? 'User item has been updated.'
         : 'New User item has been added.',
       icon: 'success',
       customClass: {
-        container: 'z-[99999]' // Very high z-index to ensure it's on top
+        container: 'z-[99999]'
       }
     });
+ fatchUser();
     setActiveTab("usersList");
 
   };
-  // Handle delete confirmation
-  const handleDeleteConfirmation = () => {
-    setUserToDelete(id);
-    setShowDeleteConfirmation(true);
-  };
-  // Handle delete user
-  const handleDeleteUser = () => {
-    if (userToDelete) {
-      setUsers(users.filter((u) => u.id !== userToDelete));
+// State
+const [userToDeleteId, setUserToDeleteId] = useState(null);
+
+// Confirmation function
+
+
+// Delete function
+// Modified delete function that accepts ID directly
+const handleDeleteUser = async (id) => {
+  if (!id) {
+    await Swal.fire({
+      title: 'Error!',
+      text: 'Cannot delete user - missing ID',
+      icon: 'error',
+      customClass: { container: 'z-[99999]' }
+    });
+    return;
+  }
+
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    customClass: { container: 'z-[99999]' }
+  });
+
+  if (result.isConfirmed) {
+    try {
+      await api.delete(`/user/${id}`);
+      setUsers(prevUsers => prevUsers.filter(u => u.id !== id));
+      await Swal.fire({
+        title: 'Deleted!',
+        text: 'User has been deleted.',
+        icon: 'success',
+        customClass: { container: 'z-[99999]' }
+      });
+    } catch (error) {
+      console.error("Delete error:", error);
+      await Swal.fire({
+        title: 'Error!',
+        text: error.response?.data?.message || 'Failed to delete user',
+        icon: 'error',
+        customClass: { container: 'z-[99999]' }
+      });
+    } finally {
       setShowDeleteConfirmation(false);
-      setUserToDelete(null);
     }
-  };
+  }
+};
+
+
   // Filter users based on search and filters
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.dealership_id.toLowerCase().includes(searchTerm.toLowerCase());
+      user.dealership_name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole =
       roleFilter === "all" ||
       (roleFilter === "manager" && user.role === "Manager") ||
@@ -332,12 +380,7 @@ console.log("ggg", responce)
                       >
                         Status
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Last Login
-                      </th>
+
                       <th
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -387,7 +430,7 @@ console.log("ggg", responce)
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {user.dealership_id}
+                          {user.dealership_name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
@@ -419,9 +462,7 @@ console.log("ggg", responce)
                             </span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {user.lastLogin}
-                        </td>
+                       
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {new Date(user.created_at).toLocaleDateString(
                             "en-US",
@@ -441,7 +482,7 @@ console.log("ggg", responce)
                               <i className="fas fa-edit"></i>
                             </button>
                             <button
-                              onClick={() => handleDeleteConfirmation(user.id)}
+                              onClick={() => handleDeleteUser(user.id)}
                               className="text-red-600 hover:text-red-900 cursor-pointer !rounded-button whitespace-nowrap"
                             >
                               <i className="fas fa-trash"></i>
@@ -640,7 +681,7 @@ console.log("ggg", responce)
                     </div>
 
 
-                    {isEditing && (
+                    {/* {isEditing && (
                       <>
                         <h6 className="mt-4 mb-3 border-bottom pb-2 text-muted">
                           System Fields
@@ -682,7 +723,7 @@ console.log("ggg", responce)
                           </div>
                         </div>
                       </>
-                    )}
+                    )} */}
 
                     <div className="d-flex justify-end gap-2 mt-4">
                       <button
@@ -1022,64 +1063,7 @@ console.log("ggg", responce)
         </div>
       </main>
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirmation && (
-        <div className="fixed z-20 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <i className="fas fa-exclamation-triangle text-red-600"></i>
-                  </div>
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
-                      id="modal-title"
-                    >
-                      Delete User
-                    </h3>
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        Are you sure you want to delete this user? This action
-                        cannot be undone.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={handleDeleteUser}
-                >
-                  Delete
-                </button>
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer !rounded-button whitespace-nowrap"
-                  onClick={() => setShowDeleteConfirmation(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+    
       {/* Assign Dealership Modal */}
       {showAssignDealershipModal && (
         <div className="fixed z-20 inset-0 overflow-y-auto">

@@ -15,6 +15,13 @@ input:focus{
   z-index: 99999 !important;
 }
 
+td {
+  white-space: normal !important;
+
+   max-width: 500px !important; /* optional, limit width */
+}
+
+
 /* General Modal Styling */
 .modal-backdrop {
   position: fixed;

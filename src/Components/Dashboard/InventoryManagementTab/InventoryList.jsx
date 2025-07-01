@@ -10,48 +10,49 @@ function InventoryList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilter, setShowFilter] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedCOUNTRY, setSelectedCOUNTRY] = useState("");
+  const [selectedBRAND, setSelectedBRAND] = useState("");
   const [loading, setLoading] = useState(false);
 
   // State for modal
   const [showInventoryModal, setShowInventoryModal] = useState(false);
   const [itemForm, setItemForm] = useState({
-    sourceName: "",
-    stockNumber: "",
-    manuNumber: "",
-    manuNumber2: "",
-    invoiceNumber: "",
-    payment: "",
-    paymentStatus: "",
-    paymentTerms: "",
-    vin: "",
-    engine: "",
-    keyNumber: "",
-    bl: "",
-    shipDate: "",
-    brand: "",
-    ocnSpec: "",
-    model: "",
-    country: "",
-    vinYear: "",
-    extColor: "",
-    intColor: "",
-    tbd3: "",
-    orderMonth: "",
-    productionEstimate: "",
-    shipEstimate: "",
-    estArrival: "",
-    shippingDate: "",
-    arrivalEstimate: "",
-    arrivalDate: "",
-    shippingIndication: ""
+    SourceName: "",
+    STOCK: "",
+    MANU1: "",
+    MANU2: "",
+    INVOICE: "",
+    PAYMENT: "",
+    PMTSTATUS: "",
+    PAYTERMS: "",
+    VIN: "",
+    ENGINE: "",
+    KEY: "",
+    BL: "",
+    SHIPDATE: "",
+    BRAND: "",
+    OCNSPEC: "",
+    MODEL: "",
+    COUNTRY: "",
+    MYYEAR: "",
+    EXTCOLOR: "",
+    INTCOLOR: "",
+    TBD3: "",
+    ORDERMONTH: "",
+    PRODEST: "",
+    SHIPEST: "",
+    ESTARR: "",
+    SHPDTE: "",
+    ARREST: "",
+    ARRDATE: "",
+    SHIPINDICATION: ""
   });
   const [editingIndex, setEditingIndex] = useState(null);
   const [editingId, setEditingId] = useState(null);
 
   // Inventory data state
   const [data, setData] = useState([]);
+  const [data2, setData2] = useState([]);
 
   // Chart ref
   const timelineChartRef = useRef(null);
@@ -73,199 +74,216 @@ function InventoryList() {
       setLoading(false);
     }
   };
-
+  // Fetch inventory data
+  const fetchGoogleshet = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get("/sync-google-sheet");
+      setData2(response.data2);
+    } catch (error) {
+      console.error("Error fetching inventory:", error);
+      Swal.fire(
+        'Error!',
+        'Failed to fetch inventory data.',
+        'error'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
+    fetchGoogleshet()
     fetchInventoryData();
   }, []);
 
-useEffect(() => {
-  if (timelineChartRef.current && data.length > 0) {
-    const chart = echarts.init(timelineChartRef.current);
+  useEffect(() => {
+    if (timelineChartRef.current && data.length > 0) {
+      const chart = echarts.init(timelineChartRef.current);
 
-    // 1. PROPER DATA PROCESSING
-    const shippingData = data
-      .filter(item => {
-        // Ensure required fields exist
-        const hasStock = item.stockNumber || item.stock;
-        const hasShipDate = item.shippingDate || item.shipDate;
-        const hasArrivalDate = item.arrivalDate || item.arrDate;
-        return hasStock && hasShipDate && hasArrivalDate;
-      })
-      .map(item => {
-        // Handle all possible field name variations
-        const stock = item.stockNumber || item.stock || 'N/A';
-        const model = item.model || 'N/A';
-        const shipDate = item.shippingDate || item.shipDate;
-        const arrivalDate = item.arrivalDate || item.arrDate;
-        const status = item.shippingIndication || 'PENDING';
+      // 1. PROPER DATA PROCESSING
+      const shippingData = data
+        .filter(item => {
+          // Ensure required fields exist
+          const hasStock = item.STOCK || item.stock;
+          const hasSHIPDATE = item.SHPDTE || item.SHIPDATE;
+          const hasARRDATE = item.ARRDATE || item.arrDate;
+          return hasStock && hasSHIPDATE && hasARRDATE;
+        })
+        .map(item => {
+          // Handle all possible field name variations
+          const stock = item.STOCK || item.stock || 'N/A';
+          const MODEL = item.MODEL || 'N/A';
+          const SHIPDATE = item.SHPDTE || item.SHIPDATE;
+          const ARRDATE = item.ARRDATE || item.arrDate;
+          const status = item.SHIPINDICATION || 'PENDING';
 
-        // Parse dates with validation
-        const parseDate = (dateStr) => {
-          if (!dateStr) return new Date('2025-01-01');
-          const date = new Date(dateStr);
-          return isNaN(date.getTime()) ? new Date('2025-01-01') : date;
-        };
+          // Parse dates with validation
+          const parseDate = (dateStr) => {
+            if (!dateStr) return new Date('2025-01-01');
+            const date = new Date(dateStr);
+            return isNaN(date.getTime()) ? new Date('2025-01-01') : date;
+          };
 
-        return {
-          stock,
-          model,
-          shippingDate: parseDate(shipDate),
-          arrivalDate: parseDate(arrivalDate),
-          status: status.toUpperCase()
-        };
-      });
+          return {
+            stock,
+            MODEL,
+            SHPDTE: parseDate(SHIPDATE),
+            ARRDATE: parseDate(ARRDATE),
+            status: status.toUpperCase()
+          };
+        });
 
-    console.log('Processed Shipping Data:', shippingData); // Debug log
 
-    if (shippingData.length === 0) {
-      console.warn('No valid shipping data available');
-      return;
-    }
 
-    // 2. CHART OPTIONS WITH PROPER DATA MAPPING
-    const option = {
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: { type: 'shadow' },
-        formatter: (params) => {
-          const data = params[0].data;
-          const statusColor = 
-            data.status === 'DELIVERED' ? '#4CAF50' :
-            data.status === 'SHIPPED' ? '#2196F3' : '#FFC107';
-          
-          return `
+      if (shippingData.length === 0) {
+        console.warn('No valid shipping data available');
+        return;
+      }
+
+      // 2. CHART OPTIONS WITH PROPER DATA MAPPING
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: { type: 'shadow' },
+          formatter: (params) => {
+            const data = params[0].data;
+            const statusColor =
+              data.status === 'DELIVERED' ? '#4CAF50' :
+                data.status === 'SHIPPED' ? '#2196F3' : '#FFC107';
+
+            return `
             <div style="padding: 10px; border-left: 3px solid ${statusColor}">
               <div style="font-weight: bold;">${data.stock}</div>
-              <div>Model: ${data.model}</div>
-              <div>Shipping: ${data.shippingDate.toLocaleDateString()}</div>
-              <div>Arrival: ${data.arrivalDate.toLocaleDateString()}</div>
+              <div>MODEL: ${data.MODEL}</div>
+              <div>Shipping: ${data.SHPDTE.toLocaleDateString()}</div>
+              <div>Arrival: ${data.ARRDATE.toLocaleDateString()}</div>
               <div>Status: <strong style="color: ${statusColor}">${data.status}</strong></div>
             </div>
           `;
-        }
-      },
-      legend: {
-        data: ['Delivered', 'Shipped', 'Pending', 'Transit'],
-        textStyle: { color: '#333' }
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      xAxis: {
-        type: 'category',
-        data: shippingData.map(item => item.stock),
-        axisLabel: { 
-          rotate: 45,
-          interval: 0 // Show all labels
-        }
-      },
-      yAxis: {
-        type: 'value',
-        name: 'Timeline',
-        min: 1,
-        max: 6,
-        interval: 1,
-        axisLabel: {
-          formatter: (value) => {
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-            return months[value - 1] || '';
           }
-        }
-      },
-      series: [
-        {
-          name: 'Shipping Period',
-          type: 'bar',
-          barWidth: 20,
-          itemStyle: {
-            color: (params) => {
-              const status = shippingData[params.dataIndex].status;
-              return status === 'DELIVERED' ? '#4CAF50' :
-                     status === 'SHIPPED' ? '#2196F3' : '#FFC107';
-            },
-            borderRadius: [4, 4, 0, 0]
-          },
-          data: shippingData.map(item => ({
-            value: item.shippingDate.getMonth() + 1,
-            stock: item.stock,
-            model: item.model,
-            shippingDate: item.shippingDate,
-            arrivalDate: item.arrivalDate,
-            status: item.status
-          }))
         },
-        {
-          name: 'Transit Time',
-          type: 'bar',
-          barWidth: 20,
-          stack: 'timeline',
-          itemStyle: {
-            color: '#9C27B0',
-            borderRadius: [0, 0, 4, 4]
-          },
-          data: shippingData.map(item => {
-            const shipMonth = item.shippingDate.getMonth() + 1;
-            const arrivalMonth = item.arrivalDate.getMonth() + 1;
-            return {
-              value: arrivalMonth - shipMonth,
+        legend: {
+          data: ['Delivered', 'Shipped', 'Pending', 'Transit'],
+          textStyle: { color: '#333' }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          data: shippingData.map(item => item.stock),
+          axisLabel: {
+            rotate: 45,
+            interval: 0 // Show all labels
+          }
+        },
+        yAxis: {
+          type: 'value',
+          name: 'Timeline',
+          min: 1,
+          max: 6,
+          interval: 1,
+          axisLabel: {
+            formatter: (value) => {
+              const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+              return months[value - 1] || '';
+            }
+          }
+        },
+        series: [
+          {
+            name: 'Shipping Period',
+            type: 'bar',
+            barWidth: 20,
+            itemStyle: {
+              color: (params) => {
+                const status = shippingData[params.dataIndex].status;
+                return status === 'DELIVERED' ? '#4CAF50' :
+                  status === 'SHIPPED' ? '#2196F3' : '#FFC107';
+              },
+              borderRadius: [4, 4, 0, 0]
+            },
+            data: shippingData.map(item => ({
+              value: item.SHPDTE.getMonth() + 1,
               stock: item.stock,
-              model: item.model,
-              shippingDate: item.shippingDate,
-              arrivalDate: item.arrivalDate,
+              MODEL: item.MODEL,
+              SHPDTE: item.SHPDTE,
+              ARRDATE: item.ARRDATE,
               status: item.status
-            };
-          })
-        }
-      ]
-    };
+            }))
+          },
+          {
+            name: 'Transit Time',
+            type: 'bar',
+            barWidth: 20,
+            stack: 'timeline',
+            itemStyle: {
+              color: '#9C27B0',
+              borderRadius: [0, 0, 4, 4]
+            },
+            data: shippingData.map(item => {
+              const shipMonth = item.SHPDTE.getMonth() + 1;
+              const arrivalMonth = item.ARRDATE.getMonth() + 1;
+              return {
+                value: arrivalMonth - shipMonth,
+                stock: item.stock,
+                MODEL: item.MODEL,
+                SHPDTE: item.SHPDTE,
+                ARRDATE: item.ARRDATE,
+                status: item.status
+              };
+            })
+          }
+        ]
+      };
 
-    chart.setOption(option);
+      chart.setOption(option);
 
-    // 3. RESPONSIVE HANDLING
-    const handleResize = () => chart.resize();
-    window.addEventListener('resize', handleResize);
+      // 3. RESPONSIVE HANDLING
+      const handleResize = () => chart.resize();
+      window.addEventListener('resize', handleResize);
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      chart.dispose();
-    };
-  }
-}, [data]);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        chart.dispose();
+      };
+    }
+  }, [data]);
 
   const handleAddInventory = () => {
     setItemForm({
-      sourceName: "",
-      stockNumber: "",
-      manuNumber: "",
-      manuNumber2: "",
-      invoiceNumber: "",
-      payment: "",
-      paymentStatus: "",
-      paymentTerms: "",
-      vin: "",
-      engine: "",
-      keyNumber: "",
-      bl: "",
-      shipDate: "",
-      brand: "",
-      ocnSpec: "",
-      model: "",
-      country: "",
-      vinYear: "",
-      extColor: "",
-      intColor: "",
-      tbd3: "",
-      orderMonth: "",
-      productionEstimate: "",
-      shipEstimate: "",
-      estArrival: "",
-      shippingDate: "",
-      arrivalEstimate: "",
-      arrivalDate: "",
-      shippingIndication: ""
+      SourceName: "",
+      STOCK: "",
+      MANU1: "",
+      MANU2: "",
+      INVOICE: "",
+      PAYMENT: "",
+      PMTSTATUS: "",
+      PAYTERMS: "",
+      VIN: "",
+      ENGINE: "",
+      KEY: "",
+      BL: "",
+      SHIPDATE: "",
+      BRAND: "",
+      OCNSPEC: "",
+      MODEL: "",
+      COUNTRY: "",
+      MYYEAR: "",
+      EXTCOLOR: "",
+      INTCOLOR: "",
+      TBD3: "",
+      ORDERMONTH: "",
+      PRODEST: "",
+      SHIPEST: "",
+      ESTARR: "",
+      SHPDTE: "",
+      ARREST: "",
+      ARRDATE: "",
+      SHIPINDICATION: ""
     });
     setEditingIndex(null);
     setEditingId(null);
@@ -274,35 +292,35 @@ useEffect(() => {
 
   const handleEditInventory = (item, index) => {
     setItemForm({
-      sourceName: item.sourceName || "",
-      stockNumber: item.stockNumber || "",
-      manuNumber: item.manuNumber || "",
-      manuNumber2: item.manuNumber2 || "",
-      invoiceNumber: item.invoiceNumber || "",
-      payment: item.payment || "",
-      paymentStatus: item.paymentStatus || "",
-      paymentTerms: item.paymentTerms || "",
-      vin: item.vin || "",
-      engine: item.engine || "",
-      keyNumber: item.keyNumber || "",
-      bl: item.bl || "",
-      shipDate: item.shipDate || "",
-      brand: item.brand || "",
-      ocnSpec: item.ocnSpec || "",
-      model: item.model || "",
-      country: item.country || "",
-      vinYear: item.vinYear || "",
-      extColor: item.extColor || "",
-      intColor: item.intColor || "",
-      tbd3: item.tbd3 || "",
-      orderMonth: item.orderMonth || "",
-      productionEstimate: item.productionEstimate || "",
-      shipEstimate: item.shipEstimate || "",
-      estArrival: item.estArrival || "",
-      shippingDate: item.shippingDate || "",
-      arrivalEstimate: item.arrivalEstimate || "",
-      arrivalDate: item.arrivalDate || "",
-      shippingIndication: item.shippingIndication || ""
+      SourceName: item.SourceName || "",
+      STOCK: item.STOCK || "",
+      MANU1: item.MANU1 || "",
+      MANU2: item.MANU2 || "",
+      INVOICE: item.INVOICE || "",
+      PAYMENT: item.PAYMENT || "",
+      PMTSTATUS: item.PMTSTATUS || "",
+      PAYTERMS: item.PAYTERMS || "",
+      VIN: item.VIN || "",
+      ENGINE: item.ENGINE || "",
+      KEY: item.KEY || "",
+      BL: item.BL || "",
+      SHIPDATE: item.SHIPDATE || "",
+      BRAND: item.BRAND || "",
+      OCNSPEC: item.OCNSPEC || "",
+      MODEL: item.MODEL || "",
+      COUNTRY: item.COUNTRY || "",
+      MYYEAR: item.MYYEAR || "",
+      EXTCOLOR: item.EXTCOLOR || "",
+      INTCOLOR: item.INTCOLOR || "",
+      TBD3: item.TBD3 || "",
+      ORDERMONTH: item.ORDERMONTH || "",
+      PRODEST: item.PRODEST || "",
+      SHIPEST: item.SHIPEST || "",
+      ESTARR: item.ESTARR || "",
+      SHPDTE: item.SHPDTE || "",
+      ARREST: item.ARREST || "",
+      ARRDATE: item.ARRDATE || "",
+      SHIPINDICATION: item.SHIPINDICATION || ""
     });
     setEditingIndex(index);
     setEditingId(item.id); // Assuming your API uses _id as identifier
@@ -366,10 +384,10 @@ useEffect(() => {
   const handleSaveInventory = async () => {
     try {
       // Validate required fields
-      if (!itemForm.stockNumber || !itemForm.vin || !itemForm.model) {
+      if (!itemForm.STOCK || !itemForm.VIN || !itemForm.MODEL) {
         await Swal.fire({
           title: 'Validation Error',
-          text: 'Please fill in all required fields (Stock Number, VIN, and Model)',
+          text: 'Please fill in all required fields (Stock Number, VIN, and MODEL)',
           icon: 'warning',
           customClass: {
             container: 'z-[99999]' // Very high z-index to ensure it's on top
@@ -419,13 +437,13 @@ useEffect(() => {
     } catch (error) {
       await Swal.fire({
         title: 'Error!',
-        text: 'There was a problem saving the inventory item.',
+        text: 'There was a problem saVINg the inventory item.',
         icon: 'error',
         customClass: {
           container: 'z-[99999]' // Very high z-index to ensure it's on top
         }
       });
-      console.error("Error saving inventory:", error);
+      console.error("Error saVINg inventory:", error);
     } finally {
       setLoading(false); // Hide loading state
     }
@@ -445,7 +463,7 @@ useEffect(() => {
     const rows = data.map(item => Object.values(item).join(","));
     const csvContent = [headers, ...rows].join("\n");
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const blob = new blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -455,56 +473,58 @@ useEffect(() => {
     document.body.removeChild(link);
   };
 
-  // Filter data based on search and filters
-  const filteredData = data.filter(item => {
-    const matchesSearch = Object.values(item).some(
-      val => val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  const filteredData = Array.isArray(data)
+    ? data.filter(item => {
+      const matchesSearch = Object.values(item).some(
+        val => val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      );
 
-    const matchesStatus = !selectedStatus ||
-      (item.shippingIndication && item.shippingIndication.toUpperCase() === selectedStatus.toUpperCase());
+      const matchesStatus = !selectedStatus ||
+        (item.SHIPINDICATION && item.SHIPINDICATION.toUpperCase() === selectedStatus.toUpperCase());
 
-    const matchesCountry = !selectedCountry ||
-      (item.country && item.country.toUpperCase() === selectedCountry.toUpperCase());
+      const matchesCOUNTRY = !selectedCOUNTRY ||
+        (item.COUNTRY && item.COUNTRY.toUpperCase() === selectedCOUNTRY.toUpperCase());
 
-    const matchesBrand = !selectedBrand ||
-      (item.brand && item.brand.toUpperCase() === selectedBrand.toUpperCase());
+      const matchesBRAND = !selectedBRAND ||
+        (item.BRAND && item.BRAND.toUpperCase() === selectedBRAND.toUpperCase());
 
-    return matchesSearch && matchesStatus && matchesCountry && matchesBrand;
-  });
+      return matchesSearch && matchesStatus && matchesCOUNTRY && matchesBRAND;
+    })
+    : [];
 
 
- const [selectedFile, setSelectedFile] = useState(null);
+
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleSheetUpload = (event) => {
     setSelectedFile(event.target.files[0]);
   };
 
-const handleSave = async () => {
-  if (!selectedFile) {
-    alert("Please select a file first.");
-    return;
-  }
+  const handleSave = async () => {
+    if (!selectedFile) {
+      alert("Please select a file first.");
+      return;
+    }
 
-  const formData = new FormData();
-  formData.append("file", selectedFile);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
 
-  try {
-    const response = await api.post("/upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    try {
+      const response = await api.post("/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    const result = response.data;
-    fetchInventoryData()
-    alert(result.message || "File uploaded successfully!");
-  } catch (error) {
-    console.error("Error uploading file:", error);
-    // alert("Error uploading file.");
-    alert(result.message || "File uploaded successfully!");
-  }
-};
+      const result = response.data;
+      fetchInventoryData()
+      alert(result.message || "File uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      // alert("Error uploading file.");
+      alert(result.message || "File uploaded successfully!");
+    }
+  };
 
 
   return (
@@ -528,22 +548,22 @@ const handleSave = async () => {
             <div ref={timelineChartRef} className="w-full h-full"></div>
           </div>
         </div>
-    <div className="p-4">
-      <input
-        type="file"
-        accept=".csv, .xlsx"
-        onChange={handleSheetUpload}
-        className="w-full sm:w-auto px-4 py-2 border rounded-lg text-sm cursor-pointer text-gray-700 bg-white hover:bg-gray-100"
-        title="Upload Inventory Sheet"
-      />
+        {/* <div className="p-4">
+          <input
+            type="file"
+            accept=".csv, .xlsx"
+            onChange={handleSheetUpload}
+            className="w-full sm:w-auto px-4 py-2 border rounded-lg text-sm cursor-pointer text-gray-700 bg-white hover:bg-gray-100"
+            title="Upload Inventory Sheet"
+          />
 
-      <button
-        onClick={handleSave}
-        className="ms-3 p-3 bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 mt-2"
-      >
-        Save
-      </button>
-    </div>
+          <button
+            onClick={handleSave}
+            className="ms-3 p-3 bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 mt-2"
+          >
+            Save
+          </button>
+        </div> */}
         {/* Inventory Table */}
         <div className="bg-white rounded-lg shadow mt-3 overflow-hidden">
           <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-200 bg-gray-50">
@@ -589,11 +609,11 @@ const handleSave = async () => {
 
                       <div className="mb-3">
                         <label className="block text-sm font-medium text-gray-700">
-                          Country
+                          COUNTRY
                         </label>
                         <select
-                          value={selectedCountry}
-                          onChange={(e) => setSelectedCountry(e.target.value)}
+                          value={selectedCOUNTRY}
+                          onChange={(e) => setSelectedCOUNTRY(e.target.value)}
                           className="mt-1 block w-full border border-gray-300 rounded p-2 text-sm"
                         >
                           <option value="">All</option>
@@ -605,11 +625,11 @@ const handleSave = async () => {
 
                       <div className="mb-2">
                         <label className="block text-sm font-medium text-gray-700">
-                          Brand
+                          BRAND
                         </label>
                         <select
-                          value={selectedBrand}
-                          onChange={(e) => setSelectedBrand(e.target.value)}
+                          value={selectedBRAND}
+                          onChange={(e) => setSelectedBRAND(e.target.value)}
                           className="mt-1 block w-full border border-gray-300 rounded p-2 text-sm"
                         >
                           <option value="">All</option>
@@ -754,104 +774,104 @@ const handleSave = async () => {
                         {idx + 1}.
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {item?.sourceName}
+                        {item?.SourceName}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.stockNumber}
+                        {item.STOCK}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.manuNumber}
+                        {item.MANU1}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.manuNumber2}
+                        {item.MANU2}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.invoiceNumber}
+                        {item.INVOICE}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.payment}
+                        {item.PAYMENT}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.paymentStatus}
+                        {item.PMTSTATUS}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.paymentTerms}
+                        {item.PAYTERMS}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.vin}
+                        {item.VIN}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.engine}
+                        {item.ENGINE}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.keyNumber}
+                        {item.KEY}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.bl}
+                        {item.BL}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.shipDate}
+                        {item.SHIPDATE}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.brand}
+                        {item.BRAND}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.ocnSpec}
+                        {item.OCNSPEC}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.model}
+                        {item.MODEL}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.country}
+                        {item.COUNTRY}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.vinYear}
+                        {item.MYYEAR}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.extColor}
+                        {item.EXTCOLOR}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.intColor}
+                        {item.INTCOLOR}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.tbd3}
+                        {item.TBD3}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.orderMonth}
+                        {item.ORDERMONTH}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.productionEstimate}
+                        {item.PRODEST}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.shipEstimate}
+                        {item.SHIPEST}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.estArrival}
+                        {item.ESTARR}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.shippingDate}
+                        {item.SHPDTE}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.arrivalEstimate}
+                        {item.ARREST}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.arrivalDate}
+                        {item.ARRDATE}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
-                            ${item.shippingIndication === "DELIVERED"
+                            ${item.SHIPINDICATION === "DELIVERED"
                               ? "bg-green-100 text-green-800"
-                              : item.shippingIndication === "SHIPPED"
+                              : item.SHIPINDICATION === "SHIPPED"
                                 ? "bg-yellow-100 text-yellow-800"
-                                : item.shippingIndication === "CANCELLED"
+                                : item.SHIPINDICATION === "CANCELLED"
                                   ? "bg-red-100 text-red-800"
-                                  : item.shippingIndication === "ORDERED"
+                                  : item.SHIPINDICATION === "ORDERED"
                                     ? "bg-gray-200 text-gray-800"
                                     : "bg-slate-100 text-slate-800"
                             }`}
                         >
-                          {item.shippingIndication}
+                          {item.SHIPINDICATION}
                         </span>
                       </td>
 
@@ -913,8 +933,8 @@ const handleSave = async () => {
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 id="source-name"
-                                value={itemForm.sourceName}
-                                onChange={(e) => setItemForm({ ...itemForm, sourceName: e.target.value })}
+                                value={itemForm.SourceName}
+                                onChange={(e) => setItemForm({ ...itemForm, SourceName: e.target.value })}
                               />
                             </div>
 
@@ -924,8 +944,8 @@ const handleSave = async () => {
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 id="stock-number"
-                                value={itemForm.stockNumber}
-                                onChange={(e) => setItemForm({ ...itemForm, stockNumber: e.target.value })}
+                                value={itemForm.STOCK}
+                                onChange={(e) => setItemForm({ ...itemForm, STOCK: e.target.value })}
                                 required
                               />
                             </div>
@@ -936,8 +956,8 @@ const handleSave = async () => {
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 id="manu-number"
-                                value={itemForm.manuNumber}
-                                onChange={(e) => setItemForm({ ...itemForm, manuNumber: e.target.value })}
+                                value={itemForm.MANU1}
+                                onChange={(e) => setItemForm({ ...itemForm, MANU1: e.target.value })}
                               />
                             </div>
 
@@ -947,8 +967,8 @@ const handleSave = async () => {
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 id="manu-number2"
-                                value={itemForm.manuNumber2}
-                                onChange={(e) => setItemForm({ ...itemForm, manuNumber2: e.target.value })}
+                                value={itemForm.MANU2}
+                                onChange={(e) => setItemForm({ ...itemForm, MANU2: e.target.value })}
                               />
                             </div>
 
@@ -958,30 +978,30 @@ const handleSave = async () => {
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 id="invoice-number"
-                                value={itemForm.invoiceNumber}
-                                onChange={(e) => setItemForm({ ...itemForm, invoiceNumber: e.target.value })}
+                                value={itemForm.INVOICE}
+                                onChange={(e) => setItemForm({ ...itemForm, INVOICE: e.target.value })}
                               />
                             </div>
 
                             <div>
-                              <label htmlFor="payment" className="block text-sm font-medium text-gray-700">PAYMENT</label>
+                              <label htmlFor="PAYMENT" className="block text-sm font-medium text-gray-700">PAYMENT</label>
                               <input
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                id="payment"
-                                value={itemForm.payment}
-                                onChange={(e) => setItemForm({ ...itemForm, payment: e.target.value })}
+                                id="PAYMENT"
+                                value={itemForm.PAYMENT}
+                                onChange={(e) => setItemForm({ ...itemForm, PAYMENT: e.target.value })}
                               />
                             </div>
 
                             <div>
-                              <label htmlFor="payment-status" className="block text-sm font-medium text-gray-700">PMT STATUS</label>
+                              <label htmlFor="PAYMENT-status" className="block text-sm font-medium text-gray-700">PMT STATUS</label>
                               <input
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                id="payment-status"
-                                value={itemForm.paymentStatus}
-                                onChange={(e) => setItemForm({ ...itemForm, paymentStatus: e.target.value })}
+                                id="PAYMENT-status"
+                                value={itemForm.PMTSTATUS}
+                                onChange={(e) => setItemForm({ ...itemForm, PMTSTATUS: e.target.value })}
                               />
                             </div>
                           </div>
@@ -989,36 +1009,36 @@ const handleSave = async () => {
                           {/* Second Column */}
                           <div className="space-y-4">
                             <div>
-                              <label htmlFor="payment-terms" className="block text-sm font-medium text-gray-700">PAY. TERMS</label>
+                              <label htmlFor="PAYMENT-terms" className="block text-sm font-medium text-gray-700">PAY. TERMS</label>
                               <input
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                id="payment-terms"
-                                value={itemForm.paymentTerms}
-                                onChange={(e) => setItemForm({ ...itemForm, paymentTerms: e.target.value })}
+                                id="PAYMENT-terms"
+                                value={itemForm.PAYTERMS}
+                                onChange={(e) => setItemForm({ ...itemForm, PAYTERMS: e.target.value })}
                               />
                             </div>
 
 
                             <div>
-                              <label htmlFor="vin" className="block text-sm font-medium text-gray-700">VIN#</label>
+                              <label htmlFor="VIN" className="block text-sm font-medium text-gray-700">VIN#</label>
                               <input
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                id="vin"
-                                value={itemForm.vin}
-                                onChange={(e) => setItemForm({ ...itemForm, vin: e.target.value })}
+                                id="VIN"
+                                value={itemForm.VIN}
+                                onChange={(e) => setItemForm({ ...itemForm, VIN: e.target.value })}
                               />
                             </div>
 
                             <div>
-                              <label htmlFor="engine" className="block text-sm font-medium text-gray-700">ENGINE#</label>
+                              <label htmlFor="ENGINE" className="block text-sm font-medium text-gray-700">ENGINE#</label>
                               <input
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                id="engine"
-                                value={itemForm.engine}
-                                onChange={(e) => setItemForm({ ...itemForm, engine: e.target.value })}
+                                id="ENGINE"
+                                value={itemForm.ENGINE}
+                                onChange={(e) => setItemForm({ ...itemForm, ENGINE: e.target.value })}
                               />
                             </div>
 
@@ -1028,8 +1048,8 @@ const handleSave = async () => {
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 id="key-number"
-                                value={itemForm.keyNumber}
-                                onChange={(e) => setItemForm({ ...itemForm, keyNumber: e.target.value })}
+                                value={itemForm.KEY}
+                                onChange={(e) => setItemForm({ ...itemForm, KEY: e.target.value })}
                               />
                             </div>
 
@@ -1038,9 +1058,9 @@ const handleSave = async () => {
                               <input
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                id="bl"
-                                value={itemForm.bl}
-                                onChange={(e) => setItemForm({ ...itemForm, bl: e.target.value })}
+                                id="BL"
+                                value={itemForm.BL}
+                                onChange={(e) => setItemForm({ ...itemForm, BL: e.target.value })}
                               />
                             </div>
 
@@ -1050,19 +1070,19 @@ const handleSave = async () => {
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 id="ship-date"
-                                value={itemForm.shipDate}
-                                onChange={(e) => setItemForm({ ...itemForm, shipDate: e.target.value })}
+                                value={itemForm.SHIPDATE}
+                                onChange={(e) => setItemForm({ ...itemForm, SHIPDATE: e.target.value })}
                               />
                             </div>
 
                             <div>
-                              <label htmlFor="brand" className="block text-sm font-medium text-gray-700">BRAND</label>
+                              <label htmlFor="BRAND" className="block text-sm font-medium text-gray-700">BRAND</label>
                               <input
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                id="brand"
-                                value={itemForm.brand}
-                                onChange={(e) => setItemForm({ ...itemForm, brand: e.target.value })}
+                                id="BRAND"
+                                value={itemForm.BRAND}
+                                onChange={(e) => setItemForm({ ...itemForm, BRAND: e.target.value })}
                               />
                             </div>
                           </div>
@@ -1075,41 +1095,41 @@ const handleSave = async () => {
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 id="ocn-spec"
-                                value={itemForm.ocnSpec}
-                                onChange={(e) => setItemForm({ ...itemForm, ocnSpec: e.target.value })}
+                                value={itemForm.OCNSPEC}
+                                onChange={(e) => setItemForm({ ...itemForm, OCNSPEC: e.target.value })}
                               />
                             </div>
 
                             <div>
-                              <label htmlFor="model" className="block text-sm font-medium text-gray-700">MODEL</label>
+                              <label htmlFor="MODEL" className="block text-sm font-medium text-gray-700">MODEL</label>
                               <input
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                id="model"
-                                value={itemForm.model}
-                                onChange={(e) => setItemForm({ ...itemForm, model: e.target.value })}
+                                id="MODEL"
+                                value={itemForm.MODEL}
+                                onChange={(e) => setItemForm({ ...itemForm, MODEL: e.target.value })}
                               />
                             </div>
 
                             <div>
-                              <label htmlFor="country" className="block text-sm font-medium text-gray-700">COUNTRY</label>
+                              <label htmlFor="COUNTRY" className="block text-sm font-medium text-gray-700">COUNTRY</label>
                               <input
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                id="country"
-                                value={itemForm.country}
-                                onChange={(e) => setItemForm({ ...itemForm, country: e.target.value })}
+                                id="COUNTRY"
+                                value={itemForm.COUNTRY}
+                                onChange={(e) => setItemForm({ ...itemForm, COUNTRY: e.target.value })}
                               />
                             </div>
 
                             <div>
-                              <label htmlFor="vin-year" className="block text-sm font-medium text-gray-700">MY YEAR</label>
+                              <label htmlFor="VIN-year" className="block text-sm font-medium text-gray-700">MY YEAR</label>
                               <input
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                id="vin-year"
-                                value={itemForm.vinYear}
-                                onChange={(e) => setItemForm({ ...itemForm, vinYear: e.target.value })}
+                                id="VIN-year"
+                                value={itemForm.MYYEAR}
+                                onChange={(e) => setItemForm({ ...itemForm, MYYEAR: e.target.value })}
                               />
                             </div>
 
@@ -1119,8 +1139,8 @@ const handleSave = async () => {
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 id="ext-color"
-                                value={itemForm.extColor}
-                                onChange={(e) => setItemForm({ ...itemForm, extColor: e.target.value })}
+                                value={itemForm.EXTCOLOR}
+                                onChange={(e) => setItemForm({ ...itemForm, EXTCOLOR: e.target.value })}
                               />
                             </div>
 
@@ -1130,19 +1150,19 @@ const handleSave = async () => {
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                 id="int-color"
-                                value={itemForm.intColor}
-                                onChange={(e) => setItemForm({ ...itemForm, intColor: e.target.value })}
+                                value={itemForm.INTCOLOR}
+                                onChange={(e) => setItemForm({ ...itemForm, INTCOLOR: e.target.value })}
                               />
                             </div>
 
                             <div>
-                              <label htmlFor="tbd3" className="block text-sm font-medium text-gray-700">TBD3</label>
+                              <label htmlFor="TBD3" className="block text-sm font-medium text-gray-700">TBD3</label>
                               <input
                                 type="text"
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                id="tbd3"
-                                value={itemForm.tbd3}
-                                onChange={(e) => setItemForm({ ...itemForm, tbd3: e.target.value })}
+                                id="TBD3"
+                                value={itemForm.TBD3}
+                                onChange={(e) => setItemForm({ ...itemForm, TBD3: e.target.value })}
                               />
                             </div>
                           </div>
@@ -1156,8 +1176,8 @@ const handleSave = async () => {
                               type="text"
                               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                               id="order-month"
-                              value={itemForm.orderMonth}
-                              onChange={(e) => setItemForm({ ...itemForm, orderMonth: e.target.value })}
+                              value={itemForm.ORDERMONTH}
+                              onChange={(e) => setItemForm({ ...itemForm, ORDERMONTH: e.target.value })}
                             />
                           </div>
 
@@ -1167,8 +1187,8 @@ const handleSave = async () => {
                               type="text"
                               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                               id="production-estimate"
-                              value={itemForm.productionEstimate}
-                              onChange={(e) => setItemForm({ ...itemForm, productionEstimate: e.target.value })}
+                              value={itemForm.PRODEST}
+                              onChange={(e) => setItemForm({ ...itemForm, PRODEST: e.target.value })}
                             />
                           </div>
 
@@ -1178,8 +1198,8 @@ const handleSave = async () => {
                               type="text"
                               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                               id="ship-estimate"
-                              value={itemForm.shipEstimate}
-                              onChange={(e) => setItemForm({ ...itemForm, shipEstimate: e.target.value })}
+                              value={itemForm.SHIPEST}
+                              onChange={(e) => setItemForm({ ...itemForm, SHIPEST: e.target.value })}
                             />
                           </div>
 
@@ -1189,8 +1209,8 @@ const handleSave = async () => {
                               type="text"
                               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                               id="est-arrival"
-                              value={itemForm.estArrival}
-                              onChange={(e) => setItemForm({ ...itemForm, estArrival: e.target.value })}
+                              value={itemForm.ESTARR}
+                              onChange={(e) => setItemForm({ ...itemForm, ESTARR: e.target.value })}
                             />
                           </div>
                         </div>
@@ -1203,8 +1223,8 @@ const handleSave = async () => {
                               type="text"
                               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                               id="shipping-date"
-                              value={itemForm.shippingDate}
-                              onChange={(e) => setItemForm({ ...itemForm, shippingDate: e.target.value })}
+                              value={itemForm.SHPDTE}
+                              onChange={(e) => setItemForm({ ...itemForm, SHPDTE: e.target.value })}
                             />
                           </div>
 
@@ -1214,8 +1234,8 @@ const handleSave = async () => {
                               type="text"
                               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                               id="arrival-estimate"
-                              value={itemForm.arrivalEstimate}
-                              onChange={(e) => setItemForm({ ...itemForm, arrivalEstimate: e.target.value })}
+                              value={itemForm.ARREST}
+                              onChange={(e) => setItemForm({ ...itemForm, ARREST: e.target.value })}
                             />
                           </div>
 
@@ -1225,8 +1245,8 @@ const handleSave = async () => {
                               type="text"
                               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                               id="arrival-date"
-                              value={itemForm.arrivalDate}
-                              onChange={(e) => setItemForm({ ...itemForm, arrivalDate: e.target.value })}
+                              value={itemForm.ARRDATE}
+                              onChange={(e) => setItemForm({ ...itemForm, ARRDATE: e.target.value })}
                             />
                           </div>
                         </div>
@@ -1236,8 +1256,8 @@ const handleSave = async () => {
                           <select
                             id="shipping-indication"
                             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            value={itemForm.shippingIndication}
-                            onChange={(e) => setItemForm({ ...itemForm, shippingIndication: e.target.value })}
+                            value={itemForm.SHIPINDICATION}
+                            onChange={(e) => setItemForm({ ...itemForm, SHIPINDICATION: e.target.value })}
                           >
                             <option value="Delivered">Delivered</option>
                             <option value="Shipped">Shipped</option>

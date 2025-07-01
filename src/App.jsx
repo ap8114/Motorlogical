@@ -55,6 +55,7 @@ function App() {
            <Route path="/manager/managerstaff" element={<ManagerStaff />} />
             <Route path="/manager/managerreports" element={<ManagerReports />} />
             <Route path="/manager/managerinventory" element={<ManagerInventory />} />
+          <Route path="/salesperson/salespersondashboard" element={<SalespersonDashboard />} />
         </Route>
 
          {/* Salesperson Dashboard routes with MainLayout */}
