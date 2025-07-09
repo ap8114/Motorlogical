@@ -75,7 +75,7 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
                         {navItem("/salesperson/salespersondashboard", "fas fa-tachometer-alt", "Dashboard")}
                         {navItem("/salesperson/salespersonorder", "fas fa-shopping-cart", "Order Management")}
                         {navItem("/inventorymanagement", "fas fa-boxes", "logistics")}
-                        {navItem("/salesperson/salespersoncustomerinfo", "fas fa-user-friends", "Customer Information")}
+                        {navItem("/", "fas fa-user-friends", "Logout")}
 
                     </>
                 );

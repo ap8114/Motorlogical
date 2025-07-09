@@ -128,7 +128,7 @@ const SalespersonDashboard = () => {
 
                 {/* Stats Cards */}
                 <div className="row mb-4">
-                    <div className="col-md-6 col-lg-3 mb-3">
+                    <div className="col-md-6 col-lg-4 mb-3">
                         <div className="card h-100">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
@@ -138,57 +138,34 @@ const SalespersonDashboard = () => {
                                     <div className="ms-3">
                                         <p className="text-muted mb-1">Total Orders</p>
                                         <h3 className="mb-0">125</h3>
-                                        <p className="text-success mb-0">
-                                            <i className="fas fa-arrow-up me-1"></i>
-                                            12% up
-                                        </p>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="col-md-6 col-lg-3 mb-3">
+                    <div className="col-md-6 col-lg-4 mb-3">
                         <div className="card h-100">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
                                     <div className="p-3 rounded-circle bg-success bg-opacity-10 text-success">
-                                        <i className="fas fa-dollar-sign fs-4"></i>
+                                        <i className="fas fa-truck fs-4"></i>
+
                                     </div>
                                     <div className="ms-3">
-                                        <p className="text-muted mb-1">Total Revenue</p>
-                                        <h3 className="mb-0">$12,426</h3>
-                                        <p className="text-success mb-0">
-                                            <i className="fas fa-arrow-up me-1"></i>
-                                            8% up
-                                        </p>
+                                        <p className="text-muted mb-1">Total Logistic</p>
+                                        <h3 className="mb-0">12,426</h3>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="col-md-6 col-lg-3 mb-3">
-                        <div className="card h-100">
-                            <div className="card-body">
-                                <div className="d-flex align-items-center">
-                                    <div className="p-3 rounded-circle bg-info bg-opacity-10 text-info">
-                                        <i className="fas fa-users fs-4"></i>
-                                    </div>
-                                    <div className="ms-3">
-                                        <p className="text-muted mb-1">Total Customers</p>
-                                        <h3 className="mb-0">1,205</h3>
-                                        <p className="text-success mb-0">
-                                            <i className="fas fa-arrow-up me-1"></i>
-                                            5% up
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div className="col-md-6 col-lg-3 mb-3">
+
+                    <div className="col-md-6 col-lg-4 mb-3">
                         <div className="card h-100">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
@@ -196,12 +173,9 @@ const SalespersonDashboard = () => {
                                         <i className="fas fa-box fs-4"></i>
                                     </div>
                                     <div className="ms-3">
-                                        <p className="text-muted mb-1">Products in Stock</p>
+                                        <p className="text-muted mb-1">Total dealership</p>
                                         <h3 className="mb-0">85</h3>
-                                        <p className="text-danger mb-0">
-                                            <i className="fas fa-arrow-down me-1"></i>
-                                            3% down
-                                        </p>
+
                                     </div>
                                 </div>
                             </div>
@@ -209,166 +183,7 @@ const SalespersonDashboard = () => {
                     </div>
                 </div>
 
-                {/* Order Management Section */}
-                <div className="card mb-4">
-                    <div className="card-header bg-white">
-                        <h2 className="h5 mb-0">
-                            <i className="fas fa-clipboard-list me-2"></i>
-                            Order Management
-                        </h2>
-                    </div>
-                    <div className="card-body">
-                        <form onSubmit={handleSubmitOrder}>
-                            <div className="row g-3 mb-4">
-                                <div className="col-md-6">
-                                    <label htmlFor="product" className="form-label">Product</label>
-                                    <select
-                                        id="product"
-                                        name="product"
-                                        value={newOrder.product}
-                                        onChange={handleInputChange}
-                                        className="form-select"
-                                        required
-                                    >
-                                        <option value="">Select a product</option>
-                                        {inventory.map((item) => (
-                                            <option key={item.sku} value={item.name} disabled={item.status === 'Out of Stock'}>
-                                                {item.name} {item.status === 'Out of Stock' ? '(Out of Stock)' : ''}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
 
-                                <div className="col-md-6">
-                                    <label htmlFor="quantity" className="form-label">Quantity</label>
-                                    <div className="input-group">
-                                        <button
-                                            type="button"
-                                            onClick={() => handleQuantityChange(-1)}
-                                            className="me-2"
-                                        >
-                                            <i className="fas fa-minus"></i>
-                                        </button>
-                                        <input
-                                            type="number"
-                                            id="quantity"
-                                            name="quantity"
-                                            value={newOrder.quantity}
-                                            onChange={handleInputChange}
-                                            min="1"
-                                            className="form-control text-center"
-                                            required
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => handleQuantityChange(1)}
-                                            className="ms-2"
-                                        >
-                                            <i className="fas fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="col-md-6">
-                                    <label htmlFor="customerName" className="form-label">Customer Name</label>
-                                    <input
-                                        type="text"
-                                        id="customerName"
-                                        name="customerName"
-                                        value={newOrder.customerName}
-                                        onChange={handleInputChange}
-                                        className="form-control"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="col-md-6">
-                                    <label htmlFor="customerPhone" className="form-label">Customer Phone</label>
-                                    <input
-                                        type="tel"
-                                        id="customerPhone"
-                                        name="customerPhone"
-                                        value={newOrder.customerPhone}
-                                        onChange={handleInputChange}
-                                        className="form-control"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="col-12">
-                                    <label htmlFor="orderNotes" className="form-label">Order Notes</label>
-                                    <textarea
-                                        id="orderNotes"
-                                        name="orderNotes"
-                                        rows={3}
-                                        value={newOrder.orderNotes}
-                                        onChange={handleInputChange}
-                                        className="form-control"
-                                    ></textarea>
-                                </div>
-
-                                <div className="col-12 text-end">
-                                    <button
-                                        type="submit"
-                                        className="btn btn-primary"
-                                    >
-                                        <i className="fas fa-plus me-2"></i>
-                                        Place Order
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
-                        <h3 className="h5 mb-3">My Orders</h3>
-                        <div className="table-responsive">
-                            <table className="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Customer</th>
-                                        <th>Product</th>
-                                        <th>Qty</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {orders.map((order) => (
-                                        <tr key={order.id}>
-                                            <td>{order.id}</td>
-                                            <td>{order.customer}</td>
-                                            <td>{order.product}</td>
-                                            <td>{order.quantity}</td>
-                                            <td>
-                                                <span className={`badge ${getStatusColor(order.status)}`}>
-                                                    {order.status}
-                                                </span>
-                                            </td>
-                                            <td>{order.date}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="mt-4">
-                            <h4 className="h6 mb-3">Order Status Tracker</h4>
-                            <div className="d-flex justify-content-between">
-                                {['Pending', 'Processing', 'Shipped', 'Delivered'].map((status, index) => (
-                                    <div key={status} className="text-center">
-                                        <div className={`rounded-circle d-inline-flex align-items-center justify-content-center ${index === 0 ? 'bg-primary text-white' : 'bg-light text-muted'}`} style={{ width: '36px', height: '36px' }}>
-                                            {index === 0 && <i className="fas fa-clipboard-check"></i>}
-                                            {index === 1 && <i className="fas fa-cog"></i>}
-                                            {index === 2 && <i className="fas fa-shipping-fast"></i>}
-                                            {index === 3 && <i className="fas fa-check"></i>}
-                                        </div>
-                                        <div className="small mt-1">{status}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 {/* Inventory Section */}
                 <div className="card mb-4">
