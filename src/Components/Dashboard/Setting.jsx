@@ -240,8 +240,7 @@
 // };
 
 // export default Setting;
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Card,
   ListGroup,
@@ -252,94 +251,28 @@ import {
   Button,
   Modal,
 } from "react-bootstrap";
-import api from "../../../utils/axiosInterceptor";
 
 const Setting = () => {
   const loginDetail = JSON.parse(localStorage.getItem("login_detail"));
 
   const [showModal, setShowModal] = useState(false);
-  const [userData, setUserData] = useState(null);
-
   const [formData, setFormData] = useState({
-    full_name: "",
-    email: "",
-    phone: "",
-    address: "",
-    gender: "",
-    date_of_birth: "",
-    father_name: "",
-    admission_no: "",
-    id_no: "",
-    category: "",
-    university_id: "",
+    id: loginDetail.id || "",
+    email: loginDetail.email || "",
+    name: loginDetail.name || "",
+    phone: loginDetail.phone || "",
+    country: loginDetail.country || "",
   });
-
-  const fetchUserData = async () => {
-    if (!loginDetail) return;
-
-    try {
-      const res = await api.get(`auth/getUser/${loginDetail.id}`);
-      if (res.data.user) {
-        const user = res.data.user;
-        setUserData(user);
-        setFormData({
-          full_name: user.full_name || "",
-          email: user.email || "",
-          phone: user.phone || "",
-          address: user.address || "",
-          gender: user.gender || "",
-          date_of_birth: user.date_of_birth
-            ? user.date_of_birth.split("T")[0]
-            : "",
-          father_name: user.father_name || "",
-          admission_no: user.admission_no || "",
-          id_no: user.id_no || "",
-          category: user.category || "",
-          university_id: user.university_id || "",
-        });
-      }
-    } catch (error) {
-      console.error("Failed to fetch user data: ", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserData();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleUpdateProfile = async (e) => {
+  const handleUpdateProfile = (e) => {
     e.preventDefault();
-
-    const filteredFormData = {};
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value !== "" && value !== null && value !== undefined) {
-        filteredFormData[key] = value;
-      }
-    });
-
-    filteredFormData["user_id"] = loginDetail.id;
-
-    try {
-      const res = await api.put(
-        `auth/updateUser/${loginDetail.id}`,
-        filteredFormData
-      );
-      if (res.status === 200) {
-        alert("Profile updated successfully!");
-        setShowModal(false);
-        fetchUserData();
-      } else {
-        alert("Failed to update profile.");
-      }
-    } catch (error) {
-      console.error("Error updating profile: ", error);
-      alert("An error occurred while updating the profile.");
-    }
+    alert("Profile updated successfully!"); // Simulating a successful update
+    setShowModal(false);
   };
 
   const renderItem = (label, value) => {
@@ -373,44 +306,22 @@ const Setting = () => {
             </Card.Header>
 
             <ListGroup variant="flush">
-              {/* Render all loginDetail fields */}
               <ListGroup.Item className="text-center bg-light fw-semibold text-dark">
                 Login Details
               </ListGroup.Item>
-              {Object.entries(loginDetail).map(([key, value]) =>
-                renderItem(
-                  key
-                    .replace(/_/g, " ")
-                    .replace(/\b\w/g, (l) => l.toUpperCase()),
-                  typeof value === "object" ? JSON.stringify(value) : value
-                )
-              )}
-
-              {/* Render extra details from userData (API) */}
-              {userData && (
-                <>
-                  <ListGroup.Item className="text-center bg-light fw-semibold text-dark">
-                    Additional Details
-                  </ListGroup.Item>
-                  {renderItem("Address", userData.address)}
-                  {renderItem("Gender", userData.gender)}
-                  {renderItem(
-                    "Date of Birth",
-                    userData.date_of_birth &&
-                    new Date(userData.date_of_birth).toLocaleDateString()
-                  )}
-                  {renderItem("Father's Name", userData.father_name)}
-                  {renderItem("Admission No.", userData.admission_no)}
-                  {renderItem("ID No.", userData.id_no)}
-                  {renderItem("Category", userData.category)}
-                  {renderItem("University ID", userData.university_id)}
-                </>
-              )}
+              {renderItem("ID", formData.id)}
+              {renderItem("Email", formData.email)}
+              {renderItem("Name", formData.name)}
+              {renderItem("Phone", formData.phone)}
+              {renderItem("Country", formData.country)}
             </ListGroup>
 
-            <Card.Footer className="text-center bg-light">
+            <Card.Footer className="text-center bg-light d-flex gap-2 justify-content-center">
               <Button variant="primary" onClick={() => setShowModal(true)}>
                 Update Profile
+              </Button>
+              <Button variant="primary" onClick={() => setShowModal(true)}>
+                Change Password
               </Button>
             </Card.Footer>
           </Card>
@@ -425,11 +336,11 @@ const Setting = () => {
         <Modal.Body>
           <Form onSubmit={handleUpdateProfile}>
             <Form.Group className="mb-3">
-              <Form.Label>Full Name</Form.Label>
+              <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
-                name="full_name"
-                value={formData.full_name}
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
               />
             </Form.Group>
@@ -455,61 +366,14 @@ const Setting = () => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Address</Form.Label>
+              <Form.Label>Country</Form.Label>
               <Form.Control
                 type="text"
-                name="address"
-                value={formData.address}
+                name="country"
+                value={formData.country}
                 onChange={handleChange}
               />
             </Form.Group>
-
-            {loginDetail.role !== "admin" && (
-              <>
-                <Form.Group className="mb-3">
-                  <Form.Label>Gender</Form.Label>
-                  <Form.Select
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </Form.Select>
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Date of Birth</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="date_of_birth"
-                    value={formData.date_of_birth}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Father's Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="father_name"
-                    value={formData.father_name}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>ID No.</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="id_no"
-                    value={formData.id_no}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              </>
-            )}
 
             <Button variant="primary" type="submit">
               Save Changes
