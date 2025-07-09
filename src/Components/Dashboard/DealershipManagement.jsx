@@ -336,7 +336,7 @@ const DealershipManagement = () => {
           </div>
 
           {/* Pagination */}
-      
+
         </div>
 
       </main>
