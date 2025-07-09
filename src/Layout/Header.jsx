@@ -25,8 +25,8 @@ const Header = ({ onToggleSidebar }) => {
       console.log(error)
     }
   }
-const userData = JSON.parse(localStorage.getItem("login_detail"));
-console.log("Email:", userData.email);
+  const userData = JSON.parse(localStorage.getItem("login_detail"));
+  console.log("Email:", userData.email);
 
   return (
     <header className="py-4 px-3 header position-relative">
@@ -64,7 +64,7 @@ console.log("Email:", userData.email);
             <span className="d-none d-sm-inline text-dark">Synced</span>
           </button> */}
 
-   
+
 
 
           {/* User profile */}

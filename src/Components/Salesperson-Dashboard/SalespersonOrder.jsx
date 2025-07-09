@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEdit, FaTrash, FaDownload, FaPlus, FaFilter } from "react-icons/fa";
+import api from "../../../utils/axiosInterceptor";
 
 // const ordersData = [
 //   {
@@ -170,16 +171,69 @@ const OrderManagement = () => {
   };
 
   useEffect(() => {
+    // const fetchOrders = async () => {
+    //   const loginDetails = JSON.parse(localStorage.getItem("login_detail"));
+    //   const country = loginDetails?.country || "India"; // Default to India if not found
+    //   try {
+    //     const response = await axios.get(`https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/getOrderByCountry/${country}`);
+    //     setOrdersData(response?.data?.data); // Assuming the response data is an array of orders
+    //   } catch (error) {
+    //     console.error("Error fetching orders:", error);
+    //   }
+    // };
     const fetchOrders = async () => {
       const loginDetails = JSON.parse(localStorage.getItem("login_detail"));
       const country = loginDetails?.country || "India"; // Default to India if not found
       try {
-        const response = await axios.get(`https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/getOrderByCountry/${country}`);
-        setOrdersData(response?.data?.data); // Assuming the response data is an array of orders
+        const response = await api.get(`/getOrderByCountry/${country}`);
+        // const response = await axios.get(`https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/getOrderByCountry/${country}`);
+        const mappedOrders = response.data.data.map(order => ({
+          id: order.id,
+          customer: order.customer,
+          dealership: order.dealership,
+          product: order.product,
+          quantity: order.qty,
+          status: order.status,
+          orderDate: new Date(order.order_date).toLocaleDateString(), // Format date as needed
+          delivery: new Date(order.delivery).toLocaleDateString(),
+          total: `$${parseFloat(order.total).toFixed(2)}`, // Format total as currency
+          sourceName: order.source,
+          stockNumber: order.stock_no,
+          manuNumber: order.manu_no,
+          manuNumber2: order.manu_no2,
+          invoiceNumber: order.invoice_no,
+          payment: order.payment,
+          paymentStatus: order.pay_status,
+          paymentTerms: order.pay_terms,
+          vin: order.vin_no,
+          engineNumber: order.engine_no,
+          keyNumber: order.key_no,
+          blNumber: order.bl_no,
+          shipDate: new Date(order.ship_date).toLocaleDateString(),
+          brand: order.brand,
+          ocnSpec: order.ocn_spec,
+          model: order.model,
+          country: order.country,
+          myYear: order.year,
+          exteriorColor: order.ext_color,
+          interiorColor: order.int_color,
+          tbd3: order.tbd3,
+          orderMonth: order.order_month,
+          prodEst: new Date(order.prod_est).toLocaleDateString(),
+          shipEst: new Date(order.ship_est).toLocaleDateString(),
+          estArr: new Date(order.est_arr).toLocaleDateString(),
+          shpDte: new Date(order.shp_dte).toLocaleDateString(),
+          arrEst: new Date(order.arr_est).toLocaleDateString(),
+          arrDate: order.arr_date ? new Date(order.arr_date).toLocaleDateString() : null,
+          shipIndication: order.ship_ind
+        }));
+        setOrdersData(mappedOrders);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
+
+
     fetchOrders();
   }, []);
 
@@ -196,7 +250,7 @@ const OrderManagement = () => {
     // Search term filtering
     const lowerTerm = searchTerm.toLowerCase();
     const matchesSearch =
-      order.id.toLowerCase().includes(lowerTerm) ||
+      // order.id.toLowerCase().includes(lowerTerm) ||
       order.customer.toLowerCase().includes(lowerTerm) ||
       order.dealership.toLowerCase().includes(lowerTerm) ||
       order.product.toLowerCase().includes(lowerTerm) ||
@@ -328,7 +382,8 @@ const OrderManagement = () => {
           <table className="min-w-full text-sm text-left whitespace-nowrap">
             <thead className="bg-gray-100 text-gray-700">
               <tr>
-                <th className="px-4 py-2">ORDER ID</th>
+                <th className="px-4 py-2">Sr.No.</th>
+                {/* <th className="px-4 py-2">ORDER ID</th> */}
                 <th className="px-4 py-2">CUSTOMER</th>
                 <th className="px-4 py-2">DEALERSHIP</th>
                 <th className="px-4 py-2">PRODUCT</th>
@@ -372,7 +427,8 @@ const OrderManagement = () => {
             <tbody>
               {filteredOrders.map((order, idx) => (
                 <tr key={idx} className="border-t">
-                  <td className="px-4 py-2 text-blue-600 underline">{order.id}</td>
+                  <td className="px-4 py-2">{idx + 1}</td>
+                  {/* <td className="px-4 py-2 text-blue-600 underline">{order.id}</td> */}
                   <td className="px-4 py-2">{order.customer}</td>
                   <td className="px-4 py-2">{order.dealership}</td>
                   <td className="px-4 py-2 whitespace-pre-line">{order.product}</td>
