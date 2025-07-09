@@ -66,9 +66,9 @@ const Login = () => {
     }
   };
 
-const autoLogin = (email, password) => {
-  setFormData({ email, password }); // Only set the fields, no login
-};
+  const autoLogin = (email, password) => {
+    setFormData({ email, password }); // Only set the fields, no login
+  };
 
 
   return (
@@ -128,35 +128,35 @@ const autoLogin = (email, password) => {
                   <span>Log in</span>
                   <i className="fas fa-arrow-right ml-2"></i>
                 </button>
-            <div className="row mt-3 p-1">
-  <div className="col-sm-4">
-    <button
-      className="text-white rounded-lg text-base p-2 w-full"
-      style={{ backgroundColor: "#023047" }}
-      onClick={() => autoLogin("admin@gmail.com", "admin@123")}
-    >
-      Admin
-    </button>
-  </div>
-  <div className="col-sm-4">
-    <button
-      className="text-white rounded-lg text-base p-2 w-full"
-      style={{ backgroundColor: "#023047" }}
-      onClick={() => autoLogin("manager@gmail.com", "manager@123")}
-    >
-      Manager
-    </button>
-  </div>
-  <div className="col-sm-4">
-    <button
-      className="text-white rounded-lg text-base p-2 w-full"
-      style={{ backgroundColor: "#023047" }}
-      onClick={() => autoLogin("salesperson@gmail.com", "salesperson@123")}
-    >
-      Salesperson
-    </button>
-  </div>
-</div>
+                <div className="row mt-3 p-1">
+                  <div className="col-sm-4">
+                    <button
+                      className="text-white rounded-lg text-base p-2 w-full"
+                      style={{ backgroundColor: "#023047" }}
+                      onClick={() => autoLogin("admin@gmail.com", "admin@123")}
+                    >
+                      Admin
+                    </button>
+                  </div>
+                  <div className="col-sm-4">
+                    <button
+                      className="text-white rounded-lg text-base p-2 w-full"
+                      style={{ backgroundColor: "#023047" }}
+                      onClick={() => autoLogin("manager@gmail.com", "manager@123")}
+                    >
+                      Manager
+                    </button>
+                  </div>
+                  <div className="col-sm-4">
+                    <button
+                      className="text-white rounded-lg text-base p-2 w-full"
+                      style={{ backgroundColor: "#023047" }}
+                      onClick={() => autoLogin("salesperson@gmail.com", "salesperson@123")}
+                    >
+                      Salesperson
+                    </button>
+                  </div>
+                </div>
 
 
               </div>

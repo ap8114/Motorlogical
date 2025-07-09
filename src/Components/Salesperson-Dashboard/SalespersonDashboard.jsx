@@ -8,7 +8,7 @@ const SalespersonDashboard = () => {
         { id: 'ORD-2487', customer: 'Michael Brown', product: 'Smart Watch', quantity: 3, status: 'Shipped', date: '2025-06-18' },
         { id: 'ORD-2475', customer: 'Sarah Davis', product: 'Bluetooth Speaker', quantity: 1, status: 'Pending', date: '2025-06-19' },
     ]);
-    
+
     // Sample data for inventory
     const [inventory, setInventory] = useState([
         { name: 'Premium Laptop', sku: 'LP-2025-PRO', quantity: 25, status: 'In Stock' },
@@ -18,7 +18,7 @@ const SalespersonDashboard = () => {
         { name: 'Wireless Charger', sku: 'WC-100-WHT', quantity: 15, status: 'In Stock' },
         { name: 'External SSD', sku: 'SSD-1TB-BLK', quantity: 3, status: 'Low Stock' },
     ]);
-    
+
     // Sample data for customers
     const [customers, setCustomers] = useState([
         { name: 'John Smith', phone: '(555) 123-4567', email: 'john.smith@example.com', totalOrders: 5, lastOrderDate: '2025-06-15' },
@@ -26,7 +26,7 @@ const SalespersonDashboard = () => {
         { name: 'Michael Brown', phone: '(555) 456-7890', email: 'michael.b@example.com', totalOrders: 8, lastOrderDate: '2025-06-18' },
         { name: 'Sarah Davis', phone: '(555) 789-0123', email: 'sarah.d@example.com', totalOrders: 1, lastOrderDate: '2025-06-19' },
     ]);
-    
+
     // Form state for new order
     const [newOrder, setNewOrder] = useState({
         product: '',
@@ -35,10 +35,10 @@ const SalespersonDashboard = () => {
         customerPhone: '',
         orderNotes: '',
     });
-    
+
     // State for expanded customer
     const [expandedCustomer, setExpandedCustomer] = useState(null);
-    
+
     // Handle form input changes
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -47,7 +47,7 @@ const SalespersonDashboard = () => {
             [name]: value,
         });
     };
-    
+
     // Handle quantity change with buttons
     const handleQuantityChange = (amount) => {
         setNewOrder({
@@ -55,7 +55,7 @@ const SalespersonDashboard = () => {
             quantity: Math.max(1, newOrder.quantity + amount),
         });
     };
-    
+
     // Handle form submission
     const handleSubmitOrder = (e) => {
         e.preventDefault();
@@ -78,7 +78,7 @@ const SalespersonDashboard = () => {
             orderNotes: '',
         });
     };
-    
+
     // Toggle customer expansion
     const toggleCustomerExpansion = (customerName) => {
         if (expandedCustomer === customerName) {
@@ -87,7 +87,7 @@ const SalespersonDashboard = () => {
             setExpandedCustomer(customerName);
         }
     };
-    
+
     // Get status color class
     const getStatusColor = (status) => {
         switch (status) {
@@ -103,7 +103,7 @@ const SalespersonDashboard = () => {
                 return 'bg-light text-dark';
         }
     };
-    
+
     // Get inventory status color class
     const getInventoryStatusColor = (status) => {
         switch (status) {
@@ -117,7 +117,7 @@ const SalespersonDashboard = () => {
                 return 'bg-light text-dark';
         }
     };
-    
+
     return (
         <div className="container-fluid p-0">
             <div className="container py-4">
@@ -125,7 +125,7 @@ const SalespersonDashboard = () => {
                     <h1 className="h2">Welcome back, Sales Manager</h1>
                     <p className="text-muted">Here's what's happening with your sales today.</p>
                 </div>
-                
+
                 {/* Stats Cards */}
                 <div className="row mb-4">
                     <div className="col-md-6 col-lg-3 mb-3">
@@ -147,7 +147,7 @@ const SalespersonDashboard = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     <div className="col-md-6 col-lg-3 mb-3">
                         <div className="card h-100">
                             <div className="card-body">
@@ -167,7 +167,7 @@ const SalespersonDashboard = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     <div className="col-md-6 col-lg-3 mb-3">
                         <div className="card h-100">
                             <div className="card-body">
@@ -187,7 +187,7 @@ const SalespersonDashboard = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     <div className="col-md-6 col-lg-3 mb-3">
                         <div className="card h-100">
                             <div className="card-body">
@@ -208,7 +208,7 @@ const SalespersonDashboard = () => {
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Order Management Section */}
                 <div className="card mb-4">
                     <div className="card-header bg-white">
@@ -238,7 +238,7 @@ const SalespersonDashboard = () => {
                                         ))}
                                     </select>
                                 </div>
-                                
+
                                 <div className="col-md-6">
                                     <label htmlFor="quantity" className="form-label">Quantity</label>
                                     <div className="input-group">
@@ -268,7 +268,7 @@ const SalespersonDashboard = () => {
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 <div className="col-md-6">
                                     <label htmlFor="customerName" className="form-label">Customer Name</label>
                                     <input
@@ -281,7 +281,7 @@ const SalespersonDashboard = () => {
                                         required
                                     />
                                 </div>
-                                
+
                                 <div className="col-md-6">
                                     <label htmlFor="customerPhone" className="form-label">Customer Phone</label>
                                     <input
@@ -294,7 +294,7 @@ const SalespersonDashboard = () => {
                                         required
                                     />
                                 </div>
-                                
+
                                 <div className="col-12">
                                     <label htmlFor="orderNotes" className="form-label">Order Notes</label>
                                     <textarea
@@ -306,7 +306,7 @@ const SalespersonDashboard = () => {
                                         className="form-control"
                                     ></textarea>
                                 </div>
-                                
+
                                 <div className="col-12 text-end">
                                     <button
                                         type="submit"
@@ -318,7 +318,7 @@ const SalespersonDashboard = () => {
                                 </div>
                             </div>
                         </form>
-                        
+
                         <h3 className="h5 mb-3">My Orders</h3>
                         <div className="table-responsive">
                             <table className="table table-hover">
@@ -350,13 +350,13 @@ const SalespersonDashboard = () => {
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <div className="mt-4">
                             <h4 className="h6 mb-3">Order Status Tracker</h4>
                             <div className="d-flex justify-content-between">
                                 {['Pending', 'Processing', 'Shipped', 'Delivered'].map((status, index) => (
                                     <div key={status} className="text-center">
-                                        <div className={`rounded-circle d-inline-flex align-items-center justify-content-center ${index === 0 ? 'bg-primary text-white' : 'bg-light text-muted'}`} style={{width: '36px', height: '36px'}}>
+                                        <div className={`rounded-circle d-inline-flex align-items-center justify-content-center ${index === 0 ? 'bg-primary text-white' : 'bg-light text-muted'}`} style={{ width: '36px', height: '36px' }}>
                                             {index === 0 && <i className="fas fa-clipboard-check"></i>}
                                             {index === 1 && <i className="fas fa-cog"></i>}
                                             {index === 2 && <i className="fas fa-shipping-fast"></i>}
@@ -369,7 +369,7 @@ const SalespersonDashboard = () => {
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Inventory Section */}
                 <div className="card mb-4">
                     <div className="card-header bg-white">
@@ -390,20 +390,20 @@ const SalespersonDashboard = () => {
                             </div>
                             <div className="d-flex gap-2">
                                 <button className="btn btn-sm btn-outline-secondary d-flex align-items-center">
-                                    <span className="badge bg-success me-2" style={{width: '8px', height: '8px'}}></span>
+                                    <span className="badge bg-success me-2" style={{ width: '8px', height: '8px' }}></span>
                                     In Stock
                                 </button>
                                 <button className="btn btn-sm btn-outline-secondary d-flex align-items-center">
-                                    <span className="badge bg-warning me-2" style={{width: '8px', height: '8px'}}></span>
+                                    <span className="badge bg-warning me-2" style={{ width: '8px', height: '8px' }}></span>
                                     Low Stock
                                 </button>
                                 <button className="btn btn-sm btn-outline-secondary d-flex align-items-center">
-                                    <span className="badge bg-danger me-2" style={{width: '8px', height: '8px'}}></span>
+                                    <span className="badge bg-danger me-2" style={{ width: '8px', height: '8px' }}></span>
                                     Out of Stock
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div className="table-responsive">
                             <table className="table table-hover">
                                 <thead>
@@ -437,7 +437,7 @@ const SalespersonDashboard = () => {
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mt-3">
                             <div className="mb-2 mb-md-0">
                                 Showing <b>1</b> to <b>{inventory.length}</b> of <b>{inventory.length}</b> items
@@ -462,7 +462,7 @@ const SalespersonDashboard = () => {
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Customer Information Section */}
                 <div className="card">
                     <div className="card-header bg-white">
@@ -482,7 +482,7 @@ const SalespersonDashboard = () => {
                                 />
                             </div>
                         </div>
-                        
+
                         <div className="table-responsive">
                             <table className="table table-hover">
                                 <thead>
@@ -501,7 +501,7 @@ const SalespersonDashboard = () => {
                                             <tr>
                                                 <td>
                                                     <div className="d-flex align-items-center">
-                                                        <div className="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-3" style={{width: '36px', height: '36px'}}>
+                                                        <div className="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-3" style={{ width: '36px', height: '36px' }}>
                                                             <span className="text-primary fw-medium">
                                                                 {customer.name.split(' ').map(n => n[0]).join('')}
                                                             </span>
@@ -576,7 +576,7 @@ const SalespersonDashboard = () => {
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mt-3">
                             <div className="mb-2 mb-md-0">
                                 Showing <b>1</b> to <b>{customers.length}</b> of <b>{customers.length}</b> customers
