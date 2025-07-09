@@ -56,6 +56,7 @@ const Login = () => {
           else if (role === "finance") {
             navigate("/finance/financedashboard");
           }
+       
         }, 300);
 
       } else {
@@ -134,7 +135,7 @@ const Login = () => {
                   <i className="fas fa-arrow-right ml-2"></i>
                 </button>
                 <div className="row mt-3 p-1">
-                  <div className="col-sm-4">
+                  <div className="col-sm-6 mt-3">
                     <button
                       className="text-white rounded-lg text-base p-2 w-full"
                       style={{ backgroundColor: "#023047" }}
@@ -143,7 +144,7 @@ const Login = () => {
                       Admin
                     </button>
                   </div>
-                  <div className="col-sm-4">
+                  <div className="col-sm-6 mt-3">
                     <button
                       className="text-white rounded-lg text-base p-2 w-full"
                       style={{ backgroundColor: "#023047" }}
@@ -152,13 +153,22 @@ const Login = () => {
                       Manager
                     </button>
                   </div>
-                  <div className="col-sm-4">
+                  <div className="col-sm-6 mt-3">
                     <button
                       className="text-white rounded-lg text-base p-2 w-full"
                       style={{ backgroundColor: "#023047" }}
                       onClick={() => autoLogin("salesperson@gmail.com", "salesperson@123")}
                     >
                       Salesperson
+                    </button>
+                  </div>
+                   <div className="col-sm-6 mt-3">
+                    <button
+                      className="text-white rounded-lg text-base p-2 w-full"
+                      style={{ backgroundColor: "#023047" }}
+                      onClick={() => autoLogin("finance@gmail.com", "finance@123")}
+                    >
+                      Finance
                     </button>
                   </div>
                 </div>

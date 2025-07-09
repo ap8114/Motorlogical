@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaEye, FaEdit, FaTrash, FaDownload, FaPlus, FaFilter } from "react-icons/fa";
 import Swal from "sweetalert2";
 import api from "../../../utils/axiosInterceptor";
+import { toast } from "react-toastify";
 
 const FinanceOrder = () => {
   const [modalShow, setModalShow] = useState(false);
@@ -11,6 +12,10 @@ const FinanceOrder = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+
+
+
+
   const [filters, setFilters] = useState({
     status: "",
     brand: "",
@@ -149,7 +154,7 @@ const FinanceOrder = () => {
     e.preventDefault();
     try {
       const userDetails = getUserDetails();
-      
+
       // Prepare the order data with the appropriate user ID
       const orderData = {
         ...selectedOrder,
@@ -189,6 +194,31 @@ const FinanceOrder = () => {
     }
   };
 
+const handleStatusChange = async (orderId, newStatus) => {
+  try {
+    const response = await api.patch(
+      `order/statusbyfinance/${orderId}`,
+      {
+        finance_order_status: newStatus, // ✅ use correct backend key
+      }
+    );
+
+    toast.success("Order status updated successfully!");
+
+    // 🔄 Update the UI without refetching all orders
+    setOrdersData(prevOrders =>
+      prevOrders.map(order =>
+        order.id === orderId
+          ? { ...order, finance_order_status: newStatus }
+          : order
+      )
+    );
+
+  } catch (error) {
+    toast.error("Failed to update order status.");
+    console.error(error);
+  }
+};
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -273,15 +303,15 @@ const FinanceOrder = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <button className="w-full sm:w-auto bg-green-600 text-white px-4 py-2 rounded inline-flex items-center justify-center">
+          {/* <button className="w-full sm:w-auto bg-green-600 text-white px-4 py-2 rounded inline-flex items-center justify-center">
             <FaDownload className="mr-2" /> Download CSV
-          </button>
-          <button
+          </button> */}
+          {/* <button
             onClick={() => handleOpenModal("add")}
             className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded inline-flex items-center justify-center"
           >
             <FaPlus className="mr-2" /> Create New Order
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -387,6 +417,7 @@ const FinanceOrder = () => {
                 <th className="px-4 py-2">PRODUCT</th>
                 <th className="px-4 py-2">QTY</th>
                 <th className="px-4 py-2">STATUS</th>
+                <th className="px-4 py-2">ORDER STATUS</th>
                 <th className="px-4 py-2">ORDER DATE</th>
                 <th className="px-4 py-2">DELIVERY</th>
                 <th className="px-4 py-2">TOTAL</th>
@@ -404,35 +435,42 @@ const FinanceOrder = () => {
                     <td className="px-4 py-2">{order.qty}</td>
                     <td className="px-4 py-2">
                       <span className={`px-2 py-1 text-xs border rounded ${order.status === "Pending" ? "bg-yellow-100 text-yellow-800 border-yellow-200" :
-                          order.status === "Processing" ? "bg-blue-100 text-blue-800 border-blue-200" :
-                            order.status === "Completed" ? "bg-green-100 text-green-800 border-green-200" :
-                              "bg-gray-100 text-gray-800 border-gray-200"
+                        order.status === "Processing" ? "bg-blue-100 text-blue-800 border-blue-200" :
+                          order.status === "Completed" ? "bg-green-100 text-green-800 border-green-200" :
+                            "bg-gray-100 text-gray-800 border-gray-200"
                         }`}>
                         {order.status}
                       </span>
                     </td>
+                  <td className="px-4 py-2">
+  <select
+    className={`form-select fw-bold text-white 
+      ${order.finance_order_status === "Yes" ? "bg-success" :
+        order.finance_order_status === "No" ? "bg-danger" : "bg-secondary"}`}
+    value={order.finance_order_status || ""}
+    onChange={(e) => handleStatusChange(order.id, e.target.value)}
+  >
+    <option value="">Select</option>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+</td>
+
+
+
                     <td className="px-4 py-2">{formatDate(order.order_date)}</td>
                     <td className="px-4 py-2">{formatDate(order.delivery)}</td>
                     <td className="px-4 py-2">${order.total?.toLocaleString()}</td>
-                    <td className="px-4 py-2 space-x-2">
+                    <td className="px-4 py-2 ">
                       <button
-                        className="text-blue-600"
+                        className="btn btn-outline-primary btn-sm"
                         onClick={() => handleOpenModal("view", order)}
                       >
                         <FaEye />
                       </button>
-                      <button
-                        className="text-green-600"
-                        onClick={() => handleOpenModal("edit", order)}
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        className="text-red-600"
-                        onClick={() => handleDelete(order.id)}
-                      >
-                        <FaTrash />
-                      </button>
+
+
+
                     </td>
                   </tr>
                 ))
