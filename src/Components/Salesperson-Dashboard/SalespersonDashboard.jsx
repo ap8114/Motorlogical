@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import api from '../../../utils/axiosInterceptor';
 
 const SalespersonDashboard = () => {
     // Sample data for orders
@@ -34,6 +35,12 @@ const SalespersonDashboard = () => {
         customerName: '',
         customerPhone: '',
         orderNotes: '',
+    });
+
+    const [apiData, setApiData] = useState({
+        totalOrders: 0,
+        totalInventory: 0,
+        totalDealerships: 0,
     });
 
     // State for expanded customer
@@ -125,6 +132,25 @@ const SalespersonDashboard = () => {
         return "Good evening";
     };
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const loginDetails = JSON.parse(localStorage.getItem("login_detail"));
+                const country = loginDetails?.country || "India"; // Default to India if not found
+                const response = await api.get(`/dashboard/getsalespersonDashboard/${country}`);
+                const result = response?.data?.data;
+                setApiData({
+                    totalOrders: result.total_orders,
+                    totalInventory: result.total_inventorys,
+                    totalDealerships: result.total_dealerships,
+                });
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <div className="container-fluid p-0">
@@ -146,7 +172,7 @@ const SalespersonDashboard = () => {
                                     </div>
                                     <div className="ms-3">
                                         <p className="text-muted mb-1">Total Orders</p>
-                                        <h3 className="mb-0">125</h3>
+                                        <h3 className="mb-0">{apiData.totalOrders}</h3>
 
                                     </div>
                                 </div>
@@ -164,7 +190,7 @@ const SalespersonDashboard = () => {
                                     </div>
                                     <div className="ms-3">
                                         <p className="text-muted mb-1">Total Logistic</p>
-                                        <h3 className="mb-0">12,426</h3>
+                                        <h3 className="mb-0">{apiData.totalInventory}</h3>
 
                                     </div>
                                 </div>
@@ -183,7 +209,7 @@ const SalespersonDashboard = () => {
                                     </div>
                                     <div className="ms-3">
                                         <p className="text-muted mb-1">Total dealership</p>
-                                        <h3 className="mb-0">85</h3>
+                                        <h3 className="mb-0">{apiData.totalDealerships}</h3>
 
                                     </div>
                                 </div>

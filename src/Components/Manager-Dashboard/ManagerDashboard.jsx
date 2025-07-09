@@ -165,7 +165,7 @@ const ManagerDashboard = () => {
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-800">Dealership Overview</h1>
                     <h2 className="text-xl text-gray-600 mt-1">{dealershipName}</h2>
-                  
+
                 </div>
 
                 {/* Summary Cards */}
@@ -229,27 +229,26 @@ const ManagerDashboard = () => {
 
                 {/* Sales Graph Section */}
                 <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-                  <div className="flex flex-col gap-4 md:flex-row md:justify-between md:items-center mb-6">
-  <h3 className="text-lg sm:text-xl font-semibold text-gray-800">
-    Sales Performance
-  </h3>
+                    <div className="flex flex-col gap-4 md:flex-row md:justify-between md:items-center mb-6">
+                        <h3 className="text-lg sm:text-xl font-semibold text-gray-800">
+                            Sales Performance
+                        </h3>
 
-  <div className="flex flex-wrap gap-2">
-    {['daily', 'weekly', 'monthly'].map((range) => (
-      <button
-        key={range}
-        onClick={() => handleTimeRangeChange(range)}
-        className={`px-4 py-2 text-sm font-medium rounded-md whitespace-nowrap cursor-pointer ${
-          timeRange === range
-            ? 'bg-indigo-600 text-white'
-            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-        }`}
-      >
-        {range.charAt(0).toUpperCase() + range.slice(1)}
-      </button>
-    ))}
-  </div>
-</div>
+                        <div className="flex flex-wrap gap-2">
+                            {['daily', 'weekly', 'monthly'].map((range) => (
+                                <button
+                                    key={range}
+                                    onClick={() => handleTimeRangeChange(range)}
+                                    className={`px-4 py-2 text-sm font-medium rounded-md whitespace-nowrap cursor-pointer ${timeRange === range
+                                            ? 'bg-indigo-600 text-white'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        }`}
+                                >
+                                    {range.charAt(0).toUpperCase() + range.slice(1)}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
 
                     <div id="sales-chart" className="w-full h-80"></div>
                     <div className="flex justify-end mt-4">
