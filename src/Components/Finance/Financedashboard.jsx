@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SalespersonDashboard = () => {
+const Financedashboard = () => {
     // Sample data for orders
     const [orders, setOrders] = useState([
         { id: 'ORD-2506', customer: 'John Smith', product: 'Premium Laptop', quantity: 2, status: 'Delivered', date: '2025-06-15' },
@@ -8,7 +8,7 @@ const SalespersonDashboard = () => {
         { id: 'ORD-2487', customer: 'Michael Brown', product: 'Smart Watch', quantity: 3, status: 'Shipped', date: '2025-06-18' },
         { id: 'ORD-2475', customer: 'Sarah Davis', product: 'Bluetooth Speaker', quantity: 1, status: 'Pending', date: '2025-06-19' },
     ]);
-
+    
     // Sample data for inventory
     const [inventory, setInventory] = useState([
         { name: 'Premium Laptop', sku: 'LP-2025-PRO', quantity: 25, status: 'In Stock' },
@@ -18,7 +18,7 @@ const SalespersonDashboard = () => {
         { name: 'Wireless Charger', sku: 'WC-100-WHT', quantity: 15, status: 'In Stock' },
         { name: 'External SSD', sku: 'SSD-1TB-BLK', quantity: 3, status: 'Low Stock' },
     ]);
-
+    
     // Sample data for customers
     const [customers, setCustomers] = useState([
         { name: 'John Smith', phone: '(555) 123-4567', email: 'john.smith@example.com', totalOrders: 5, lastOrderDate: '2025-06-15' },
@@ -26,7 +26,7 @@ const SalespersonDashboard = () => {
         { name: 'Michael Brown', phone: '(555) 456-7890', email: 'michael.b@example.com', totalOrders: 8, lastOrderDate: '2025-06-18' },
         { name: 'Sarah Davis', phone: '(555) 789-0123', email: 'sarah.d@example.com', totalOrders: 1, lastOrderDate: '2025-06-19' },
     ]);
-
+    
     // Form state for new order
     const [newOrder, setNewOrder] = useState({
         product: '',
@@ -35,10 +35,10 @@ const SalespersonDashboard = () => {
         customerPhone: '',
         orderNotes: '',
     });
-
+    
     // State for expanded customer
     const [expandedCustomer, setExpandedCustomer] = useState(null);
-
+    
     // Handle form input changes
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -47,7 +47,7 @@ const SalespersonDashboard = () => {
             [name]: value,
         });
     };
-
+    
     // Handle quantity change with buttons
     const handleQuantityChange = (amount) => {
         setNewOrder({
@@ -55,7 +55,7 @@ const SalespersonDashboard = () => {
             quantity: Math.max(1, newOrder.quantity + amount),
         });
     };
-
+    
     // Handle form submission
     const handleSubmitOrder = (e) => {
         e.preventDefault();
@@ -78,7 +78,7 @@ const SalespersonDashboard = () => {
             orderNotes: '',
         });
     };
-
+    
     // Toggle customer expansion
     const toggleCustomerExpansion = (customerName) => {
         if (expandedCustomer === customerName) {
@@ -87,7 +87,7 @@ const SalespersonDashboard = () => {
             setExpandedCustomer(customerName);
         }
     };
-
+    
     // Get status color class
     const getStatusColor = (status) => {
         switch (status) {
@@ -103,7 +103,7 @@ const SalespersonDashboard = () => {
                 return 'bg-light text-dark';
         }
     };
-
+    
     // Get inventory status color class
     const getInventoryStatusColor = (status) => {
         switch (status) {
@@ -117,7 +117,8 @@ const SalespersonDashboard = () => {
                 return 'bg-light text-dark';
         }
     };
-    const userData = JSON.parse(localStorage.getItem("login_detail"));
+
+        const userData = JSON.parse(localStorage.getItem("login_detail"));
     const getGreeting = () => {
         const hour = new Date().getHours();
         if (hour < 12) return "Good morning";
@@ -125,15 +126,16 @@ const SalespersonDashboard = () => {
         return "Good evening";
     };
 
-
+    
     return (
         <div className="container-fluid p-0">
             <div className="container py-4">
-                <div className="mb-8">
+               <div className="mb-8">
                     <h1 className="text-2xl font-bold text-gray-800">
                         {getGreeting()}, {userData?.name}!
                     </h1>
                 </div>
+                
                 {/* Stats Cards */}
                 <div className="row mb-4">
                     <div className="col-md-6 col-lg-4 mb-3">
@@ -146,33 +148,33 @@ const SalespersonDashboard = () => {
                                     <div className="ms-3">
                                         <p className="text-muted mb-1">Total Orders</p>
                                         <h3 className="mb-0">125</h3>
-
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                    
                     <div className="col-md-6 col-lg-4 mb-3">
                         <div className="card h-100">
                             <div className="card-body">
                                 <div className="d-flex align-items-center">
                                     <div className="p-3 rounded-circle bg-success bg-opacity-10 text-success">
-                                        <i className="fas fa-truck fs-4"></i>
+                                      <i className="fas fa-truck fs-4"></i>
 
                                     </div>
                                     <div className="ms-3">
                                         <p className="text-muted mb-1">Total Logistic</p>
                                         <h3 className="mb-0">12,426</h3>
-
+                                      
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-
+                    
+                
+                    
                     <div className="col-md-6 col-lg-4 mb-3">
                         <div className="card h-100">
                             <div className="card-body">
@@ -183,16 +185,16 @@ const SalespersonDashboard = () => {
                                     <div className="ms-3">
                                         <p className="text-muted mb-1">Total dealership</p>
                                         <h3 className="mb-0">85</h3>
-
+                                     
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-
+                
+          
+                
                 {/* Inventory Section */}
                 <div className="card mb-4">
                     <div className="card-header bg-white">
@@ -213,20 +215,20 @@ const SalespersonDashboard = () => {
                             </div>
                             <div className="d-flex gap-2">
                                 <button className="btn btn-sm btn-outline-secondary d-flex align-items-center">
-                                    <span className="badge bg-success me-2" style={{ width: '8px', height: '8px' }}></span>
+                                    <span className="badge bg-success me-2" style={{width: '8px', height: '8px'}}></span>
                                     In Stock
                                 </button>
                                 <button className="btn btn-sm btn-outline-secondary d-flex align-items-center">
-                                    <span className="badge bg-warning me-2" style={{ width: '8px', height: '8px' }}></span>
+                                    <span className="badge bg-warning me-2" style={{width: '8px', height: '8px'}}></span>
                                     Low Stock
                                 </button>
                                 <button className="btn btn-sm btn-outline-secondary d-flex align-items-center">
-                                    <span className="badge bg-danger me-2" style={{ width: '8px', height: '8px' }}></span>
+                                    <span className="badge bg-danger me-2" style={{width: '8px', height: '8px'}}></span>
                                     Out of Stock
                                 </button>
                             </div>
                         </div>
-
+                        
                         <div className="table-responsive">
                             <table className="table table-hover">
                                 <thead>
@@ -260,7 +262,7 @@ const SalespersonDashboard = () => {
                                 </tbody>
                             </table>
                         </div>
-
+                        
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mt-3">
                             <div className="mb-2 mb-md-0">
                                 Showing <b>1</b> to <b>{inventory.length}</b> of <b>{inventory.length}</b> items
@@ -285,12 +287,12 @@ const SalespersonDashboard = () => {
                         </div>
                     </div>
                 </div>
-
+                
                 {/* Customer Information Section */}
-
+          
             </div>
         </div>
     );
 };
 
-export default SalespersonDashboard;
+export default Financedashboard;

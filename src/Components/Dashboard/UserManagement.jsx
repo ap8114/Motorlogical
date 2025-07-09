@@ -31,6 +31,7 @@ const UserManagement = () => {
     email: "",
     password: "",
     role: "",
+    country: "",
     dealership_id: "",
     status: true,
 
@@ -153,6 +154,7 @@ const UserManagement = () => {
       password: "",
       role: "",
       dealership_id: "",
+      country: "",
       status: true,
 
 
@@ -170,6 +172,8 @@ const UserManagement = () => {
     setUserForm({
       name: user.name || "",
       email: user.email || "",
+      country: user.country || "",
+
       password: user.password || "",
       role: user.role || "",
       dealership_id: user.dealership_id || "",
@@ -263,6 +267,7 @@ const UserManagement = () => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.dealership_name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole =
       roleFilter === "all" ||
@@ -424,6 +429,12 @@ const UserManagement = () => {
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
+                        Country
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Status
                       </th>
 
@@ -476,7 +487,28 @@ const UserManagement = () => {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {user.dealership_name}
+                          {user.dealership_name ? (
+                            <span>{user.dealership_name}</span>
+                          ) : (
+                            <span
+                              style={{
+                                backgroundColor: "#dc3545", // Bootstrap red
+                                color: "#fff",
+                                padding: "2px 8px",
+                                borderRadius: "12px",
+                                fontSize: "12px",
+                                display: "flex",
+                                fontWeight: "500",
+                                width: "100px"
+                              }}
+                            >
+                              Not Assigned
+                            </span>
+                          )}
+
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {user.country}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
@@ -725,7 +757,20 @@ const UserManagement = () => {
                         ))}
                       </select>
                     </div>
-
+                    <div className="mb-3">
+                      <label htmlFor="country" className="form-label">
+                        Country *
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="country"
+                        value={userForm.country}
+                        onChange={(e) =>
+                          setUserForm({ ...userForm, country: e.target.value })
+                        }
+                      />
+                    </div>
 
                     {/* {isEditing && (
                       <>
@@ -927,7 +972,7 @@ const UserManagement = () => {
                                   </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  {user.dealership_id}
+                                  {user.dealership_name}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                   {new Date(

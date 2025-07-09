@@ -21,6 +21,7 @@ const DealershipManagement = () => {
     code: 'DLR-' + Math.floor(1000 + Math.random() * 9000),
     location: '',
     address: '',
+    country: '',
     city: '',
     state: '',
     contactPerson: '',
@@ -52,6 +53,7 @@ const DealershipManagement = () => {
       code: 'DLR-' + Math.floor(1000 + Math.random() * 9000),
       location: '',
       address: '',
+      country: '',
       city: '',
       state: '',
       contactPerson: '',
@@ -90,6 +92,7 @@ const DealershipManagement = () => {
         code: 'DLR-' + Math.floor(1000 + Math.random() * 9000),
         location: '',
         address: '',
+        country: '',
         city: '',
         state: '',
         contactPerson: '',
@@ -232,7 +235,7 @@ const DealershipManagement = () => {
                 <tr>
                   {[
                     'Dealership Name & Code',
-                    'Location',
+                    'Country',
                     'Contact Details',
                     'Status',
                     'Date Created',
@@ -272,8 +275,8 @@ const DealershipManagement = () => {
 
                     {/* Location */}
                     <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{dealership.state}</div>
-                      <div className="text-sm text-gray-500">{dealership.address}</div>
+                      <div className="text-sm text-gray-900">{dealership.country}</div>
+                      <div className="text-sm text-gray-500">{dealership.state}</div>
                     </td>
 
                     {/* Contact */}
@@ -366,6 +369,15 @@ const DealershipManagement = () => {
                           className="form-control"
                           value={dealershipForm.name}
                           onChange={(e) => setDealershipForm({ ...dealershipForm, name: e.target.value })}
+                        />
+                      </div>
+                       <div className="col-12">
+                        <label className="form-label">Country *</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={dealershipForm.country}
+                          onChange={(e) => setDealershipForm({ ...dealershipForm, country: e.target.value })}
                         />
                       </div>
 
