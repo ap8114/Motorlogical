@@ -566,36 +566,53 @@ const Reporting = () => {
   }, [isDownloadReady, reportType, reportData]);
 
   // Handle download report
-  const handleDownload = async () => {
-    try {
-      // Prepare request data
-      const requestData = {
-        report_type: reportType.toLowerCase(),
-        from_date: startDate,
-        to_date: endDate,
-        dealership_id: dealershipId,
-        export_type: exportType.toLowerCase()
-      };
+ const handleDownload = async () => {
+  try {
+    // Prepare request data
+    const requestData = {
+      report_type: reportType.toLowerCase(),
+      from_date: startDate,
+      to_date: endDate,
+      dealership_id: dealershipId,
+      export_type: exportType.toLowerCase()
+    };
 
-      // Make API call to download
-      const response = await api.post('/report/export', requestData, {
-        responseType: 'blob' // Important for file downloads
-      });
+    // Make API call to download
+    const response = await api.post('/report/export', requestData, {
+      responseType: 'blob', // Important for file downloads
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': exportType === 'Excel' 
+          ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+          : 'application/pdf'
+      }
+    });
 
-      // Create download link
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `${reportType}_Report_${new Date().toISOString().split('T')[0]}.${exportType.toLowerCase()}`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      
-    } catch (error) {
-      console.error("Error downloading report:", error);
-      // Handle error (show error message, etc.)
-    }
-  };
+    // Determine file extension
+    const extension = exportType.toLowerCase();
+    
+    // Create download link
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute(
+      'download', 
+      `${reportType}_Report_${new Date().toISOString().split('T')[0]}.${extension}`
+    );
+    
+    document.body.appendChild(link);
+    link.click();
+    
+    // Clean up
+    window.URL.revokeObjectURL(url);
+    link.remove();
+    
+  } catch (error) {
+    console.error("Error downloading report:", error);
+    // You might want to add error notification here
+    alert(`Download failed: ${error.message}`);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-50">
