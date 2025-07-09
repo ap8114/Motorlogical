@@ -239,8 +239,8 @@
 //   );
 // };
 
-// export default Setting;
-import React, { useState } from "react";
+// export default Setting;import React, { useState } from "react";
+import { useState } from "react";
 import {
   Card,
   ListGroup,
@@ -256,6 +256,7 @@ const Setting = () => {
   const loginDetail = JSON.parse(localStorage.getItem("login_detail"));
 
   const [showModal, setShowModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [formData, setFormData] = useState({
     id: loginDetail.id || "",
     email: loginDetail.email || "",
@@ -264,15 +265,33 @@ const Setting = () => {
     country: loginDetail.country || "",
   });
 
+  const [passwordData, setPasswordData] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleUpdateProfile = (e) => {
     e.preventDefault();
     alert("Profile updated successfully!"); // Simulating a successful update
     setShowModal(false);
+  };
+
+  const handleChangePassword = (e) => {
+    e.preventDefault();
+    alert("Password changed successfully!"); // Simulating a successful password change
+    setShowPasswordModal(false);
+    setPasswordData({ oldPassword: "", newPassword: "", confirmNewPassword: "" }); // Reset fields
   };
 
   const renderItem = (label, value) => {
@@ -320,7 +339,7 @@ const Setting = () => {
               <Button variant="primary" onClick={() => setShowModal(true)}>
                 Update Profile
               </Button>
-              <Button variant="primary" onClick={() => setShowModal(true)}>
+              <Button variant="primary" onClick={() => setShowPasswordModal(true)}>
                 Change Password
               </Button>
             </Card.Footer>
@@ -328,7 +347,7 @@ const Setting = () => {
         </Col>
       </Row>
 
-      {/* Modal */}
+      {/* Update Profile Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Update Profile</Modal.Title>
@@ -377,6 +396,53 @@ const Setting = () => {
 
             <Button variant="primary" type="submit">
               Save Changes
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+
+      {/* Change Password Modal */}
+      <Modal show={showPasswordModal} onHide={() => setShowPasswordModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Change Password</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleChangePassword}>
+            <Form.Group className="mb-3">
+              <Form.Label>Old Password</Form.Label>
+              <Form.Control
+                type="password"
+                name="oldPassword"
+                value={passwordData.oldPassword}
+                onChange={handlePasswordChange}
+                placeholder="Enter Old Password"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>New Password</Form.Label>
+              <Form.Control
+                type="password"
+                name="newPassword"
+                value={passwordData.newPassword}
+                onChange={handlePasswordChange}
+                placeholder="Enter New Password"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Confirm New Password</Form.Label>
+              <Form.Control
+                type="password"
+                name="confirmNewPassword"
+                value={passwordData.confirmNewPassword}
+                onChange={handlePasswordChange}
+                placeholder="Confirm New Password"
+              />
+            </Form.Group>
+
+            <Button variant="primary" type="submit">
+              Change Password
             </Button>
           </Form>
         </Modal.Body>
