@@ -111,12 +111,12 @@ const Login = () => {
                   type="password"
                   placeholder="Your Password"
                   name="password"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 loginnnn"
                   value={formData.password}
                   onChange={handleChange}
                 />
 
-                <label className="flex items-center text-sm text-gray-600">
+                <label className="flex items-center text-sm text-gray-600 loginnnn">
                   <input
                     type="checkbox"
                     className="form-checkbox h-4 w-4 text-indigo-600 rounded mr-2"
