@@ -79,6 +79,16 @@ const Sidebar = ({ isMobile, onLinkClick }) => {
 
                     </>
                 );
+                 case "finance":
+                return (
+                    <>
+                        {navItem("/finance/financedashboard", "fas fa-tachometer-alt", "Dashboard")}
+                        {navItem("/finance/financeOrder", "fas fa-box-open", "Order Management")}
+                        {navItem("/finance/settings", "fas fa-warehouse", "settings")}
+
+
+                    </>
+                );
             default:
                 return null;
         }

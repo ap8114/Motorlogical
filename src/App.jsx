@@ -19,6 +19,8 @@ import SalespersonDashboard from './Components/Salesperson-Dashboard/Salesperson
 import SalespersonInventory from './Components/Salesperson-Dashboard/SalespersonInventory';
 import SalespersonOrder from './Components/Salesperson-Dashboard/SalespersonOrder';
 import SalespersonCustomerInfo from './Components/Salesperson-Dashboard/SalespersonCustomerInfo';
+import Financedashboard from './Components/Finance/Financedashboard';
+import FinanceOrder from './Components/Finance/FinanceOrder';
 
 function App() {
   return (
@@ -64,6 +66,12 @@ function App() {
           <Route path="/salesperson/salespersoninventory" element={<SalespersonInventory />} />
             <Route path="/salesperson/salespersonorder" element={<SalespersonOrder />} /> 
            <Route path="/salesperson/salespersoncustomerinfo" element={<SalespersonCustomerInfo />} /> 
+          
+        </Route>
+         <Route element={<MainLayout />}>
+          <Route path="/finance/financedashboard" element={<Financedashboard />} />
+          <Route path="/finance/financeOrder" element={<FinanceOrder />} />
+        
           
         </Route>
 
