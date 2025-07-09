@@ -54,6 +54,7 @@ const Login = () => {
           else if (role === "finance") {
             navigate("/finance/financedashboard");
           }
+       
         }, 300);
 
       } else {
@@ -132,11 +133,7 @@ const Login = () => {
                   <i className="fas fa-arrow-right ml-2"></i>
                 </button>
                 <div className="row mt-3 p-1">
-<<<<<<< HEAD
-                  <div className="col-sm-6">
-=======
-                  <div className="col-sm-4">
->>>>>>> 2d7c93d8a0a47fd512d180cdb4e36cf8bd9b0437
+                  <div className="col-sm-6 mt-3">
                     <button
                       className="text-white rounded-lg text-base p-2 w-full"
                       style={{ backgroundColor: "#023047" }}
@@ -145,11 +142,7 @@ const Login = () => {
                       Admin
                     </button>
                   </div>
-<<<<<<< HEAD
-                  <div className="col-sm-6">
-=======
-                  <div className="col-sm-4">
->>>>>>> 2d7c93d8a0a47fd512d180cdb4e36cf8bd9b0437
+                  <div className="col-sm-6 mt-3">
                     <button
                       className="text-white rounded-lg text-base p-2 w-full"
                       style={{ backgroundColor: "#023047" }}
@@ -158,11 +151,7 @@ const Login = () => {
                       Manager
                     </button>
                   </div>
-<<<<<<< HEAD
                   <div className="col-sm-6 mt-3">
-=======
-                  <div className="col-sm-4">
->>>>>>> 2d7c93d8a0a47fd512d180cdb4e36cf8bd9b0437
                     <button
                       className="text-white rounded-lg text-base p-2 w-full"
                       style={{ backgroundColor: "#023047" }}
@@ -171,7 +160,6 @@ const Login = () => {
                       Salesperson
                     </button>
                   </div>
-<<<<<<< HEAD
                    <div className="col-sm-6 mt-3">
                     <button
                       className="text-white rounded-lg text-base p-2 w-full"
@@ -181,8 +169,6 @@ const Login = () => {
                       Finance
                     </button>
                   </div>
-=======
->>>>>>> 2d7c93d8a0a47fd512d180cdb4e36cf8bd9b0437
                 </div>
 
 
