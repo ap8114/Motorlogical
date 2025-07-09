@@ -765,8 +765,8 @@ const Dashboard = () => {
             try {
                 const response = await api.get('/dashboard/summary');
                 // const response = await fetch('https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/dashboard/summary');
-                const data = await response.json();
-                if (data.success) {
+                const data = await response.data;
+                if (response.status === 200) {
                     setDashboardData(data.data);
                 }
             } catch (error) {
