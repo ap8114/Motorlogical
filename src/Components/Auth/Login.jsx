@@ -56,7 +56,7 @@ const Login = () => {
           else if (role === "finance") {
             navigate("/finance/financedashboard");
           }
-       
+
         }, 300);
 
       } else {
@@ -162,7 +162,7 @@ const Login = () => {
                       Salesperson
                     </button>
                   </div>
-                   <div className="col-sm-6 mt-3">
+                  <div className="col-sm-6 mt-3">
                     <button
                       className="text-white rounded-lg text-base p-2 w-full"
                       style={{ backgroundColor: "#023047" }}

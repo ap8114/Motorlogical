@@ -751,6 +751,7 @@
 import React, { useState, useEffect } from 'react';
 import * as echarts from 'echarts';
 import { Link } from 'react-router-dom';
+import api from '../../../utils/axiosInterceptor';
 
 const Dashboard = () => {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -762,7 +763,8 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                const response = await fetch('https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/dashboard/summary');
+                const response = await api.get('/dashboard/summary');
+                // const response = await fetch('https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/dashboard/summary');
                 const data = await response.json();
                 if (data.success) {
                     setDashboardData(data.data);
