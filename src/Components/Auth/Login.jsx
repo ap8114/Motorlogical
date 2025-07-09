@@ -24,6 +24,8 @@ const Login = () => {
 
     try {
       const response = await axios.post(`${BASE_URL}/login`, formData);
+      console.log("response", response);
+
       const { token, user } = response.data;
 
 
