@@ -1,128 +1,130 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { FaEye, FaEdit, FaTrash, FaDownload, FaPlus, FaFilter } from "react-icons/fa";
+import api from "../../../utils/axiosInterceptor";
 
-const ordersData = [
-  {
-    id: "ORD-2025-001",
-    customer: "John Smith",
-    dealership: "City Motors",
-    product: "2025 SUV Model X\nExtended Warranty",
-    quantity: 1,
-    status: "Pending",
-    orderDate: "Jun 15, 2025",
-    delivery: "Jul 15, 2025",
-    total: "$45,000",
-    sourceName: "Supplier A",
-    stockNumber: "STK-001",
-    manuNumber: "MN-001",
-    manuNumber2: "MN-001-A",
-    invoiceNumber: "INV-2025-001",
-    payment: "Down Payment Paid",
-    paymentStatus: "Partial",
-    paymentTerms: "30 days",
-    vin: "1HGCM82633A123456",
-    engineNumber: "ENG-001",
-    keyNumber: "KEY-001",
-    blNumber: "BL-2025-001",
-    shipDate: "2025-06-20",
-    brand: "Toyota",
-    ocnSpec: "OCN-SPEC-001",
-    model: "Camry",
-    country: "Japan",
-    myYear: "2025",
-    exteriorColor: "Red",
-    interiorColor: "Black",
-    tbd3: "N/A",
-    orderMonth: "June",
-    prodEst: "2025-06-10",
-    shipEst: "2025-06-20",
-    estArr: "2025-07-15",
-    shpDte: "2025-06-20",
-    arrEst: "2025-07-15",
-    arrDate: "2025-07-15",
-    shipIndication: "On Time"
-  },
-  {
-    id: "ORD-2025-002",
-    customer: "Sarah Johnson",
-    dealership: "Highway Auto",
-    product: "2025 Sedan Model S\nPremium Package",
-    quantity: 1,
-    status: "Processing",
-    orderDate: "Jun 12, 2025",
-    delivery: "Jul 10, 2025",
-    total: "$38,500",
-    sourceName: "Supplier B",
-    stockNumber: "STK-002",
-    manuNumber: "MN-002",
-    manuNumber2: "MN-002-A",
-    invoiceNumber: "INV-2025-002",
-    payment: "Full Payment Pending",
-    paymentStatus: "Pending",
-    paymentTerms: "45 days",
-    vin: "2HGCM82633A654321",
-    engineNumber: "ENG-002",
-    keyNumber: "KEY-002",
-    blNumber: "BL-2025-002",
-    shipDate: "2025-06-18",
-    brand: "Honda",
-    ocnSpec: "OCN-SPEC-002",
-    model: "Accord",
-    country: "Japan",
-    myYear: "2025",
-    exteriorColor: "Blue",
-    interiorColor: "Beige",
-    tbd3: "N/A",
-    orderMonth: "June",
-    prodEst: "2025-06-08",
-    shipEst: "2025-06-18",
-    estArr: "2025-07-10",
-    shpDte: "2025-06-18",
-    arrEst: "2025-07-10",
-    arrDate: "2025-07-10",
-    shipIndication: "Delayed"
-  },
-  {
-    id: "ORD-2025-003",
-    customer: "Michael Brown",
-    dealership: "Global Motors",
-    product: "2025 Chang'an CS75 Plus\nPremium Edition",
-    quantity: 1,
-    status: "Completed",
-    orderDate: "May 20, 2025",
-    delivery: "Jun 25, 2025",
-    total: "$32,000",
-    sourceName: "Supplier C",
-    stockNumber: "STK-003",
-    manuNumber: "MN-003",
-    manuNumber2: "MN-003-A",
-    invoiceNumber: "INV-2025-003",
-    payment: "Full Payment Paid",
-    paymentStatus: "Paid",
-    paymentTerms: "15 days",
-    vin: "3HGCM82633A789012",
-    engineNumber: "ENG-003",
-    keyNumber: "KEY-003",
-    blNumber: "BL-2025-003",
-    shipDate: "2025-06-05",
-    brand: "Chang'an",
-    ocnSpec: "OCN-SPEC-003",
-    model: "CS75 Plus",
-    country: "China",
-    myYear: "2025",
-    exteriorColor: "White",
-    interiorColor: "Brown",
-    tbd3: "N/A",
-    orderMonth: "May",
-    prodEst: "2025-05-25",
-    shipEst: "2025-06-05",
-    estArr: "2025-06-25",
-    shpDte: "2025-06-05",
-    arrEst: "2025-06-25",
-    arrDate: "2025-06-25",
-    shipIndication: "On Time"
-  }
-];
+// const ordersData = [
+//   {
+//     id: "ORD-2025-001",
+//     customer: "John Smith",
+//     dealership: "City Motors",
+//     product: "2025 SUV Model X\nExtended Warranty",
+//     quantity: 1,
+//     status: "Pending",
+//     orderDate: "Jun 15, 2025",
+//     delivery: "Jul 15, 2025",
+//     total: "$45,000",
+//     sourceName: "Supplier A",
+//     stockNumber: "STK-001",
+//     manuNumber: "MN-001",
+//     manuNumber2: "MN-001-A",
+//     invoiceNumber: "INV-2025-001",
+//     payment: "Down Payment Paid",
+//     paymentStatus: "Partial",
+//     paymentTerms: "30 days",
+//     vin: "1HGCM82633A123456",
+//     engineNumber: "ENG-001",
+//     keyNumber: "KEY-001",
+//     blNumber: "BL-2025-001",
+//     shipDate: "2025-06-20",
+//     brand: "Toyota",
+//     ocnSpec: "OCN-SPEC-001",
+//     model: "Camry",
+//     country: "Japan",
+//     myYear: "2025",
+//     exteriorColor: "Red",
+//     interiorColor: "Black",
+//     tbd3: "N/A",
+//     orderMonth: "June",
+//     prodEst: "2025-06-10",
+//     shipEst: "2025-06-20",
+//     estArr: "2025-07-15",
+//     shpDte: "2025-06-20",
+//     arrEst: "2025-07-15",
+//     arrDate: "2025-07-15",
+//     shipIndication: "On Time"
+//   },
+//   {
+//     id: "ORD-2025-002",
+//     customer: "Sarah Johnson",
+//     dealership: "Highway Auto",
+//     product: "2025 Sedan Model S\nPremium Package",
+//     quantity: 1,
+//     status: "Processing",
+//     orderDate: "Jun 12, 2025",
+//     delivery: "Jul 10, 2025",
+//     total: "$38,500",
+//     sourceName: "Supplier B",
+//     stockNumber: "STK-002",
+//     manuNumber: "MN-002",
+//     manuNumber2: "MN-002-A",
+//     invoiceNumber: "INV-2025-002",
+//     payment: "Full Payment Pending",
+//     paymentStatus: "Pending",
+//     paymentTerms: "45 days",
+//     vin: "2HGCM82633A654321",
+//     engineNumber: "ENG-002",
+//     keyNumber: "KEY-002",
+//     blNumber: "BL-2025-002",
+//     shipDate: "2025-06-18",
+//     brand: "Honda",
+//     ocnSpec: "OCN-SPEC-002",
+//     model: "Accord",
+//     country: "Japan",
+//     myYear: "2025",
+//     exteriorColor: "Blue",
+//     interiorColor: "Beige",
+//     tbd3: "N/A",
+//     orderMonth: "June",
+//     prodEst: "2025-06-08",
+//     shipEst: "2025-06-18",
+//     estArr: "2025-07-10",
+//     shpDte: "2025-06-18",
+//     arrEst: "2025-07-10",
+//     arrDate: "2025-07-10",
+//     shipIndication: "Delayed"
+//   },
+//   {
+//     id: "ORD-2025-003",
+//     customer: "Michael Brown",
+//     dealership: "Global Motors",
+//     product: "2025 Chang'an CS75 Plus\nPremium Edition",
+//     quantity: 1,
+//     status: "Completed",
+//     orderDate: "May 20, 2025",
+//     delivery: "Jun 25, 2025",
+//     total: "$32,000",
+//     sourceName: "Supplier C",
+//     stockNumber: "STK-003",
+//     manuNumber: "MN-003",
+//     manuNumber2: "MN-003-A",
+//     invoiceNumber: "INV-2025-003",
+//     payment: "Full Payment Paid",
+//     paymentStatus: "Paid",
+//     paymentTerms: "15 days",
+//     vin: "3HGCM82633A789012",
+//     engineNumber: "ENG-003",
+//     keyNumber: "KEY-003",
+//     blNumber: "BL-2025-003",
+//     shipDate: "2025-06-05",
+//     brand: "Chang'an",
+//     ocnSpec: "OCN-SPEC-003",
+//     model: "CS75 Plus",
+//     country: "China",
+//     myYear: "2025",
+//     exteriorColor: "White",
+//     interiorColor: "Brown",
+//     tbd3: "N/A",
+//     orderMonth: "May",
+//     prodEst: "2025-05-25",
+//     shipEst: "2025-06-05",
+//     estArr: "2025-06-25",
+//     shpDte: "2025-06-05",
+//     arrEst: "2025-06-25",
+//     arrDate: "2025-06-25",
+//     shipIndication: "On Time"
+//   }
+// ];
 
 const paymentOptions = [
   "Down Payment Paid",
@@ -140,6 +142,7 @@ const monthOptions = [
 ];
 
 const OrderManagement = () => {
+  const [ordersData, setOrdersData] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [modalType, setModalType] = useState("view");
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -167,6 +170,73 @@ const OrderManagement = () => {
     }));
   };
 
+  useEffect(() => {
+    // const fetchOrders = async () => {
+    //   const loginDetails = JSON.parse(localStorage.getItem("login_detail"));
+    //   const country = loginDetails?.country || "India"; // Default to India if not found
+    //   try {
+    //     const response = await axios.get(`https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/getOrderByCountry/${country}`);
+    //     setOrdersData(response?.data?.data); // Assuming the response data is an array of orders
+    //   } catch (error) {
+    //     console.error("Error fetching orders:", error);
+    //   }
+    // };
+    const fetchOrders = async () => {
+      const loginDetails = JSON.parse(localStorage.getItem("login_detail"));
+      const country = loginDetails?.country || "India"; // Default to India if not found
+      try {
+        const response = await api.get(`/getOrderByCountry/${country}`);
+        // const response = await axios.get(`https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/getOrderByCountry/${country}`);
+        const mappedOrders = response.data.data.map(order => ({
+          id: order.id,
+          customer: order.customer,
+          dealership: order.dealership,
+          product: order.product,
+          quantity: order.qty,
+          status: order.status,
+          orderDate: new Date(order.order_date).toLocaleDateString(), // Format date as needed
+          delivery: new Date(order.delivery).toLocaleDateString(),
+          total: `$${parseFloat(order.total).toFixed(2)}`, // Format total as currency
+          sourceName: order.source,
+          stockNumber: order.stock_no,
+          manuNumber: order.manu_no,
+          manuNumber2: order.manu_no2,
+          invoiceNumber: order.invoice_no,
+          payment: order.payment,
+          paymentStatus: order.pay_status,
+          paymentTerms: order.pay_terms,
+          vin: order.vin_no,
+          engineNumber: order.engine_no,
+          keyNumber: order.key_no,
+          blNumber: order.bl_no,
+          shipDate: new Date(order.ship_date).toLocaleDateString(),
+          brand: order.brand,
+          ocnSpec: order.ocn_spec,
+          model: order.model,
+          country: order.country,
+          myYear: order.year,
+          exteriorColor: order.ext_color,
+          interiorColor: order.int_color,
+          tbd3: order.tbd3,
+          orderMonth: order.order_month,
+          prodEst: new Date(order.prod_est).toLocaleDateString(),
+          shipEst: new Date(order.ship_est).toLocaleDateString(),
+          estArr: new Date(order.est_arr).toLocaleDateString(),
+          shpDte: new Date(order.shp_dte).toLocaleDateString(),
+          arrEst: new Date(order.arr_est).toLocaleDateString(),
+          arrDate: order.arr_date ? new Date(order.arr_date).toLocaleDateString() : null,
+          shipIndication: order.ship_ind
+        }));
+        setOrdersData(mappedOrders);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+
+    fetchOrders();
+  }, []);
+
   const resetFilters = () => {
     setFilters({
       status: "",
@@ -179,19 +249,19 @@ const OrderManagement = () => {
   const filteredOrders = ordersData.filter((order) => {
     // Search term filtering
     const lowerTerm = searchTerm.toLowerCase();
-    const matchesSearch = 
-      order.id.toLowerCase().includes(lowerTerm) ||
+    const matchesSearch =
+      // order.id.toLowerCase().includes(lowerTerm) ||
       order.customer.toLowerCase().includes(lowerTerm) ||
       order.dealership.toLowerCase().includes(lowerTerm) ||
       order.product.toLowerCase().includes(lowerTerm) ||
       order.status.toLowerCase().includes(lowerTerm);
-    
+
     // Additional filters
     const matchesStatus = !filters.status || order.status === filters.status;
     const matchesBrand = !filters.brand || order.brand === filters.brand;
     const matchesPaymentStatus = !filters.paymentStatus || order.paymentStatus === filters.paymentStatus;
     const matchesOrderMonth = !filters.orderMonth || order.orderMonth === filters.orderMonth;
-    
+
     return matchesSearch && matchesStatus && matchesBrand && matchesPaymentStatus && matchesOrderMonth;
   });
 
@@ -312,7 +382,8 @@ const OrderManagement = () => {
           <table className="min-w-full text-sm text-left whitespace-nowrap">
             <thead className="bg-gray-100 text-gray-700">
               <tr>
-                <th className="px-4 py-2">ORDER ID</th>
+                <th className="px-4 py-2">Sr.No.</th>
+                {/* <th className="px-4 py-2">ORDER ID</th> */}
                 <th className="px-4 py-2">CUSTOMER</th>
                 <th className="px-4 py-2">DEALERSHIP</th>
                 <th className="px-4 py-2">PRODUCT</th>
@@ -356,18 +427,18 @@ const OrderManagement = () => {
             <tbody>
               {filteredOrders.map((order, idx) => (
                 <tr key={idx} className="border-t">
-                  <td className="px-4 py-2 text-blue-600 underline">{order.id}</td>
+                  <td className="px-4 py-2">{idx + 1}</td>
+                  {/* <td className="px-4 py-2 text-blue-600 underline">{order.id}</td> */}
                   <td className="px-4 py-2">{order.customer}</td>
                   <td className="px-4 py-2">{order.dealership}</td>
                   <td className="px-4 py-2 whitespace-pre-line">{order.product}</td>
                   <td className="px-4 py-2">{order.quantity}</td>
                   <td className="px-4 py-2">
-                    <span className={`px-2 py-1 text-xs border rounded ${
-                      order.status === "Pending" ? "bg-yellow-100 text-yellow-800 border-yellow-200" :
+                    <span className={`px-2 py-1 text-xs border rounded ${order.status === "Pending" ? "bg-yellow-100 text-yellow-800 border-yellow-200" :
                       order.status === "Processing" ? "bg-blue-100 text-blue-800 border-blue-200" :
-                      order.status === "Completed" ? "bg-green-100 text-green-800 border-green-200" :
-                      "bg-gray-100 text-gray-800 border-gray-200"
-                    }`}>
+                        order.status === "Completed" ? "bg-green-100 text-green-800 border-green-200" :
+                          "bg-gray-100 text-gray-800 border-gray-200"
+                      }`}>
                       {order.status}
                     </span>
                   </td>
@@ -381,11 +452,10 @@ const OrderManagement = () => {
                   <td className="px-4 py-2">{order.invoiceNumber}</td>
                   <td className="px-4 py-2">{order.payment}</td>
                   <td className="px-4 py-2">
-                    <span className={`px-2 py-1 text-xs border rounded ${
-                      order.paymentStatus === "Paid" ? "bg-green-100 text-green-800 border-green-200" :
+                    <span className={`px-2 py-1 text-xs border rounded ${order.paymentStatus === "Paid" ? "bg-green-100 text-green-800 border-green-200" :
                       order.paymentStatus === "Partial" ? "bg-blue-100 text-blue-800 border-blue-200" :
-                      "bg-yellow-100 text-yellow-800 border-yellow-200"
-                    }`}>
+                        "bg-yellow-100 text-yellow-800 border-yellow-200"
+                      }`}>
                       {order.paymentStatus}
                     </span>
                   </td>
@@ -448,8 +518,8 @@ const OrderManagement = () => {
                 {modalType === "view"
                   ? "View Order"
                   : modalType === "edit"
-                  ? "Edit Order"
-                  : "Create New Order"}
+                    ? "Edit Order"
+                    : "Create New Order"}
               </h3>
               <button onClick={() => setModalShow(false)} className="text-gray-500">×</button>
             </div>

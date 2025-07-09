@@ -292,10 +292,14 @@ const UserManagement = () => {
     }
 
     try {
-      const response = await axios.patch(
-        `https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/assign-dealership/${selectedUser}`,
+      const response = await api.patch(
+        `/assign-dealership/${selectedUser}`,
         { dealership_id: parseInt(selectedDealership) }
       );
+      // const response = await axios.patch(
+      //   `https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/assign-dealership/${selectedUser}`,
+      //   { dealership_id: parseInt(selectedDealership) }
+      // );
 
       // alert('Dealership assigned successfully!');
       // console.log(response.data);

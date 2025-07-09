@@ -35,30 +35,28 @@ const InventoryManagement = () => {
           <nav className="-mb-px flex space-x-8">
             <button
               onClick={() => setActiveTab("inventory")}
-              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${
-                activeTab === "inventory"
-                  ? "border-indigo-500 text-indigo-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === "inventory"
+                ? "border-indigo-500 text-indigo-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
             >
               <i className="fas fa-warehouse mr-2"></i> Inventory List
             </button>
             <button
               onClick={() => setActiveTab("reports")}
-              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${
-                activeTab === "reports"
-                  ? "border-indigo-500 text-indigo-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
+              className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer !rounded-button ${activeTab === "reports"
+                ? "border-indigo-500 text-indigo-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
             >
               <i className="fas fa-chart-bar mr-2"></i> Reports
             </button>
           </nav>
         </div>
 
-        {activeTab === "inventory" && <div><InventoryList/></div>}
+        {activeTab === "inventory" && <div><InventoryList /></div>}
 
-        {activeTab === "reports" && <div><Report/></div>}
+        {activeTab === "reports" && <div><Report /></div>}
       </main>
     </div>
   );

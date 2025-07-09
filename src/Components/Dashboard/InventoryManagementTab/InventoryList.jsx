@@ -1302,6 +1302,7 @@ import Swal from "sweetalert2";
 import * as XLSX from 'xlsx';
 import { utils, writeFile } from 'xlsx';
 import { FixedSizeList as List } from "react-window";
+import axios from "axios";
 
 function InventoryList() {
   // State for search and filters
@@ -1374,6 +1375,29 @@ function InventoryList() {
     }
   };
 
+  const fetchInventoryDataByCounrty = async () => {
+    try {
+      setLoading(true);
+      const loginDetails = JSON.parse(localStorage.getItem("login_detail"));
+      const country = loginDetails?.country || "India";
+      // const response = await api.get(`/inventory-by-country/${country}`);
+      const response = await api.get(`/inventory-by-country/${country}`);
+      // const response = await axios.get(`https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/inventory-by-country/${country}`);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching inventory:", error);
+      Swal.fire(
+        'Error!',
+        'Failed to fetch inventory data.',
+        'error'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
   // Fetch Google Sheet data
   const fetchGoogleshet = async () => {
     try {
@@ -1394,7 +1418,8 @@ function InventoryList() {
 
   useEffect(() => {
     fetchGoogleshet();
-    fetchInventoryData();
+    // fetchInventoryData();
+    fetchInventoryDataByCounrty();
   }, []);
 
   useEffect(() => {
@@ -1780,27 +1805,6 @@ function InventoryList() {
     })
     : [];
 
-  const displayedData = filteredData.slice(0, itemsToShow); // Slice the data for lazy loading
-
-  // useEffect(() => {
-  //   const handleScroll = (event) => {
-  //     const bottom = event.target.scrollHeight === event.target.scrollTop + event.target.clientHeight;
-  //     if (bottom) {
-  //       setItemsToShow((prev) => prev + 50); // Load 50 more items
-  //     }
-  //   };
-
-  //   const tableContainer = document.querySelector('.overflow-x-auto');
-  //   if (tableContainer) {
-  //     tableContainer.addEventListener('scroll', handleScroll);
-  //   }
-
-  //   return () => {
-  //     if (tableContainer) {
-  //       tableContainer.removeEventListener('scroll', handleScroll);
-  //     }
-  //   };
-  // }, [filteredData]);
 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -1833,109 +1837,6 @@ function InventoryList() {
     }
   };
 
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const handleLoadMore = () => {
-    setIsLoadingMore(true); // Show loading spinner
-    setTimeout(() => {
-      setItemsToShow((prev) => prev + 50); // Load more data
-      setIsLoadingMore(false); // Hide loading spinner
-    }, 3000); // 5-second delay
-  };
-
-  // const columnWidths = {
-  //   sr: 60,
-  //   sourceName: 200,
-  //   stock: 150,
-  //   manu1: 150,
-  //   manu2: 150,
-  //   invoice: 150,
-  //   payment: 150,
-  //   pmtStatus: 150,
-  //   payTerms: 150,
-  //   vin: 200,
-  //   engine: 150,
-  //   key: 120,
-  //   bl: 150,
-  //   shipDate: 150,
-  //   brand: 150,
-  //   ocnSpec: 150,
-  //   model: 150,
-  //   country: 150,
-  //   myYear: 120,
-  //   extColor: 150,
-  //   intColor: 150,
-  //   tbd3: 150,
-  //   orderMonth: 150,
-  //   prodEst: 150,
-  //   shipEst: 150,
-  //   estArr: 150,
-  //   shpDte: 150,
-  //   arrEst: 150,
-  //   arrDate: 150,
-  //   shipIndication: 200,
-  //   actions: 120,
-  // };
-
-
-  // const Row = ({ index, style }) => {
-  //   const item = filteredData[index];
-  //   if (!item) return null;
-
-  //   return (
-  //     <div
-  //       className="d-flex border-bottom bg-white text-nowrap"
-  //       style={{ ...style, alignItems: "center" }}
-  //     >
-  //       <div className="p-2" style={{ width: "60px" }}>{index + 1}</div>
-  //       <div className="p-2" style={{ width: "200px" }}>{item.SourceName}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.STOCK}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.MANU1}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.MANU2}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.INVOICE}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.PAYMENT}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.PMTSTATUS}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.PAYTERMS}</div>
-  //       <div className="p-2" style={{ width: "200px" }}>{item.VIN}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.ENGINE}</div>
-  //       <div className="p-2" style={{ width: "120px" }}>{item.KEY}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.BL}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.SHIPDATE}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.BRAND}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.OCNSPEC}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.MODEL}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.COUNTRY}</div>
-  //       <div className="p-2" style={{ width: "120px" }}>{item.MYYEAR}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.EXTCOLOR}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.INTCOLOR}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.TBD3}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.ORDERMONTH}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.PRODEST}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.SHIPEST}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.ESTARR}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.SHPDTE}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.ARREST}</div>
-  //       <div className="p-2" style={{ width: "150px" }}>{item.ARRDATE}</div>
-  //       <div className="p-2" style={{ width: "200px" }}>
-  //         <span className={`badge ${item.SHIPINDICATION === "DELIVERED" ? "bg-success"
-  //           : item.SHIPINDICATION === "SHIPPED" ? "bg-warning text-dark"
-  //             : item.SHIPINDICATION === "CANCELLED" ? "bg-danger"
-  //               : item.SHIPINDICATION === "ORDERED" ? "bg-secondary"
-  //                 : "bg-light text-dark"
-  //           }`}>
-  //           {item.SHIPINDICATION}
-  //         </span>
-  //       </div>
-  //       <div className="p-2 d-flex gap-2" style={{ width: "120px" }}>
-  //         <button className="btn btn-sm btn-outline-primary" onClick={() => handleEditInventory(item, index)}>
-  //           <i className="fas fa-edit"></i>
-  //         </button>
-  //         <button className="btn btn-sm btn-outline-danger" onClick={() => handleDeleteInventory(index)}>
-  //           <i className="fas fa-trash-alt"></i>
-  //         </button>
-  //       </div>
-  //     </div>
-  //   );
-  // };
   const columnWidths = {
     sr: 60,
     sourceName: 200,
@@ -2138,245 +2039,6 @@ function InventoryList() {
               </div>
             </div>
           </div>
-
-          {/* <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    sr.
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    Source.Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    STOCK #
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    MANU#
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    MANU#2
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    INVOICE#
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    PAYMENT
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    PMT STATUS
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    PAY. TERMS
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    VIN#
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    ENGINE#
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    KEY#
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    BL#
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    SHIP DATE
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    BRAND
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    OCN SPEC
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    MODEL
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    COUNTRY
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    MY YEAR
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    EXT. COLOR
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    INT. COLOR
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    TBD3
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    ORDER MONTH
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    PROD. EST
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    SHIP. EST
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    EST ARR
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    SHP DTE
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    ARR EST
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    ARR. DATE
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    SHIP INDICATION
-                  </th>
-                  <th className="px-6 py-3 text-right text-sm font-bold text-gray-700 uppercase tracking-wide">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {displayedData.length > 0 ? (
-                  displayedData.map((item, idx) => (
-                    <tr key={item.id || idx} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {idx + 1}.
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {item?.SourceName}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.STOCK}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.MANU1}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.MANU2}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.INVOICE}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.PAYMENT}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.PMTSTATUS}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.PAYTERMS}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.VIN}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.ENGINE}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.KEY}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.BL}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.SHIPDATE}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.BRAND}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.OCNSPEC}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.MODEL}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.COUNTRY}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.MYYEAR}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.EXTCOLOR}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.INTCOLOR}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.TBD3}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.ORDERMONTH}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.PRODEST}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.SHIPEST}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.ESTARR}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.SHPDTE}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.ARREST}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {item.ARRDATE}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
-                            ${item.SHIPINDICATION === "DELIVERED"
-                              ? "bg-green-100 text-green-800"
-                              : item.SHIPINDICATION === "SHIPPED"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : item.SHIPINDICATION === "CANCELLED"
-                                  ? "bg-red-100 text-red-800"
-                                  : item.SHIPINDICATION === "ORDERED"
-                                    ? "bg-gray-200 text-gray-800"
-                                    : "bg-slate-100 text-slate-800"
-                            }`}
-                        >
-                          {item.SHIPINDICATION}
-                        </span>
-                      </td>
-
-                      <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                        <button
-                          className="text-indigo-600 hover:text-indigo-900 me-3"
-                          onClick={() => handleEditInventory(item, idx)}
-                          title="Edit"
-                        >
-                          <i className="fas fa-edit"></i>
-                        </button>
-
-                        <button
-                          className="text-red-600 hover:text-red-800"
-                          onClick={() => handleDeleteInventory(idx)}
-                          title="Delete"
-                        >
-                          <i className="fas fa-trash-alt"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="29" className="px-6 py-4 text-center text-sm text-gray-500">
-                      No inventory items found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div> */}
-
 
           <div className="table-responsive border rounded" style={{ overflowX: "auto" }}>
             {/* Header */}
