@@ -20,6 +20,9 @@ const UserManagement = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showAssignDealershipModal, setShowAssignDealershipModal] =
     useState(false);
+  const [selectedUser, setSelectedUser] = useState('');
+  const [selectedDealership, setSelectedDealership] = useState('');
+  const [Assignedusers, setAssignedUser] = useState([]);
   // Form state for add/edit user
   const [isEditing, setIsEditing] = useState(false);
   const [userForm, setUserForm] = useState({
@@ -97,26 +100,37 @@ const UserManagement = () => {
   const fetchDealership = async () => {
     try {
       const response = await api.get("/dealership");
-      
+
       setDealerships(response.data); // assuming response.data is an array of dealerships
     } catch (error) {
       console.log("Error fetching dealerships:", error);
     }
   };
 
+  const fetchAssignedUser = async () => {
+    try {
+      const response = await api.get("/getAssignedUsers");
+      setAssignedUser(response.data.users);
+    } catch (error) {
+      console.log("Error fetching AssignedUser:", error);
+    }
+  }
+
 
   const fatchUser = async () => {
     try {
       const responce = await api.get('user')
       setUsers(responce.data)
-      
+
     } catch (error) {
       console.log(error)
     }
   }
+
   useEffect(() => {
     fatchUser();
     fetchDealership();
+    fetchAssignedUser();
   }, []);
   // Toggle sidebar
   const toggleSidebar = () => {
@@ -185,63 +199,63 @@ const UserManagement = () => {
         container: 'z-[99999]'
       }
     });
- fatchUser();
+    fatchUser();
     setActiveTab("usersList");
 
   };
-// State
-const [userToDeleteId, setUserToDeleteId] = useState(null);
+  // State
+  const [userToDeleteId, setUserToDeleteId] = useState(null);
 
-// Confirmation function
+  // Confirmation function
 
 
-// Delete function
-// Modified delete function that accepts ID directly
-const handleDeleteUser = async (id) => {
-  if (!id) {
-    await Swal.fire({
-      title: 'Error!',
-      text: 'Cannot delete user - missing ID',
-      icon: 'error',
-      customClass: { container: 'z-[99999]' }
-    });
-    return;
-  }
-
-  const result = await Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!',
-    customClass: { container: 'z-[99999]' }
-  });
-
-  if (result.isConfirmed) {
-    try {
-      await api.delete(`/user/${id}`);
-      setUsers(prevUsers => prevUsers.filter(u => u.id !== id));
-      await Swal.fire({
-        title: 'Deleted!',
-        text: 'User has been deleted.',
-        icon: 'success',
-        customClass: { container: 'z-[99999]' }
-      });
-    } catch (error) {
-      console.error("Delete error:", error);
+  // Delete function
+  // Modified delete function that accepts ID directly
+  const handleDeleteUser = async (id) => {
+    if (!id) {
       await Swal.fire({
         title: 'Error!',
-        text: error.response?.data?.message || 'Failed to delete user',
+        text: 'Cannot delete user - missing ID',
         icon: 'error',
         customClass: { container: 'z-[99999]' }
       });
-    } finally {
-      setShowDeleteConfirmation(false);
+      return;
     }
-  }
-};
+
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      customClass: { container: 'z-[99999]' }
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await api.delete(`/user/${id}`);
+        setUsers(prevUsers => prevUsers.filter(u => u.id !== id));
+        await Swal.fire({
+          title: 'Deleted!',
+          text: 'User has been deleted.',
+          icon: 'success',
+          customClass: { container: 'z-[99999]' }
+        });
+      } catch (error) {
+        console.error("Delete error:", error);
+        await Swal.fire({
+          title: 'Error!',
+          text: error.response?.data?.message || 'Failed to delete user',
+          icon: 'error',
+          customClass: { container: 'z-[99999]' }
+        });
+      } finally {
+        setShowDeleteConfirmation(false);
+      }
+    }
+  };
 
 
   // Filter users based on search and filters
@@ -264,6 +278,38 @@ const handleDeleteUser = async (id) => {
   const totalUsers = users.length;
   const activeUsers = users.filter((u) => u.status).length;
   const managerUsers = users.filter((u) => u.role === "Manager").length;
+
+
+  const handleAssignDelarship = async () => {
+    if (!selectedUser || !selectedDealership) {
+      alert("Please select both user and dealership.");
+      return;
+    }
+
+    try {
+      const response = await axios.patch(
+        `https://ssknf82q-8000.inc1.devtunnels.ms/api/d1/assign-dealership/${selectedUser}`,
+        { dealership_id: parseInt(selectedDealership) }
+      );
+
+      // alert('Dealership assigned successfully!');
+      // console.log(response.data);
+      await Swal.fire({
+        title: 'Success!',
+        text: 'Dealership assigned successfully!',
+        icon: 'success',
+        customClass: {
+          container: 'z-[99999]'
+        }
+      });
+      fetchAssignedUser();
+      setSelectedUser('');
+      setSelectedDealership('');
+    } catch (error) {
+      console.error('Error assigning dealership:', error);
+      alert('Failed to assign dealership.');
+    }
+  };
 
   return (
     <div>
@@ -462,7 +508,7 @@ const handleDeleteUser = async (id) => {
                             </span>
                           </div>
                         </td>
-                       
+
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {new Date(user.created_at).toLocaleDateString(
                             "en-US",
@@ -762,7 +808,10 @@ const handleDeleteUser = async (id) => {
                         Select User
                       </label>
                       <div className="relative">
-                        <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                          value={selectedUser}
+                          onChange={(e) => setSelectedUser(e.target.value)}
+                        >
                           <option value="">-- Select User --</option>
                           {users.map((user) => (
                             <option key={user.id} value={user.id}>
@@ -778,7 +827,10 @@ const handleDeleteUser = async (id) => {
                         Select Dealership
                       </label>
                       <div className="relative">
-                        <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <select className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                          value={selectedDealership}
+                          onChange={(e) => setSelectedDealership(e.target.value)}
+                        >
                           <option value="">-- Select Dealership --</option>
                           {dealerships.map((dealership) => (
                             <option key={dealership.id} value={dealership.id}>
@@ -794,6 +846,7 @@ const handleDeleteUser = async (id) => {
                     <button
                       type="button"
                       className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer !rounded-button whitespace-nowrap"
+                      onClick={handleAssignDelarship}
                     >
                       <i className="fas fa-plus mr-2"></i> Assign
                     </button>
@@ -839,7 +892,8 @@ const handleDeleteUser = async (id) => {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          {users
+                          {/* {users */}
+                          {Assignedusers
                             .filter((u) => u.dealership_id)
                             .map((user) => (
                               <tr key={user.id} className="hover:bg-gray-50">
@@ -877,7 +931,8 @@ const handleDeleteUser = async (id) => {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                   {new Date(
-                                    user.createdDate
+                                    // user.createdDate
+                                    user.assigned_date
                                   ).toLocaleDateString("en-US", {
                                     year: "numeric",
                                     month: "short",
@@ -1063,7 +1118,7 @@ const handleDeleteUser = async (id) => {
         </div>
       </main>
 
-    
+
       {/* Assign Dealership Modal */}
       {showAssignDealershipModal && (
         <div className="fixed z-20 inset-0 overflow-y-auto">
