@@ -2041,7 +2041,6 @@ function InventoryList() {
           </div>
 
           <div className="table-responsive border rounded" style={{ overflowX: "auto" }}>
-            {/* Header */}
             <div className="d-flex bg-light fw-bold border-bottom" style={{ width: totalTableWidth }}>
               {columnKeys.map((col, idx) => (
                 <div
@@ -2059,9 +2058,8 @@ function InventoryList() {
               ))}
             </div>
 
-            {/* Virtualized Rows */}
             <div style={{ width: totalTableWidth }}>
-              <List height={600} itemCount={filteredData.length} itemSize={60} width={totalTableWidth}>
+              <List height={Math.min(filteredData.length * 60, 600)} itemCount={filteredData.length} itemSize={60} width={totalTableWidth}>
                 {({ index, style }) => {
                   const item = filteredData[index];
                   if (!item) return null;
