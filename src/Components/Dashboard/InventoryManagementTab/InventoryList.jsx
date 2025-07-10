@@ -1416,10 +1416,16 @@ function InventoryList() {
     }
   };
 
+
+  const role = localStorage.getItem("role");
+
   useEffect(() => {
     fetchGoogleshet();
-    // fetchInventoryData();
-    fetchInventoryDataByCounrty();
+    if (role == "admin") {
+      fetchInventoryData();
+    } else {
+      fetchInventoryDataByCounrty();
+    }
   }, []);
 
   useEffect(() => {
