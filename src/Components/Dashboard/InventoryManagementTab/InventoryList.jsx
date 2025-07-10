@@ -2040,139 +2040,139 @@ function InventoryList() {
             </div>
           </div>
 
-         <div
-  className="table-responsive border rounded"
-  style={{ overflowX: "auto" }}
->
-  {/* Header */}
-  <div
-    className="d-flex bg-light fw-bold border-bottom"
-    style={{ width: totalTableWidth }}
-  >
-    {columnKeys.map((col, idx) => (
-      <div
-        key={idx}
-        className="p-2"
-        style={{
-          width: columnWidths[col.key],
-          whiteSpace: "normal",
-          overflowWrap: "break-word",
-          wordBreak: "break-word",
-        }}
-      >
-        {col.label}
-      </div>
-    ))}
-  </div>
-
-  {/* All Rows - no virtualization, full height */}
-  <div style={{ width: totalTableWidth }}>
-    {filteredData.map((item, index) => (
-      <div
-        key={index}
-        className="d-flex border-bottom bg-white"
-        style={{ alignItems: "center" }}
-      >
-        {columnKeys.map((col, idx) => {
-          if (col.key === "sr") {
-            return (
-              <div
-                key={idx}
-                className="p-2"
-                style={{
-                  width: columnWidths[col.key],
-                  whiteSpace: "normal",
-                  overflowWrap: "break-word",
-                  wordBreak: "break-word",
-                }}
-              >
-                {index + 1}
-              </div>
-            );
-          }
-
-          if (col.key === "shipIndication") {
-            const status = item[col.dataKey];
-            const badgeClass =
-              status === "DELIVERED"
-                ? "bg-success"
-                : status === "SHIPPED"
-                ? "bg-warning text-dark"
-                : status === "CANCELLED"
-                ? "bg-danger"
-                : status === "ORDERED"
-                ? "bg-secondary"
-                : "bg-light text-dark";
-
-            return (
-              <div
-                key={idx}
-                className="p-2"
-                style={{
-                  width: columnWidths[col.key],
-                  whiteSpace: "normal",
-                  overflowWrap: "break-word",
-                  wordBreak: "break-word",
-                }}
-              >
-                <span className={`badge ${badgeClass}`}>{status}</span>
-              </div>
-            );
-          }
-
-          if (col.key === "actions") {
-            return (
-              <div
-                key={idx}
-                className="p-2 d-flex gap-2"
-                style={{ width: columnWidths[col.key] }}
-              >
-                <button
-                  className="btn btn-sm btn-outline-primary"
-                  onClick={() => handleEditInventory(item, index)}
+       <div className="table-responsive border rounded" style={{ overflowX: "auto" }}>
+            {/* Header */}
+            <div className="d-flex bg-light fw-bold border-bottom" style={{ width: totalTableWidth }}>
+              {columnKeys.map((col, idx) => (
+                <div
+                  key={idx}
+                  className="p-2"
+                  style={{
+                    width: columnWidths[col.key],
+                    whiteSpace: "normal",
+                    overflowWrap: "break-word",
+                    wordBreak: "break-word",
+                  }}
                 >
-                  <i className="fas fa-edit"></i>
-                </button>
-                <button
-                  className="btn btn-sm btn-outline-danger"
-                  onClick={() => handleDeleteInventory(index)}
-                >
-                  <i className="fas fa-trash-alt"></i>
-                </button>
-              </div>
-            );
-          }
-
-          const isValidDate = (val) => {
-            const d = new Date(val);
-            return val && !isNaN(d);
-          };
-
-          const rawValue = item[col.dataKey];
-          const value =
-            dateFields.includes(col.dataKey) && isValidDate(rawValue)
-              ? new Date(rawValue).toLocaleDateString("en-GB")
-              : rawValue || "";
-
-          return (
-            <div
-              key={idx}
-              className="p-2"
-              style={{
-                width: columnWidths[col.key],
-                whiteSpace: "normal",
-                overflowWrap: "break-word",
-                wordBreak: "break-word",
-              }}
-            >
-              {value}
+                  {col.label}
+                </div>
+              ))}
             </div>
-          );
-        })}
-      </div>
-    ))}
-  </div>
-</div>
+
+            {/* Virtualized Rows */}
+            <div style={{ width: totalTableWidth }}>
+              <List height={600} itemCount={filteredData.length} itemSize={60} width={totalTableWidth}>
+                {({ index, style }) => {
+                  const item = filteredData[index];
+                  if (!item) return null;
+
+                  return (
+                    <div
+                      className="d-flex border-bottom bg-white"
+                      style={{ ...style, alignItems: "center" }}
+                    >
+                      {columnKeys.map((col, idx) => {
+                        if (col.key === "sr") {
+                          return (
+                            <div
+                              key={idx}
+                              className="p-2"
+                              style={{
+                                width: columnWidths[col.key],
+                                whiteSpace: "normal",
+                                overflowWrap: "break-word",
+                                wordBreak: "break-word",
+                              }}
+                            >
+                              {index + 1}
+                            </div>
+                          );
+                        }
+
+                        if (col.key === "shipIndication") {
+                          const status = item[col.dataKey];
+                          const badgeClass =
+                            status === "DELIVERED"
+                              ? "bg-success"
+                              : status === "SHIPPED"
+                                ? "bg-warning text-dark"
+                                : status === "CANCELLED"
+                                  ? "bg-danger"
+                                  : status === "ORDERED"
+                                    ? "bg-secondary"
+                                    : "bg-light text-dark";
+
+                          return (
+                            <div
+                              key={idx}
+                              className="p-2"
+                              style={{
+                                width: columnWidths[col.key],
+                                whiteSpace: "normal",
+                                overflowWrap: "break-word",
+                                wordBreak: "break-word",
+                              }}
+                            >
+                              <span className={`badge ${badgeClass}`}>{status}</span>
+                            </div>
+                          );
+                        }
+
+                        if (col.key === "actions") {
+                          return (
+                            <div
+                              key={idx}
+                              className="p-2 d-flex gap-2"
+                              style={{ width: columnWidths[col.key] }}
+                            >
+                              <button
+                                className="btn btn-sm btn-outline-primary"
+                                onClick={() => handleEditInventory(item, index)}
+                              >
+                                <i className="fas fa-edit"></i>
+                              </button>
+                              <button
+                                className="btn btn-sm btn-outline-danger"
+                                onClick={() => handleDeleteInventory(index)}
+                              >
+                                <i className="fas fa-trash-alt"></i>
+                              </button>
+                            </div>
+                          );
+                        }
+                        const isValidDate = (val) => {
+                          const d = new Date(val);
+                          return val && !isNaN(d);
+                        };
+
+
+                        const rawValue = item[col.dataKey];
+                        const value =
+                          dateFields.includes(col.dataKey) && isValidDate(rawValue)
+                            ? new Date(rawValue).toLocaleDateString("en-GB")
+                            : rawValue || "";
+
+                        return (
+                          <div
+                            key={idx}
+                            className="p-2"
+                            style={{
+                              width: columnWidths[col.key],
+                              whiteSpace: "normal",
+                              overflowWrap: "break-word",
+                              wordBreak: "break-word",
+                            }}
+                          >
+                            {value}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                }}
+              </List>
+            </div>
+          </div>
 
 
 
