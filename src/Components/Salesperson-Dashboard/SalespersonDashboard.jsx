@@ -12,12 +12,12 @@ const SalespersonDashboard = () => {
 
     // Sample data for inventory
     const [inventory, setInventory] = useState([
-        { name: 'Premium Laptop', sku: 'LP-2025-PRO', quantity: 25, status: 'In Stock' },
-        { name: 'Wireless Headphones', sku: 'WH-350-BLK', quantity: 42, status: 'In Stock' },
-        { name: 'Smart Watch', sku: 'SW-120-SLV', quantity: 8, status: 'Low Stock' },
-        { name: 'Bluetooth Speaker', sku: 'BS-500-RED', quantity: 0, status: 'Out of Stock' },
-        { name: 'Wireless Charger', sku: 'WC-100-WHT', quantity: 15, status: 'In Stock' },
-        { name: 'External SSD', sku: 'SSD-1TB-BLK', quantity: 3, status: 'Low Stock' },
+        { name: 'New Tracking BAIC.xlsm', sku: 'LP-2025-PRO', quantity: 25, status: 'Ordered' },
+        { name: 'New Tracking BAIC.xlsm', sku: 'WH-350-BLK', quantity: 42, status: 'Ordered' },
+        { name: 'New Tracking BAIC.xlsm', sku: 'SW-120-SLV', quantity: 8, status: 'Ordered' },
+        { name: 'New Tracking BAIC.xlsm', sku: 'BS-500-RED', quantity: 0, status: 'Ordered' },
+        { name: 'New Tracking BAIC.xlsm', sku: 'WC-100-WHT', quantity: 15, status: 'Ordered' },
+        { name: 'New Tracking BAIC.xlsm', sku: 'SSD-1TB-BLK', quantity: 3, status: 'Ordered' },
     ]);
 
     // Sample data for customers
@@ -238,7 +238,7 @@ const SalespersonDashboard = () => {
                                     placeholder="Search inventory..."
                                 />
                             </div>
-                            <div className="d-flex gap-2">
+                            {/* <div className="d-flex gap-2">
                                 <button className="btn btn-sm btn-outline-secondary d-flex align-items-center">
                                     <span className="badge bg-success me-2" style={{ width: '8px', height: '8px' }}></span>
                                     In Stock
@@ -251,17 +251,17 @@ const SalespersonDashboard = () => {
                                     <span className="badge bg-danger me-2" style={{ width: '8px', height: '8px' }}></span>
                                     Out of Stock
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className="table-responsive">
                             <table className="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Item Name</th>
-                                        <th>SKU</th>
-                                        <th>Quantity Available</th>
-                                        <th>Status</th>
+                                        <th>Source Name</th>
+                                        <th>STOCK</th>
+                                        <th>PAYMENT</th>
+                                        <th>SHIPINDICATION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
