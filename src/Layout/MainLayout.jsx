@@ -59,36 +59,36 @@ const MainLayout = () => {
   }, []);
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid p-0">
       {/* Header */}
-      <div className="row fixed-top bg-white shadow-sm">
-        <div className="col-12">
-          <Header onToggleSidebar={handleToggleSidebar} />
-        </div>
+      <div className="fixed-top bg-white shadow-sm w-100" style={{ zIndex: 1030 }}>
+        <Header onToggleSidebar={handleToggleSidebar} />
       </div>
 
-      {/* Content Row */}
-      <div className="row" style={{ paddingTop: "65px" }}>
-        {/* Sidebar for Desktop */}
+      {/* Content Area */}
+      <div
+        className="d-flex"
+        style={{
+          paddingTop: "65px",
+          minHeight: "100vh",
+        }}
+      >
+        {/* Sidebar (Desktop) */}
         {screenSize === 'desktop' && sidebarVisible && (
-          <div className="col-lg-2 p-0 d-none d-lg-block">
+          <div style={{ width: "250px", flexShrink: 0 }}>
             <Sidebar isMobile={false} onClose={handleCloseSidebar} />
           </div>
         )}
 
         {/* Main Content */}
-        <div
-          className={`${
-            screenSize === 'desktop' && sidebarVisible ? "col-md-9 col-lg-10" : "col-12"
-          } bg-light`}
-        >
+        <div className="flex-grow-1 bg-light">
           <div className="p-4">
             <Outlet />
           </div>
         </div>
       </div>
 
-      {/* Offcanvas Sidebar for Mobile/Tablet */}
+      {/* Offcanvas Sidebar (Mobile/Tablet) */}
       {(screenSize === 'mobile' || screenSize === 'tablet') && (
         <div
           className="offcanvas offcanvas-start"
@@ -97,13 +97,10 @@ const MainLayout = () => {
           aria-labelledby="mobileSidebarLabel"
           data-bs-scroll="true"
           data-bs-backdrop="false"
-          style={{ width: '80px' }} // Set width here
+          style={{ width: "250px" }}
         >
           <div className="offcanvas-body p-0">
-            <Sidebar
-              isMobile={true}
-              onLinkClick={() => handleCloseSidebar()}
-            />
+            <Sidebar isMobile={true} onLinkClick={() => handleCloseSidebar()} />
           </div>
         </div>
       )}
